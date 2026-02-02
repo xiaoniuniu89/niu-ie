@@ -19,10 +19,58 @@ const nunito = Nunito({
 });
 
 export const metadata: Metadata = {
-  title: "Niu Agency | High-Quality Web Presence",
-  description: "Accessible, premium web solutions for local businesses.",
+  metadataBase: new URL("https://www.niu.ie"),
+  title: {
+    default: "Niu Web | Web Development for Local Irish Businesses",
+    template: "%s | Niu Web",
+  },
+  description: "Niu Web offers accessible, premium web development solutions for local Irish businesses. We are a website agency based in Westmeath, Ireland, helping you grow online.",
+  keywords: ["Web Development", "Local Business", "Ireland", "Westmeath", "Website Agency", "Web Design", "SEO", "Niu Web", "Irish Business"],
+  authors: [{ name: "Niu Web", url: "https://www.niu.ie" }],
+  creator: "Niu Web",
+  publisher: "Niu Web",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   icons: {
     icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
+  manifest: "/site.webmanifest",
+  openGraph: {
+    title: "Niu Web | Web Development for Local Irish Businesses",
+    description: "Accessible, premium web development solutions for local Irish businesses. Based in Westmeath.",
+    url: "https://www.niu.ie",
+    siteName: "Niu Web",
+    locale: "en_IE",
+    type: "website",
+    images: [
+      {
+        url: "/niu.webp",
+        width: 1200,
+        height: 630,
+        alt: "Niu Web",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Niu Web | Web Development for Local Irish Businesses",
+    description: "Accessible, premium web development solutions for local Irish businesses.",
+    images: ["/niu.webp"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
 };
 

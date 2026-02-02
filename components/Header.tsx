@@ -37,7 +37,7 @@ export function Header() {
               Home
             </Link>
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center justify-center text-foreground hover:text-primary transition-colors focus:outline-none p-1">
+              <DropdownMenuTrigger aria-label="Toggle services menu" className="flex items-center justify-center text-foreground hover:text-primary transition-colors focus:outline-none p-1">
                 <ChevronDown className="h-4 w-4" />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -67,7 +67,7 @@ export function Header() {
         <div className="md:hidden">
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" aria-label="Toggle navigation menu">
                 <Menu className="h-6 w-6" />
               </Button>
             </SheetTrigger>

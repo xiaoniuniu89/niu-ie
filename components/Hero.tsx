@@ -13,10 +13,7 @@ export function Hero() {
         <div className="flex flex-col gap-8 z-10">
           <div className="flex flex-col">
             <h1 className="font-serif text-5xl md:text-7xl leading-tight text-primary">
-              High-Quality Web Presence
-            </h1>
-            <h1 className="font-serif text-5xl md:text-7xl leading-tight text-secondary">
-              For Local Businesses
+              High-Quality Web Presence <span className="text-secondary block">For Local Businesses</span>
             </h1>
           </div>
           <p className="font-condensed font-light text-xl text-foreground leading-relaxed max-w-lg">
@@ -51,7 +48,7 @@ export function Hero() {
           <div className="relative">
             <Image 
               src={imgImageNiuAgencyBull} 
-              alt="Niu Agency Bull" 
+              alt="Niu Web Bull" 
               width={600}
               height={357}
               priority

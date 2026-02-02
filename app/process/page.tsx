@@ -58,7 +58,7 @@ export default function ProcessPage() {
                 2. The MVP
               </h3>
               <p className="font-condensed font-light text-foreground/80 leading-relaxed">
-                We strip it back. What is the single most important thing? Usually, it&apos;s just being found. We build a high-quality &quot;business card&quot; site to get you live in hours, not months.
+                We strip it back. What is the single most important thing? Usually, it&apos;s just being found. We build a high-quality &quot;business card&quot; site to get you live quickly, not in months.
               </p>
             </div>
 
@@ -71,7 +71,7 @@ export default function ProcessPage() {
                 3. The Build
               </h3>
               <p className="font-condensed font-light text-foreground/80 leading-relaxed">
-                Once you&apos;re live, we iterate. We add the booking system next month. The online store the month after. You pay for what you need, when you can afford it.
+                Once you&apos;re live, we iterate. We add the booking system quickly. The online store when you&apos;re ready. You pay for what you need, when you can afford it.
               </p>
             </div>
           </div>
@@ -117,7 +117,7 @@ export default function ProcessPage() {
                       A beautiful gallery & a phone number.
                     </p>
                     <p className="font-condensed font-light text-foreground/80">
-                      A simple, elegant way for locals to see your style and call to order immediately. We got them online in 4 hours with a &quot;Call to Order&quot; button.
+                      A simple, elegant way for locals to see your style and call to order immediately. We got them online in no time with a &quot;Call to Order&quot; button.
                     </p>
                   </div>
 

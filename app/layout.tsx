@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Lora, Roboto_Condensed, Nunito } from "next/font/google";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const lora = Lora({
@@ -98,6 +99,7 @@ export default function RootLayout({
           `}
         </Script>
         {children}
+        <Analytics />
       </body>
     </html>
   );

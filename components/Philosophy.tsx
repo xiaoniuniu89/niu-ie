@@ -17,7 +17,7 @@ const philosophyData = [
   },
   {
     title: "Agility",
-    content: "We don't wait months for perfection. We work backward from your dream to an MVP that gets your essential services live and searchable in hours.",
+    content: "We don&apos;t wait months for perfection. We work backward from your ideal to an MVP that gets your essential services live and searchable in hours.",
     icon: Zap,
     iconBg: "bg-secondary/10",
     iconColor: "text-secondary",

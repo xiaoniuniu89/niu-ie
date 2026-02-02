@@ -27,8 +27,8 @@ export function Hero() {
               </Link>
             </Button>
             <Button asChild size="lg" variant="secondary" className="rounded-md px-8 h-12 bg-secondary text-secondary-foreground hover:bg-secondary/90">
-              <Link href="/portfolio">
-                View Portfolio
+              <Link href="/process">
+                Our Process
               </Link>
             </Button>
           </div>

@@ -94,7 +94,7 @@ export default function Portfolio() {
         </div>
       </main>
 
-      <Footer />
+      <Footer showCTA={false} />
     </div>
   );
 }

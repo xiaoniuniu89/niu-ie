@@ -54,6 +54,10 @@ export function Header() {
             </DropdownMenu>
           </div>
 
+          <Link href="/process" className="font-condensed font-medium text-sm text-foreground hover:text-primary transition-colors">
+            Process
+          </Link>
+
           <Link href="/portfolio" className="font-condensed font-medium text-sm text-foreground hover:text-primary transition-colors">
             Portfolio
           </Link>
@@ -87,6 +91,9 @@ export function Header() {
                     FAQ
                   </Link>
                 </div>
+                <Link href="/process" className="font-condensed font-medium text-lg text-foreground hover:text-primary">
+                  Process
+                </Link>
                 <Link href="/portfolio" className="font-condensed font-medium text-lg text-foreground hover:text-primary">
                   Portfolio
                 </Link>

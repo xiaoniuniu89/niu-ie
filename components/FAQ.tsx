@@ -8,7 +8,7 @@ import {
 const faqData = [
   {
     question: "How much does a website cost?",
-    answer: "We charge a flat rate of €35 per hour. Our unique approach is to work backward from your &apos;ideal site&apos; to an MVP, breaking work into 1-2 hour iterative chunks. This allows us to get the essentials live quickly—often in just a couple of hours—avoiding huge upfront costs. For local community groups, churches, or charities that truly cannot afford the fee, we are happy to waive it entirely.",
+    answer: "We charge a flat rate of €35 per hour. Our unique approach is to work backward from your 'ideal site' to an MVP, breaking work into 1-2 hour iterative chunks. This allows us to get the essentials live quickly—often in just a couple of hours—avoiding huge upfront costs. For local community groups, churches, or charities that truly cannot afford the fee, we are happy to waive it entirely.",
   },
   {
     question: "Who is this for?",
@@ -16,7 +16,7 @@ const faqData = [
   },
   {
     question: "How long does it take?",
-    answer: "Because we work in short, affordable bursts, we can often get your essential 'Version 1' live and searchable in just a few hours. We involve you directly in the design process to define features, and then build them out iteratively when your budget allows. You get online fast, and improve your site step-by-step without a massive waiting period.",
+    answer: "Because we work in short, affordable bursts, we can often get your essential 'Version 1' live and searchable in no time. We involve you directly in the design process to define features, and then build them out iteratively when your budget allows. You get online fast, and improve your site step-by-step without a massive waiting period.",
   },
   {
     question: "Do you offer ongoing support?",

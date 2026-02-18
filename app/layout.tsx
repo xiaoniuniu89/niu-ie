@@ -22,14 +22,14 @@ const nunito = Nunito({
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.niu.ie"),
   title: {
-    default: "Niu Web | Web Development for Local Irish Businesses",
-    template: "%s | Niu Web",
+    default: "niu.ie — Daniel Callaghan",
+    template: "%s — niu.ie",
   },
-  description: "Niu Web offers accessible, premium web development solutions for local Irish businesses. We are a website agency based in Westmeath, Ireland, helping you grow online.",
-  keywords: ["Web Development", "Local Business", "Ireland", "Westmeath", "Website Agency", "Web Design", "SEO", "Niu Web", "Irish Business"],
-  authors: [{ name: "Niu Web", url: "https://www.niu.ie" }],
-  creator: "Niu Web",
-  publisher: "Niu Web",
+  description: "Writing about music, games, software, and the web. Personal site of Daniel Callaghan (小牛).",
+  keywords: ["music", "games", "software", "AI", "web development", "blog", "Daniel Callaghan"],
+  authors: [{ name: "Daniel Callaghan", url: "https://www.niu.ie" }],
+  creator: "Daniel Callaghan",
+  publisher: "Daniel Callaghan",
   formatDetection: {
     email: false,
     address: false,
@@ -41,10 +41,10 @@ export const metadata: Metadata = {
   },
   manifest: "/site.webmanifest",
   openGraph: {
-    title: "Niu Web | Web Development for Local Irish Businesses",
-    description: "Accessible, premium web development solutions for local Irish businesses. Based in Westmeath.",
+    title: "niu.ie — Daniel Callaghan",
+    description: "Writing about music, games, software, and the web.",
     url: "https://www.niu.ie",
-    siteName: "Niu Web",
+    siteName: "niu.ie",
     locale: "en_IE",
     type: "website",
     images: [
@@ -52,14 +52,14 @@ export const metadata: Metadata = {
         url: "/niu.webp",
         width: 1200,
         height: 630,
-        alt: "Niu Web",
+        alt: "niu.ie",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Niu Web | Web Development for Local Irish Businesses",
-    description: "Accessible, premium web development solutions for local Irish businesses.",
+    title: "niu.ie — Daniel Callaghan",
+    description: "Writing about music, games, software, and the web.",
     images: ["/niu.webp"],
   },
   robots: {
@@ -83,7 +83,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${lora.variable} ${robotoCondensed.variable} ${nunito.variable} antialiased`}
+        className={`${lora.variable} ${robotoCondensed.variable} ${nunito.variable} antialiased min-h-screen flex flex-col`}
       >
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-D9C89TP5C2"

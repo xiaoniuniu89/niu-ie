@@ -1,6 +1,20 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      {
+        source: "/niution",
+        destination: "/keystatic",
+        permanent: false,
+      },
+      {
+        source: "/niution/:path*",
+        destination: "/keystatic/:path*",
+        permanent: false,
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {

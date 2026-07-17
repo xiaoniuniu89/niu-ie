@@ -5,8 +5,8 @@ import { Globe, PiggyBank, TrendingUp } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Web Development",
-  description: "Web development services for local businesses. Accessible, affordable, and built with care.",
+  title: "Web Design & Development Ireland",
+  description: "Custom web design and development services for small businesses and organizations across Ireland. Fast, accessible, and SEO-optimized.",
 };
 
 const services = [
@@ -19,9 +19,9 @@ const services = [
   },
   {
     icon: PiggyBank,
-    title: "Affordable Setup",
+    title: "Pragmatic Planning",
     description:
-      "Free for charities and community organisations. For small businesses, I keep costs low — starting at €35/hr with an MVP-first approach so you only pay for what you need.",
+      "I focus on what you actually need. By starting with a lightweight Minimum Viable Product (MVP), we launch fast and avoid unnecessary overheads. Free support for local charities.",
     color: "hsl(var(--secondary))",
   },
   {
@@ -34,17 +34,36 @@ const services = [
 ];
 
 export default function WebPage() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "niu.ie",
+    "url": "https://www.niu.ie/web",
+    "logo": "https://www.niu.ie/niu-zi.webp",
+    "image": "https://www.niu.ie/niu.webp",
+    "description": "Custom web design and development services for small businesses and organizations in Ireland.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "IE"
+    },
+    "priceRange": "$$"
+  };
+
   return (
     <div className="container mx-auto px-4 md:px-8 py-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <section className="max-w-2xl mb-16">
         <h1 className="font-serif text-4xl md:text-5xl text-foreground mb-4">
-          Web Development
+          Web Design & Development in Ireland
         </h1>
         <p className="font-condensed font-light text-lg text-foreground/80 leading-relaxed mb-4">
-          I build websites for local Irish businesses. The approach is simple: start with what you actually need (an MVP), launch fast, and iterate from there. No bloated proposals, no unnecessary features.
+          I design and build fast, custom websites for small businesses and community organisations across Ireland. My process focuses on launching a high-performance Minimum Viable Product (MVP) quickly, letting you establish an online presence without high upfront overheads.
         </p>
         <p className="font-condensed font-light text-lg text-foreground/80 leading-relaxed">
-          I charge €35/hr, work is free for charities, and there are no retainers — just honest, hourly work. I want to empower you to manage your own site, not create dependency.
+          No complex retainers, no bloated systems. You get clean code, a user-friendly CMS (content editor), and full ownership of your site from day one.
         </p>
       </section>
 

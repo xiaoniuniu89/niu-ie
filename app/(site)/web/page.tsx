@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Globe, PiggyBank, TrendingUp } from "lucide-react";
+import { Globe, Key, TrendingUp } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -14,21 +14,21 @@ const services = [
     icon: Globe,
     title: "Web Development",
     description:
-      "Modern, fast, responsive websites built with Next.js and deployed on Vercel. I focus on performance, accessibility, and clean code.",
+      "Modern, secure, and fast-loading websites optimized for SEO and performance. Built with Next.js and fully responsive on all screens.",
     color: "#4a7c59",
   },
   {
-    icon: PiggyBank,
-    title: "Pragmatic Planning",
+    icon: Key,
+    title: "Complete Ownership",
     description:
-      "I focus on what you actually need. By starting with a lightweight Minimum Viable Product (MVP), we launch fast and avoid unnecessary overheads. Free support for local charities.",
+      "You own 100% of your code, content, and hosting from day one. Manage updates yourself using a simple, integrated editor, with zero vendor lock-in.",
     color: "hsl(var(--secondary))",
   },
   {
     icon: TrendingUp,
-    title: "SEO & Performance",
+    title: "Iterative Growth",
     description:
-      "Every site I build is optimised for search engines from day one. Fast load times, semantic HTML, structured data, and proper meta tags.",
+      "Start with a robust, budget-friendly foundation (MVP) and scale when you are ready. We add new features step-by-step as your business grows.",
     color: "#9d3860",
   },
 ];
@@ -60,10 +60,10 @@ export default function WebPage() {
           Web Design & Development in Ireland
         </h1>
         <p className="font-condensed font-light text-lg text-foreground/80 leading-relaxed mb-4">
-          I design and build fast, custom websites for small businesses and community organisations across Ireland. My process focuses on launching a high-performance Minimum Viable Product (MVP) quickly, letting you establish an online presence without high upfront overheads.
+          I build high-performance websites for small businesses and community organisations across Ireland. My process focuses on launching a solid, lightweight foundation quickly and expanding it iteratively as your business grows.
         </p>
         <p className="font-condensed font-light text-lg text-foreground/80 leading-relaxed">
-          No complex retainers, no bloated systems. You get clean code, a user-friendly CMS (content editor), and full ownership of your site from day one.
+          No complex monthly retainers, no proprietary platforms, and no vendor lock-in. You get clean code, an intuitive editor to manage your content, and complete ownership of your site from day one.
         </p>
       </section>
 
@@ -92,16 +92,16 @@ export default function WebPage() {
         <h2 className="font-serif text-2xl text-foreground mb-6">How It Works</h2>
         <div className="space-y-6 font-condensed font-light text-foreground/80 leading-relaxed">
           <div>
-            <h3 className="font-serif text-lg text-foreground mb-2">1. The Ideal</h3>
-            <p>Tell me everything you want your website to do — the full dream. E-commerce, booking systems, member areas — no filter.</p>
+            <h3 className="font-serif text-lg text-foreground mb-2">1. The Core Foundation (MVP)</h3>
+            <p>We define and build a high-quality initial version that covers your immediate needs. This gets your brand online quickly and cleanly without large upfront design fees.</p>
           </div>
           <div>
-            <h3 className="font-serif text-lg text-foreground mb-2">2. The MVP</h3>
-            <p>Together we figure out the smallest version that gets you online and working. A florist might just need a gallery and a phone number. An auto shop might need hours and an email form.</p>
+            <h3 className="font-serif text-lg text-foreground mb-2">2. Full Self-Management</h3>
+            <p>Once live, you can edit text, publish articles, or update images yourself using an intuitive visual editor. You aren't tied to ongoing developer retainers or custom platforms.</p>
           </div>
           <div>
-            <h3 className="font-serif text-lg text-foreground mb-2">3. The Build</h3>
-            <p>I build the MVP quickly, deploy it, and hand it over. From there, we can iterate — adding features from your roadmap as your business grows.</p>
+            <h3 className="font-serif text-lg text-foreground mb-2">3. Phase-by-Phase Iteration</h3>
+            <p>A website is an active asset. As your business grows and your budget permits, we continuously build out advanced integrations and custom features (like booking systems or e-commerce) in manageable, affordable steps.</p>
           </div>
         </div>
       </section>

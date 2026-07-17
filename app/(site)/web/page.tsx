@@ -28,7 +28,7 @@ const services = [
     icon: TrendingUp,
     title: "Iterative Growth",
     description:
-      "Start with a robust, budget-friendly foundation (MVP) and scale when you are ready. We add new features step-by-step as your business grows.",
+      "Start with a solid, budget-friendly launch version and scale when you are ready. We add new features step-by-step as your business grows.",
     color: "#9d3860",
   },
 ];
@@ -92,7 +92,7 @@ export default function WebPage() {
         <h2 className="font-serif text-2xl text-foreground mb-6">How It Works</h2>
         <div className="space-y-6 font-condensed font-light text-foreground/80 leading-relaxed">
           <div>
-            <h3 className="font-serif text-lg text-foreground mb-2">1. The Core Foundation (MVP)</h3>
+            <h3 className="font-serif text-lg text-foreground mb-2">1. The Launch Version</h3>
             <p>We define and build a high-quality initial version that covers your immediate needs. This gets your brand online quickly and cleanly without large upfront design fees.</p>
           </div>
           <div>

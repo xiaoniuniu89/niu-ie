@@ -1,6 +1,7 @@
 import { getAllPosts } from "@/lib/posts";
 import { PostCard } from "@/components/PostCard";
 import { Hero } from "@/components/Hero";
+import { CostComparison } from "@/components/CostComparison";
 
 export default function Home() {
   const posts = getAllPosts();
@@ -8,6 +9,9 @@ export default function Home() {
   return (
     <>
       <Hero />
+
+      {/* Cost comparison */}
+      <CostComparison />
 
       {/* Latest posts */}
       {posts.length > 0 && (

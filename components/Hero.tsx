@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export function Hero() {
   return (
-    <section className="relative py-20 lg:py-32 overflow-hidden bg-background">
+    <section className="relative pt-8 pb-20 lg:pt-16 lg:pb-32 overflow-hidden bg-background">
       <div className="container mx-auto px-4 md:px-8 grid lg:grid-cols-2 gap-12 items-center">
         <div className="flex flex-col gap-8 z-10">
           <div className="flex flex-col">

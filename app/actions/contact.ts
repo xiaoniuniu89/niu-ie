@@ -41,8 +41,21 @@ async function createGitHubIssueIfConfigured(payload: SampleRequestData): Promis
 
   try {
     const issueTitle = `[Lead] ${payload.name} — ${payload.company || payload.industry}`;
-    const jsonBody = JSON.stringify(payload, null, 2);
-    const issueBody = `\`\`\`json\n${jsonBody}\n\`\`\``;
+
+    // Clean metadata payload for GitHub Issue (strip raw base64 file strings)
+    const cleanPayload = {
+      ...payload,
+      attachments: payload.attachments?.map((att) => ({
+        name: att.name,
+        type: att.type,
+        size: att.size,
+        ...(att.url ? { url: att.url } : {}),
+      })),
+    };
+
+    const rawJson = JSON.stringify(cleanPayload, null, 2);
+    const safeJson = rawJson.length > 60000 ? rawJson.slice(0, 60000) + "\n...[truncated]" : rawJson;
+    const issueBody = `\`\`\`json\n${safeJson}\n\`\`\``;
 
     const res = await fetch(`https://api.github.com/repos/${repo}/issues`, {
       method: "POST",

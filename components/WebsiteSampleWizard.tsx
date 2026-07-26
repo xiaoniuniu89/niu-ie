@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useIntl, FormattedMessage } from "react-intl";
-import { sendSampleRequestEmail } from "@/app/actions/contact";
+import { sendSampleRequestEmail, consumeFormToken, checkFileHash, registerFileHash, checkUploadQuota } from "@/app/actions/contact";
 import { sampleRequestSchema, type SampleRequestData } from "@/lib/contact-schemas";
 import { KB_DESIGN_OPTIONS, KBDesignOption } from "@/lib/kb-designs";
 import { generateReactHelpers } from "@uploadthing/react";
@@ -90,6 +90,21 @@ export function WebsiteSampleWizard() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isSubmittedSuccessfully, setIsSubmittedSuccessfully] = useState<boolean>(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+
+  // Form token: one-time per page load, prevents direct API calls
+  const formTokenRef = useRef<string>("");
+  const formStartRef = useRef<number>(Date.now());
+  useEffect(() => {
+    formTokenRef.current = crypto.randomUUID();
+  }, []);
+
+  // Client-side SHA-256 hash for file dedup
+  async function sha256(file: File): Promise<string> {
+    const buffer = await file.arrayBuffer();
+    const hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+  }
 
   // File upload state: local files before submit
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -250,30 +265,58 @@ export function WebsiteSampleWizard() {
     try {
       let attachments = values.attachments || [];
 
-      // Upload files on submit — only if there are files to upload
+      // Upload files on submit — with dedup and daily cap
       if (selectedFiles.length > 0) {
         setIsUploadingFiles(true);
         setUploadProgress(0);
         setCurrentUploadingFile("");
 
-        // Upload one file at a time for per-file progress tracking
+        // Check global upload quota
+        const quota = await checkUploadQuota();
+        const filesToUpload = selectedFiles.slice(0, Math.max(0, quota.remaining));
+        const skippedCount = selectedFiles.length - filesToUpload.length;
+
         const uploadedResults: { name: string; type: string; size: number; url: string }[] = [];
 
-        for (let i = 0; i < selectedFiles.length; i++) {
-          const file = selectedFiles[i];
+        for (let i = 0; i < filesToUpload.length; i++) {
+          const file = filesToUpload[i];
           setCurrentUploadingFile(file.name);
           setUploadProgress(0);
 
+          // Hash file for dedup check
+          let hash = "";
+          try {
+            hash = await sha256(file);
+            const cached = await checkFileHash(hash);
+            if (cached.cached && cached.url) {
+              uploadedResults.push({
+                name: cached.name || file.name,
+                type: cached.type || file.type,
+                size: cached.size || file.size,
+                url: cached.url,
+              });
+              continue;
+            }
+          } catch {
+            // hash failed — proceed with upload
+          }
+
+          // Upload to UploadThing
           try {
             const result = await startUpload([file]);
 
             if (result && result.length > 0) {
-              uploadedResults.push({
+              const data = {
                 name: result[0].name || file.name,
                 type: result[0].type || file.type,
                 size: result[0].size || file.size,
                 url: result[0].url || result[0].appUrl || "",
-              });
+              };
+              uploadedResults.push(data);
+              // Register hash if we computed it
+              if (hash) {
+                await registerFileHash(hash, data);
+              }
             }
           } catch (uploadErr) {
             console.error(`Upload failed for ${file.name}:`, uploadErr);
@@ -283,11 +326,22 @@ export function WebsiteSampleWizard() {
         setIsUploadingFiles(false);
         attachments = uploadedResults;
         form.setValue("attachments", attachments, { shouldValidate: true });
+
+        if (skippedCount > 0) {
+          setSubmitError(`Upload limit reached. ${uploadedResults.length} file(s) uploaded, ${skippedCount} skipped. Try again tomorrow.`);
+        }
+      }
+
+      // Consume form token (server-side double-check)
+      if (formTokenRef.current) {
+        await consumeFormToken(formTokenRef.current);
       }
 
       const result = await sendSampleRequestEmail({
         ...values,
         attachments,
+        formToken: formTokenRef.current,
+        formStartAt: String(formStartRef.current),
       });
 
       if (result.success) {

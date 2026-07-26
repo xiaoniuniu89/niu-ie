@@ -37,6 +37,8 @@ export const sampleRequestSchema = z.object({
     url: z.string().optional(),
   })).max(3, { message: "Maximum 3 file attachments allowed." }).optional(),
   additionalNotes: z.string().optional(),
+  formToken: z.string().optional(),
+  formStartAt: z.string().optional(),
 });
 
 export type ContactFormData = z.infer<typeof contactFormSchema>;

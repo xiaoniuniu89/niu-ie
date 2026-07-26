@@ -5,8 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { FormattedMessage } from "react-intl";
 import { ContactForm } from "@/components/ContactForm";
 import { WebsiteSampleWizard } from "@/components/WebsiteSampleWizard";
-import { checkWizardAccess } from "@/app/actions/contact";
-import { MessageSquare, Sparkles, Lock } from "lucide-react";
+import { MessageSquare, Sparkles } from "lucide-react";
 
 function ContactModeSwitcherContent() {
   const searchParams = useSearchParams();
@@ -16,16 +15,6 @@ function ContactModeSwitcherContent() {
   const [activeMode, setActiveMode] = useState<"inquiry" | "sample">(
     modeParam === "sample" || modeParam === "wizard" ? "sample" : "inquiry"
   );
-  const [wizardAllowed, setWizardAllowed] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    checkWizardAccess()
-      .then((d) => {
-        setWizardAllowed(d.allowed);
-        if (!d.allowed) setActiveMode("inquiry");
-      })
-      .catch(() => setWizardAllowed(true));
-  }, []);
 
   useEffect(() => {
     const currentMode = searchParams.get("mode") || searchParams.get("tab");
@@ -53,8 +42,7 @@ function ContactModeSwitcherContent() {
           <span><FormattedMessage id="contact.tab.inquiry" /></span>
         </button>
 
-        {wizardAllowed !== false && (
-          <button
+        <button
             type="button"
             onClick={() => setActiveMode("sample")}
             className={`flex-1 flex items-center justify-center gap-2 py-3 px-5 rounded-xl font-condensed font-bold text-sm sm:text-base transition-all duration-200 ${
@@ -66,25 +54,17 @@ function ContactModeSwitcherContent() {
             <Sparkles className={`w-4 h-4 ${activeMode === "sample" ? "text-secondary" : ""}`} />
             <span><FormattedMessage id="contact.tab.sample" /></span>
           </button>
-        )}
       </div>
 
       {/* Dynamic Subhead Banner */}
       <div className="text-center max-w-2xl mx-auto">
-        {wizardAllowed === false ? (
-          <p className="text-muted-foreground font-condensed text-base sm:text-lg leading-relaxed flex items-center justify-center gap-2">
-            <Lock className="w-4 h-4 text-muted-foreground shrink-0" />
-            You've already submitted a sample website request. Please use the general inquiry form below.
-          </p>
-        ) : (
-          <p className="text-muted-foreground font-condensed text-base sm:text-lg leading-relaxed">
-            {activeMode === "sample" ? (
-              <FormattedMessage id="contact.tab.sampleSub" />
-            ) : (
-              <FormattedMessage id="contact.tab.inquirySub" />
-            )}
-          </p>
-        )}
+        <p className="text-muted-foreground font-condensed text-base sm:text-lg leading-relaxed">
+          {activeMode === "sample" ? (
+            <FormattedMessage id="contact.tab.sampleSub" />
+          ) : (
+            <FormattedMessage id="contact.tab.inquirySub" />
+          )}
+        </p>
       </div>
 
       {/* Render Selected View */}

@@ -1,26 +1,59 @@
 "use server";
 
 import nodemailer from "nodemailer";
-import { headers } from "next/headers";
 import { contactFormSchema, sampleRequestSchema } from "@/lib/contact-schemas";
 import type { ContactFormData, SampleRequestData } from "@/lib/contact-schemas";
 
-// In-memory rate limiter (Max 3 submissions per 15 minutes per email)
-const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+// ── Form token (one-time per page load) ──
+const consumedTokens = new Set<string>();
 
-// IP-based rate limiter for wizard (Max 1 request per IP, 30-day window)
-const wizardIPMap = new Map<string, { count: number; resetTime: number }>();
-
-async function getClientIP(): Promise<string> {
-  const headersList = await headers();
-  const forwarded = headersList.get("x-forwarded-for");
-  if (forwarded) return forwarded.split(",")[0].trim();
-  return headersList.get("x-real-ip") || "unknown";
+export async function consumeFormToken(token: string): Promise<boolean> {
+  if (consumedTokens.has(token)) return false;
+  consumedTokens.add(token);
+  return true;
 }
+
+// ── File dedup cache (hash → uploaded file data) ──
+const fileHashCache = new Map<string, { name: string; type: string; size: number; url: string }>();
+
+export async function checkFileHash(hash: string): Promise<{ cached: boolean; name?: string; type?: string; size?: number; url?: string }> {
+  const cached = fileHashCache.get(hash);
+  if (cached) return { cached: true, ...cached };
+  return { cached: false };
+}
+
+export async function registerFileHash(hash: string, data: { name: string; type: string; size: number; url: string }): Promise<{ success: boolean; message?: string }> {
+  if (uploadCounter.count >= UPLOAD_DAILY_LIMIT) {
+    return { success: false, message: "Upload limit reached for today." };
+  }
+  fileHashCache.set(hash, data);
+  uploadCounter.count += 1;
+  return { success: true };
+}
+
+// ── Global daily upload cap ──
+const UPLOAD_DAILY_LIMIT = 6;
+const uploadCounter = { count: 0, date: new Date().toDateString() };
+
+function resetCounterIfNewDay() {
+  const today = new Date().toDateString();
+  if (uploadCounter.date !== today) {
+    uploadCounter.count = 0;
+    uploadCounter.date = today;
+  }
+}
+
+export async function checkUploadQuota(): Promise<{ remaining: number; total: number }> {
+  resetCounterIfNewDay();
+  return { remaining: Math.max(0, UPLOAD_DAILY_LIMIT - uploadCounter.count), total: UPLOAD_DAILY_LIMIT };
+}
+
+// ── Email rate limiter (contact form only, not wizard) ──
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
 
 function checkRateLimit(clientId: string = "global_client"): { allowed: boolean; message?: string } {
   const now = Date.now();
-  const windowMs = 15 * 60 * 1000; // 15 minutes
+  const windowMs = 15 * 60 * 1000;
   const maxRequests = 3;
 
   const record = rateLimitMap.get(clientId);
@@ -39,34 +72,6 @@ function checkRateLimit(clientId: string = "global_client"): { allowed: boolean;
 
   record.count += 1;
   return { allowed: true };
-}
-
-async function checkWizardRateLimitByIP(): Promise<{ allowed: boolean; message?: string }> {
-  const ip = await getClientIP();
-  const now = Date.now();
-  const windowMs = 30 * 24 * 60 * 60 * 1000; // 30 days
-  const maxRequests = 1;
-
-  const record = wizardIPMap.get(ip);
-  if (!record || now > record.resetTime) {
-    wizardIPMap.set(ip, { count: 1, resetTime: now + windowMs });
-    return { allowed: true };
-  }
-
-  if (record.count >= maxRequests) {
-    return {
-      allowed: false,
-      message: "You've already submitted a sample website request. Please use the general inquiry form for further questions.",
-    };
-  }
-
-  record.count += 1;
-  return { allowed: true };
-}
-
-export async function checkWizardAccess(): Promise<{ allowed: boolean }> {
-  const result = await checkWizardRateLimitByIP();
-  return { allowed: result.allowed };
 }
 
 async function createGitHubIssueIfConfigured(payload: SampleRequestData): Promise<string | null> {
@@ -176,17 +181,18 @@ export async function sendEmail(data: ContactFormData & { website?: string }) {
 }
 
 export async function sendSampleRequestEmail(data: SampleRequestData & { website?: string }) {
+  // Honeypot: hidden field filled = bot
   if (data.website) return { success: false, message: "Spam detected" };
 
-  // IP-based rate limit: max 1 wizard request per IP
-  const ipRateCheck = await checkWizardRateLimitByIP();
-  if (!ipRateCheck.allowed) {
-    return { success: false, message: ipRateCheck.message || "Rate limit reached." };
-  }
+  // Form token: one-time per page load
+  if (!data.formToken) return { success: false, message: "Session expired. Please refresh the page." };
+  const tokenValid = await consumeFormToken(data.formToken);
+  if (!tokenValid) return { success: false, message: "Form already submitted. Please refresh the page." };
 
-  const rateCheck = checkRateLimit(data.email || "sample_client");
-  if (!rateCheck.allowed) {
-    return { success: false, message: rateCheck.message || "Rate limit reached." };
+  // Timestamp: filled too fast = bot
+  if (data.formStartAt) {
+    const elapsed = Date.now() - parseInt(data.formStartAt);
+    if (elapsed < 3000) return { success: false, message: "Spam detected" };
   }
 
   const result = sampleRequestSchema.safeParse(data);

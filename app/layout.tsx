@@ -22,14 +22,14 @@ const nunito = Nunito({
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.niu.ie"),
   title: {
-    default: "niu.ie — Daniel Callaghan",
-    template: "%s — niu.ie",
+    default: "Niu Web — Web Design & Local SEO for Irish Businesses",
+    template: "%s | Niu Web",
   },
-  description: "Writing about music, games, software, and the web. Personal site of Daniel Callaghan (小牛).",
-  keywords: ["music", "games", "software", "AI", "web development", "blog", "Daniel Callaghan"],
-  authors: [{ name: "Daniel Callaghan", url: "https://www.niu.ie" }],
-  creator: "Daniel Callaghan",
-  publisher: "Daniel Callaghan",
+  description: "High-performing web design, local Google SEO, and LEO digital grant assistance for small and medium local businesses in Ireland.",
+  keywords: ["web development", "web design Ireland", "local SEO", "Co. Westmeath web design", "LEO digital grants", "Grow Digital Voucher", "Trading Online Voucher", "small business website"],
+  authors: [{ name: "Niu Web", url: "https://www.niu.ie" }],
+  creator: "Niu Web",
+  publisher: "Niu Web",
   formatDetection: {
     email: false,
     address: false,
@@ -41,10 +41,10 @@ export const metadata: Metadata = {
   },
   manifest: "/site.webmanifest",
   openGraph: {
-    title: "niu.ie — Daniel Callaghan",
-    description: "Writing about music, games, software, and the web.",
+    title: "Niu Web — Web Design & Local SEO for Irish Businesses",
+    description: "High-performing web design, local Google SEO, and LEO digital grant assistance for small and medium local businesses in Ireland.",
     url: "https://www.niu.ie",
-    siteName: "niu.ie",
+    siteName: "Niu Web",
     locale: "en_IE",
     type: "website",
     images: [
@@ -52,14 +52,14 @@ export const metadata: Metadata = {
         url: "/niu.webp",
         width: 1200,
         height: 630,
-        alt: "niu.ie",
+        alt: "Niu Web",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "niu.ie — Daniel Callaghan",
-    description: "Writing about music, games, software, and the web.",
+    title: "Niu Web — Web Design & Local SEO for Irish Businesses",
+    description: "High-performing web design, local Google SEO, and LEO digital grant assistance for small and medium local businesses in Ireland.",
     images: ["/niu.webp"],
   },
   robots: {

@@ -16,12 +16,12 @@ export default function DigitalGrantsPage() {
     "@context": "https://schema.org",
     "@type": "WebPage",
     "name": "Irish Government Digital Grants & Web Funding Guide",
-    "url": "https://www.niu.ie/web/digital-grants",
+    "url": "https://www.niu.ie/digital-grants",
     "description": "Learn about the LEO Grow Digital Voucher (€5,000), Trading Online Voucher (€2,500), and free Digital for Business consultancy for web projects.",
     "publisher": {
       "@type": "ProfessionalService",
-      "name": "niu.ie",
-      "url": "https://www.niu.ie/web"
+      "name": "Niu Web",
+      "url": "https://www.niu.ie"
     }
   };
 

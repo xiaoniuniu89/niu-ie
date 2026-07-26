@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -5,6 +6,11 @@ import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/comp
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+
+export const metadata: Metadata = {
+  title: "Our Portfolio | Client Success Stories",
+  description: "Explore our portfolio of custom web design projects for local businesses, authors, and educators in Co. Westmeath and across Ireland.",
+};
 
 // Local portfolio images
 const imgBellaRose = "/bellarosebright.webp";

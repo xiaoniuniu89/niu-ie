@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ContactForm } from "@/components/ContactForm";
+
+export const metadata: Metadata = {
+  title: "Contact Us | Start Your Web Project",
+  description: "Get in touch with Niu Web to discuss your website design, local SEO, or LEO digital grant application.",
+};
 
 export default function Contact() {
   return (

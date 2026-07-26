@@ -13,11 +13,11 @@ export function Hero() {
         <div className="flex flex-col gap-8 z-10">
           <div className="flex flex-col">
             <h1 className="font-serif text-5xl md:text-7xl leading-tight text-primary">
-              High-Quality Web Presence <span className="text-secondary block">For Local Businesses</span>
+              Websites That Drive <span className="text-secondary block">Local Customers To You</span>
             </h1>
           </div>
           <p className="font-condensed font-light text-xl text-foreground leading-relaxed max-w-lg">
-            <strong>Accessible</strong>. <strong>Agile</strong>. <strong>Premium</strong>. We build affordable web solutions that help you stand out and grow your business.
+            Clear pricing, fast launch, and zero monthly platform retainers. We build high-performing websites that help local Irish businesses stand out, look professional, and get found on Google.
           </p>
           <div className="flex flex-wrap gap-4">
             <Button asChild size="lg" className="rounded-md px-8 h-12 bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/90">

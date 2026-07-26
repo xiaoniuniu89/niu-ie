@@ -1,24 +1,24 @@
-import { Eye, Scale, Zap } from "lucide-react";
+import { Eye, ShieldCheck, Rocket } from "lucide-react";
 
 const philosophyData = [
   {
-    title: "Transparency",
-    content: "No hidden fees or complex retainers. We bill transparently by the hour and work iteratively, so you stay in complete control of your budget and project timeline.",
+    title: "Transparent Pricing",
+    content: "No hidden fees or complex retainers. We bill straightforwardly in clear project phases, so you stay in complete control of your budget.",
     icon: Eye,
     iconBg: "bg-primary/10",
     iconColor: "text-primary",
   },
   {
-    title: "Accessibility",
-    content: "A professional web presence shouldn't be a luxury. We provide affordable, high-quality solutions to ensure every local business has equal footing online.",
-    icon: Scale,
+    title: "Complete Ownership",
+    content: "You own your website 100%. No monthly website builder locks or mandatory platform retainers—your digital asset is entirely yours.",
+    icon: ShieldCheck,
     iconBg: "bg-[#4a7c59]/10",
     iconColor: "text-[#4a7c59]",
   },
   {
-    title: "Agility",
-    content: "We don't wait months for perfection. We work backward from your ideal to an MVP that gets your essential services live and searchable in hours.",
-    icon: Zap,
+    title: "Fast-Track Launch",
+    content: "We don't take months to deliver. We focus on getting your core website live and searchable quickly so local customers can start calling and booking right away.",
+    icon: Rocket,
     iconBg: "bg-secondary-text/10",
     iconColor: "text-secondary-text",
   },
@@ -31,14 +31,14 @@ export function Philosophy() {
         <div className="text-center mb-20 space-y-4">
           <h2 className="font-serif text-4xl text-primary">Our Core Values</h2>
           <h3 className="font-sans font-bold text-2xl text-secondary">
-            Bridging the gap for local services.
+            Giving local services a powerful digital home.
           </h3>
           <div className="max-w-3xl mx-auto space-y-6 pt-4">
             <p className="font-condensed font-light text-lg text-foreground/80 leading-relaxed">
-              When our founder Daniel moved back to Ireland after living in China, he found it surprisingly hard to find essential local services—mechanics, montessori schools, physios, or even bouncy castle hire. Too often, great businesses are buried in Facebook posts or have no presence at all.
+              Too many great local businesses—from tradespeople and garages to tutors and boutique services—are buried in social media feeds or have no proper online presence at all.
             </p>
             <p className="font-condensed font-light text-lg text-foreground/80 leading-relaxed">
-              We exist to fix this. We want to get you out of the clutter and onto a professional platform where your community can find you.
+              We exist to solve this. We build clean, high-performing websites that move your business out of the clutter and onto Google, where your local community can easily find, trust, and contact you.
             </p>
           </div>
         </div>

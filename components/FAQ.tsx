@@ -8,19 +8,19 @@ import {
 const faqData = [
   {
     question: "How much does a website cost?",
-    answer: "We bill transparently by the hour. Our approach is to focus on launching a high-quality initial version of your site quickly and then expanding it iteratively in clear phases. This avoids massive upfront design fees and lets you manage costs alongside business growth. For registered local charities, community groups, and churches that cannot afford standard rates, we offer pro-bono web services and sliding-scale sliding support.",
+    answer: "We work in clear, transparent project phases so you always stay in complete control of your budget. By launching your core website first, you avoid paying thousands upfront for complex features before your business actually needs them. For registered local charities and community groups, we also offer pro-bono and sliding-scale support.",
   },
   {
     question: "Who is this for?",
-    answer: "While we have the capability to serve everyone from small startups to large enterprises, our core mission is providing an affordable, premium web presence for local Irish businesses. We especially love helping those who currently have no online presence or are stuck with an outdated site that no longer represents them well.",
+    answer: "Our core mission is providing high-quality, professional websites for local Irish small businesses, service providers, tradespeople, and sole traders. We especially love helping businesses that are currently buried in social media feeds or stuck with an outdated site that no longer attracts customers.",
   },
   {
-    question: "How long does it take?",
-    answer: "Because we work in structured, iterative phases, we can get your essential launch version live and searchable very quickly. We involve you directly in scoping features, then build them out step-by-step. You get online fast and improve your site over time without a massive waiting period.",
+    question: "How long does it take to get live?",
+    answer: "Because we focus on a streamlined launch phase, we can get your essential website built, approved, and live on Google in weeks rather than months. You get online fast and can expand your site step-by-step as your business grows.",
   },
   {
-    question: "Do you offer ongoing support?",
-    answer: "Of course. We don't believe in locking you into expensive monthly retainers. Instead, we are available for updates, migrations, and new features on a flexible hourly basis. We also actively encourage you to take ownership of your site; we'll show you how to manage your content yourself using our intuitive editor.",
+    question: "How do website updates work?",
+    answer: "You have 100% ownership of your site with zero forced monthly subscriptions. You can easily make text updates yourself anytime, or use simple AI writing tools with our clear guides to draft new content. Whenever you want design changes or new custom features, we are on standby to polish and publish updates for you on a flexible, on-demand basis.",
   },
 ];
 

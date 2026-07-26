@@ -235,7 +235,7 @@ export default function DigitalGrantsPage() {
               Based in Co. Westmeath? Apply Locally
             </h3>
             <p className="font-condensed font-light text-sm md:text-base text-foreground/80 leading-relaxed mb-4">
-              I am located near Kinnegad, Co. Westmeath. For local clients, we recommend coordinating with the Westmeath Local Enterprise Office (LEO) based in Mullingar.
+              We are located near Kinnegad, Co. Westmeath. For local clients, we recommend coordinating with the Westmeath Local Enterprise Office (LEO) based in Mullingar.
             </p>
             <div className="flex flex-wrap gap-4 text-xs font-condensed">
               <a 
@@ -275,7 +275,7 @@ export default function DigitalGrantsPage() {
               Supporting Registered Local Charities
             </h3>
             <p className="font-condensed font-light text-sm md:text-base text-foreground/80 leading-relaxed mb-4">
-              I believe in giving back to local communities. I reserve a portion of my calendar to provide <strong>free web design, development, and tech support</strong> for registered local charities in Ireland (particularly within Westmeath and the Midlands).
+              We believe in giving back to local communities. We reserve a portion of our calendar to provide <strong>free web design, development, and tech support</strong> for registered local charities in Ireland (particularly within Westmeath and the Midlands).
             </p>
             <p className="font-condensed font-light text-sm md:text-base text-foreground/80 leading-relaxed">
               If your charity needs a new site or needs technical upgrades to accept donations, please reach out directly via the contact form and mention your charity registration details.

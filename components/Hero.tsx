@@ -3,49 +3,52 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
+const imgImageKanji = "/niu-zi.webp";
+const imgImageNiuAgencyBull = "/niu.webp";
+
 export function Hero() {
   return (
-    <section className="relative pt-8 pb-20 lg:pt-16 lg:pb-32 overflow-hidden bg-background">
+    <section className="relative py-20 lg:py-32 overflow-hidden bg-background">
       <div className="container mx-auto px-4 md:px-8 grid lg:grid-cols-2 gap-12 items-center">
         <div className="flex flex-col gap-8 z-10">
           <div className="flex flex-col">
             <h1 className="font-serif text-5xl md:text-7xl leading-tight text-primary">
-              Daniel Callaghan <span className="text-secondary-text block">小牛 / xiǎo niú</span>
+              High-Quality Web Presence <span className="text-secondary block">For Local Businesses</span>
             </h1>
           </div>
           <p className="font-condensed font-light text-xl text-foreground leading-relaxed max-w-lg">
-            Writing about <strong>music</strong>, <strong>games</strong>, <strong>software &amp; AI</strong>. Building things for the web. Based in Ireland, formerly Beijing.
+            <strong>Accessible</strong>. <strong>Agile</strong>. <strong>Premium</strong>. We build affordable web solutions that help you stand out and grow your business.
           </p>
           <div className="flex flex-wrap gap-4">
             <Button asChild size="lg" className="rounded-md px-8 h-12 bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/90">
-              <Link href="/web">
-                Web Services
+              <Link href="/contact">
+                Start Your Project
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
             <Button asChild size="lg" variant="secondary" className="rounded-md px-8 h-12 bg-secondary text-secondary-foreground hover:bg-secondary/90">
-              <Link href="/contact">
-                Contact
+              <Link href="/process">
+                Our Process
               </Link>
             </Button>
           </div>
         </div>
-
+        
         <div className="relative w-full max-w-xl mx-auto lg:mx-0">
           <div className="absolute -inset-10 bg-secondary/10 blur-3xl rounded-full opacity-50" />
           <div className="absolute top-[-10%] right-[-5%] w-[80%] opacity-[0.03] -rotate-12 pointer-events-none">
-            <Image
-              src="/niu-zi.webp"
-              alt=""
-              width={400}
-              height={400}
-              className="w-full h-auto"
+            <Image 
+              src={imgImageKanji} 
+              alt="" 
+              width={400} 
+              height={400} 
+              className="w-full h-auto" 
             />
           </div>
           <div className="relative">
-            <Image
-              src="/niu.webp"
-              alt="Niu"
+            <Image 
+              src={imgImageNiuAgencyBull} 
+              alt="Niu Web Bull" 
               width={600}
               height={357}
               priority

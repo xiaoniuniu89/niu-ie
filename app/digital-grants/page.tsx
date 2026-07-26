@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, FileText, Calendar, Heart, ShieldAlert, BadgeCheck, Compass, Info, MapPin } from "lucide-react";
 import type { Metadata } from "next";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Irish Government Digital Grants & Web Funding Guide | niu.ie",
@@ -100,7 +102,9 @@ export default function DigitalGrantsPage() {
   ];
 
   return (
-    <div className="container mx-auto px-4 md:px-8 py-16">
+    <div className="min-h-screen flex flex-col bg-background">
+      <Header />
+      <main className="flex-grow container mx-auto px-4 md:px-8 py-16">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -303,12 +307,14 @@ export default function DigitalGrantsPage() {
             variant="secondary"
             className="rounded-md px-8 h-12 font-condensed font-medium text-base"
           >
-            <Link href="/web">
-              Web Services
+            <Link href="/">
+              Services
             </Link>
           </Button>
         </div>
       </section>
+      </main>
+      <Footer showCTA={false} />
     </div>
   );
 }

@@ -1,39 +1,26 @@
 import { MetadataRoute } from 'next'
-import { getAllPosts } from '@/lib/posts'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://www.niu.ie'
-
-  const staticPages: MetadataRoute.Sitemap = [
+  
+  return [
     {
       url: baseUrl,
       lastModified: new Date(),
-      changeFrequency: 'weekly',
+      changeFrequency: 'monthly',
       priority: 1,
     },
     {
-      url: `${baseUrl}/music`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/games`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/software`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/web`,
+      url: `${baseUrl}/portfolio`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
-      priority: 0.7,
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/process`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
     },
     {
       url: `${baseUrl}/contact`,
@@ -41,14 +28,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'yearly',
       priority: 0.5,
     },
+    {
+      url: `${baseUrl}/digital-grants`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
   ]
-
-  const posts = getAllPosts().map((post) => ({
-    url: `${baseUrl}/posts/${post.slug}`,
-    lastModified: new Date(post.frontmatter.date),
-    changeFrequency: 'monthly' as const,
-    priority: 0.6,
-  }))
-
-  return [...staticPages, ...posts]
 }

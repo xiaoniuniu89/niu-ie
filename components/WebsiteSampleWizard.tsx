@@ -5,11 +5,9 @@ import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useIntl, FormattedMessage } from "react-intl";
-import { sendSampleRequestEmail, checkUploadQuota } from "@/app/actions/contact";
+import { sendSampleRequestEmail } from "@/app/actions/contact";
 import { sampleRequestSchema, type SampleRequestData } from "@/lib/contact-schemas";
 import { KB_DESIGN_OPTIONS, KBDesignOption } from "@/lib/kb-designs";
-import { generateReactHelpers } from "@uploadthing/react";
-import type { OurFileRouter } from "@/app/api/uploadthing/core";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -50,7 +48,6 @@ import {
   Image as ImageIcon,
   X,
   Upload,
-  Loader2,
 } from "lucide-react";
 
 const AVAILABLE_PAGES = [
@@ -82,8 +79,6 @@ const PRIMARY_GOALS = [
   "Modernize an old / outdated existing website",
 ];
 
-const { useUploadThing: useUT } = generateReactHelpers<OurFileRouter>();
-
 export function WebsiteSampleWizard() {
   const intl = useIntl();
   const [currentStep, setCurrentStep] = useState<number>(1);
@@ -98,29 +93,9 @@ export function WebsiteSampleWizard() {
     formTokenRef.current = crypto.randomUUID();
   }, []);
 
-  // Client-side SHA-256 hash for file dedup
-  async function sha256(file: File): Promise<string> {
-    const buffer = await file.arrayBuffer();
-    const hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
-  }
-
   // File upload state: local files before submit
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [isUploadingFiles, setIsUploadingFiles] = useState<boolean>(false);
-  const [uploadProgress, setUploadProgress] = useState<number>(0);
-  const [currentUploadingFile, setCurrentUploadingFile] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Client-side dedup: track uploaded files by name|size|lastModified
-  const uploadedFilesRef = useRef<Set<string>>(new Set());
-
-  const { startUpload } = useUT("sampleAssetUploader", {
-    onUploadProgress: (p) => {
-      setUploadProgress(p);
-    },
-  });
 
   // Modal Lightbox Carousel State
   const [previewIndex, setPreviewIndex] = useState<number | null>(null);
@@ -150,7 +125,6 @@ export function WebsiteSampleWizard() {
   const watchHasDesign = form.watch("hasDesign");
   const watchSelectedKbDesigns = form.watch("selectedKbDesigns") || [];
   const watchPages = form.watch("pages") || [];
-  const watchAttachments = form.watch("attachments") || [];
 
   const activePreviewOption: KBDesignOption | null =
     previewIndex !== null ? KB_DESIGN_OPTIONS[previewIndex] : null;
@@ -261,64 +235,27 @@ export function WebsiteSampleWizard() {
     }
   };
 
+  async function readFilesAsBase64(files: File[]): Promise<{ name: string; type: string; size: number; content: string }[]> {
+    return Promise.all(files.map(file => new Promise<{ name: string; type: string; size: number; content: string }>((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result as string;
+        const base64 = result.split(",")[1]; // strip data:...;base64, prefix
+        resolve({ name: file.name, type: file.type, size: file.size, content: base64 });
+      };
+      reader.readAsDataURL(file);
+    })));
+  }
+
   async function onSubmit(values: SampleRequestData) {
     setIsSubmitting(true);
     setSubmitError(null);
 
     try {
-      let attachments = values.attachments || [];
-
-      // Upload files on submit — with dedup and daily cap
-      if (selectedFiles.length > 0) {
-        setIsUploadingFiles(true);
-        setUploadProgress(0);
-        setCurrentUploadingFile("");
-
-        // Check global upload quota
-        const quota = await checkUploadQuota();
-        const filesToUpload = selectedFiles.slice(0, Math.max(0, quota.remaining));
-        const skippedCount = selectedFiles.length - filesToUpload.length;
-
-        const uploadedResults: { name: string; type: string; size: number; url: string }[] = [];
-
-        for (let i = 0; i < filesToUpload.length; i++) {
-          const file = filesToUpload[i];
-          setCurrentUploadingFile(file.name);
-          setUploadProgress(0);
-
-          // Client-side dedup: skip if same file already uploaded this session
-          const fileKey = `${file.name}|${file.size}|${file.lastModified}`;
-          if (uploadedFilesRef.current.has(fileKey)) {
-            continue;
-          }
-
-          // Upload to UploadThing
-          try {
-            const result = await startUpload([file]);
-
-            if (result && result.length > 0) {
-              const data = {
-                name: result[0].name || file.name,
-                type: result[0].type || file.type,
-                size: result[0].size || file.size,
-                url: result[0].url || result[0].appUrl || "",
-              };
-              uploadedResults.push(data);
-              uploadedFilesRef.current.add(fileKey);
-            }
-          } catch (uploadErr) {
-            console.error(`Upload failed for ${file.name}:`, uploadErr);
-          }
-        }
-
-        setIsUploadingFiles(false);
-        attachments = uploadedResults;
-        form.setValue("attachments", attachments, { shouldValidate: true });
-
-        if (skippedCount > 0) {
-          setSubmitError(`Upload limit reached. ${uploadedResults.length} file(s) uploaded, ${skippedCount} skipped. Try again tomorrow.`);
-        }
-      }
+      // Read selected files as base64 for email attachment
+      const attachments = selectedFiles.length > 0
+        ? await readFilesAsBase64(selectedFiles)
+        : [];
 
       const result = await sendSampleRequestEmail({
         ...values,
@@ -330,8 +267,6 @@ export function WebsiteSampleWizard() {
       if (result.success) {
         setIsSubmittedSuccessfully(true);
         setSelectedFiles([]);
-        setUploadProgress(0);
-        setCurrentUploadingFile("");
         form.reset({
           name: "",
           email: "",
@@ -355,7 +290,6 @@ export function WebsiteSampleWizard() {
       setSubmitError("Submission failed. Please try again or email us directly.");
     } finally {
       setIsSubmitting(false);
-      setIsUploadingFiles(false);
     }
   }
 
@@ -944,7 +878,7 @@ export function WebsiteSampleWizard() {
                   <div className="space-y-2 pt-2">
                     <span className="text-xs font-bold text-foreground">
                       Selected Files ({selectedFiles.length}/3)
-                      <span className="font-normal text-muted-foreground ml-1">— will upload on submit</span>
+                      <span className="font-normal text-muted-foreground ml-1">— attached directly to email on submit</span>
                     </span>
                     <div className="flex flex-wrap gap-2">
                       {selectedFiles.map((file, fileIdx) => (
@@ -974,51 +908,7 @@ export function WebsiteSampleWizard() {
                   </div>
                 )}
 
-                {/* Upload Progress Bar (visible during file upload on submit) */}
-                {isUploadingFiles && (
-                  <div className="space-y-2 pt-2 border-t border-dashed border-muted-foreground/20">
-                    <div className="flex items-center gap-2 text-xs font-condensed">
-                      <Loader2 className="w-3.5 h-3.5 text-primary animate-spin shrink-0" />
-                      <span className="text-foreground font-semibold">
-                        Uploading{currentUploadingFile ? ` ${currentUploadingFile}` : "..."}
-                      </span>
-                      <span className="text-muted-foreground ml-auto">{uploadProgress}%</span>
-                    </div>
-                    <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-primary rounded-full transition-all duration-300 ease-out"
-                        style={{ width: `${uploadProgress}%` }}
-                      />
-                    </div>
-                    <p className="text-[10px] text-muted-foreground font-condensed">
-                      Files are uploaded securely on submit. Cancel or navigate away to skip.
-                    </p>
-                  </div>
-                )}
-
-                {/* Already uploaded attachments (from previous state) */}
-                {!isUploadingFiles && watchAttachments.length > 0 && (
-                  <div className="space-y-2 pt-2">
-                    <span className="text-xs font-bold text-foreground">Uploaded Files ({watchAttachments.length}/3):</span>
-                    <div className="flex flex-wrap gap-2">
-                      {watchAttachments.map((att, attIdx) => (
-                        <div
-                          key={attIdx}
-                          className="flex items-center gap-2 p-2 rounded-lg bg-card border text-xs font-condensed text-foreground shadow-xs"
-                        >
-                          {att.type.includes("pdf") ? (
-                            <FileText className="w-4 h-4 text-red-500 shrink-0" />
-                          ) : (
-                            <ImageIcon className="w-4 h-4 text-blue-500 shrink-0" />
-                          )}
-                          <span className="truncate max-w-[160px] font-medium">{att.name}</span>
-                          <span className="text-[10px] text-muted-foreground">({(att.size / (1024 * 1024)).toFixed(1)} MB)</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
+                </div>
 
               {/* Personal Resources & Branding Asset Links */}
               <FormField
@@ -1104,15 +994,10 @@ export function WebsiteSampleWizard() {
             ) : (
               <Button
                 type="submit"
-                disabled={isSubmitting || isUploadingFiles}
+                disabled={isSubmitting}
                 className="font-condensed font-bold bg-secondary text-secondary-foreground hover:bg-secondary/90 px-8"
               >
-                {isUploadingFiles ? (
-                  <span className="flex items-center gap-2">
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Uploading Files ({uploadProgress}%)...
-                  </span>
-                ) : isSubmitting ? (
+                {isSubmitting ? (
                   <FormattedMessage id="wizard.submitting" />
                 ) : (
                   <>

@@ -73,7 +73,7 @@ function validateFileMagicBytes(buffer: Buffer, fileType: string): boolean {
 
 async function createGitHubIssueIfConfigured(payload: SampleRequestData, llmPrompt: string) {
   const token = process.env.GITHUB_TOKEN;
-  const repo = process.env.GITHUB_REPO || "xiaoniuniu89/niu-ie";
+  const repo = process.env.GITHUB_REPO || "xiaoniuniu89/niu-client-leads";
 
   if (!token) return null;
 

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Lora, Roboto_Condensed, Nunito } from "next/font/google";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
+import { cookies } from "next/headers";
+import { LocaleWrapper } from "@/components/LocaleWrapper";
 import "./globals.css";
 
 const lora = Lora({
@@ -75,13 +77,18 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const localeCookie = cookieStore.get("NEXT_LOCALE")?.value ?? "enUs";
+  const localeMap: Record<string, string> = { enUs: "en", ga: "ga", zhCn: "zh", de: "de", es: "es", fr: "fr", pl: "pl", ro: "ro", uk: "uk", lt: "lt", pt: "pt" };
+  const lang = localeMap[localeCookie] ?? "en";
+
   return (
-    <html lang="en">
+    <html lang={lang} suppressHydrationWarning>
       <body
         className={`${lora.variable} ${robotoCondensed.variable} ${nunito.variable} antialiased min-h-screen flex flex-col`}
       >
@@ -98,7 +105,9 @@ export default function RootLayout({
             gtag('config', 'G-D9C89TP5C2');
           `}
         </Script>
-        {children}
+        <LocaleWrapper>
+          {children}
+        </LocaleWrapper>
         <Analytics />
       </body>
     </html>

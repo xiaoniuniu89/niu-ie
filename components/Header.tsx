@@ -13,6 +13,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { ChevronDown, Menu } from "lucide-react";
+import { LanguageSelector } from "@/components/LanguageSelector";
 
 const imgImageNiuLogo = "/niu-zi.webp";
 
@@ -66,13 +67,16 @@ export function Header() {
             Portfolio
           </Link>
 
+          <LanguageSelector />
+
           <Button asChild className="font-condensed font-medium text-sm rounded-md px-6 bg-primary text-primary-foreground hover:bg-primary/90">
             <Link href="/contact">Contact</Link>
           </Button>
         </nav>
 
         {/* Mobile Navigation */}
-        <div className="md:hidden">
+        <div className="md:hidden flex items-center gap-3">
+          <LanguageSelector />
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" aria-label="Toggle navigation menu">

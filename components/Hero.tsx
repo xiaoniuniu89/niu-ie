@@ -1,34 +1,39 @@
+'use client';
+
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { useIntl } from "react-intl";
 
 const imgImageKanji = "/niu-zi.webp";
 const imgImageNiuAgencyBull = "/niu.webp";
 
 export function Hero() {
+  const intl = useIntl();
+
   return (
     <section className="relative py-20 lg:py-32 overflow-hidden bg-background">
       <div className="container mx-auto px-4 md:px-8 grid lg:grid-cols-2 gap-12 items-center">
         <div className="flex flex-col gap-8 z-10">
           <div className="flex flex-col">
             <h1 className="font-serif text-5xl md:text-7xl leading-tight text-primary">
-              Websites That Drive <span className="text-secondary block">Local Customers To You</span>
+              {intl.formatMessage({ id: "hero.title1" })} <span className="text-secondary block">{intl.formatMessage({ id: "hero.title2" })}</span>
             </h1>
           </div>
           <p className="font-condensed font-light text-xl text-foreground leading-relaxed max-w-lg">
-            Clear pricing, fast launch, and zero monthly platform retainers. We build high-performing websites that help local Irish businesses stand out, look professional, and get found on Google.
+            {intl.formatMessage({ id: "hero.subtext" })}
           </p>
           <div className="flex flex-wrap gap-4">
             <Button asChild size="lg" className="rounded-md px-8 h-12 bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/90">
               <Link href="/contact">
-                Start Your Project
+                {intl.formatMessage({ id: "hero.startProject" })}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
             <Button asChild size="lg" variant="secondary" className="rounded-md px-8 h-12 bg-secondary text-secondary-foreground hover:bg-secondary/90">
               <Link href="/process">
-                Our Process
+                {intl.formatMessage({ id: "hero.ourProcess" })}
               </Link>
             </Button>
           </div>

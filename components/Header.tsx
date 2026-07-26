@@ -1,3 +1,5 @@
+'use client';
+
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -14,10 +16,13 @@ import {
 } from "@/components/ui/sheet";
 import { ChevronDown, Menu } from "lucide-react";
 import { LanguageSelector } from "@/components/LanguageSelector";
+import { useIntl } from "react-intl";
 
 const imgImageNiuLogo = "/niu-zi.webp";
 
 export function Header() {
+  const intl = useIntl();
+
   return (
     <header className="sticky top-0 z-50 w-full bg-background/80 backdrop-blur-md border-b border-foreground/5">
       <div className="container mx-auto px-4 md:px-8 h-20 flex items-center justify-between">
@@ -35,7 +40,7 @@ export function Header() {
         <nav className="hidden md:flex items-center gap-6">
           <div className="flex items-center gap-1">
             <Link href="/" className="font-condensed font-medium text-sm text-foreground hover:text-primary transition-colors">
-              Home
+              {intl.formatMessage({ id: "nav.home" })}
             </Link>
             <DropdownMenu>
               <DropdownMenuTrigger aria-label="Toggle home menu" className="flex items-center justify-center text-foreground hover:text-primary transition-colors focus:outline-none p-1">
@@ -43,34 +48,34 @@ export function Header() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem asChild>
-                  <Link href="/#about" className="font-condensed cursor-pointer">Our Core Values</Link>
+                  <Link href="/#about" className="font-condensed cursor-pointer">{intl.formatMessage({ id: "nav.values" })}</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/#services" className="font-condensed cursor-pointer">Services</Link>
+                  <Link href="/#services" className="font-condensed cursor-pointer">{intl.formatMessage({ id: "nav.services" })}</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/#faq" className="font-condensed cursor-pointer">FAQ</Link>
+                  <Link href="/#faq" className="font-condensed cursor-pointer">{intl.formatMessage({ id: "nav.faq" })}</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
 
           <Link href="/process" className="font-condensed font-medium text-sm text-foreground hover:text-primary transition-colors">
-            Process
+            {intl.formatMessage({ id: "nav.process" })}
           </Link>
 
           <Link href="/digital-grants" className="font-condensed font-medium text-sm text-foreground hover:text-primary transition-colors">
-            Grants
+            {intl.formatMessage({ id: "nav.grants" })}
           </Link>
 
           <Link href="/portfolio" className="font-condensed font-medium text-sm text-foreground hover:text-primary transition-colors">
-            Portfolio
+            {intl.formatMessage({ id: "nav.portfolio" })}
           </Link>
 
           <LanguageSelector />
 
           <Button asChild className="font-condensed font-medium text-sm rounded-md px-6 bg-primary text-primary-foreground hover:bg-primary/90">
-            <Link href="/contact">Contact</Link>
+            <Link href="/contact">{intl.formatMessage({ id: "nav.contact" })}</Link>
           </Button>
         </nav>
 
@@ -86,30 +91,30 @@ export function Header() {
             <SheetContent side="right" className="w-[300px] sm:w-[400px]">
               <nav className="flex flex-col gap-6 mt-12">
                 <Link href="/" className="font-condensed font-medium text-lg text-foreground hover:text-primary">
-                  Home
+                  {intl.formatMessage({ id: "nav.home" })}
                 </Link>
                 <div className="flex flex-col gap-4 pl-4 border-l border-foreground/10">
                   <Link href="/#about" className="font-condensed text-base text-foreground/80 hover:text-primary">
-                    Our Core Values
+                    {intl.formatMessage({ id: "nav.values" })}
                   </Link>
                   <Link href="/#services" className="font-condensed text-base text-foreground/80 hover:text-primary">
-                    Services
+                    {intl.formatMessage({ id: "nav.services" })}
                   </Link>
                   <Link href="/#faq" className="font-condensed text-base text-foreground/80 hover:text-primary">
-                    FAQ
+                    {intl.formatMessage({ id: "nav.faq" })}
                   </Link>
                 </div>
                 <Link href="/process" className="font-condensed font-medium text-lg text-foreground hover:text-primary">
-                  Process
+                  {intl.formatMessage({ id: "nav.process" })}
                 </Link>
                 <Link href="/digital-grants" className="font-condensed font-medium text-lg text-foreground hover:text-primary">
-                  Grants
+                  {intl.formatMessage({ id: "nav.grants" })}
                 </Link>
                 <Link href="/portfolio" className="font-condensed font-medium text-lg text-foreground hover:text-primary">
-                  Portfolio
+                  {intl.formatMessage({ id: "nav.portfolio" })}
                 </Link>
                 <Button asChild className="w-full font-condensed font-medium text-lg mt-4">
-                  <Link href="/contact">Contact</Link>
+                  <Link href="/contact">{intl.formatMessage({ id: "nav.contact" })}</Link>
                 </Button>
               </nav>
             </SheetContent>

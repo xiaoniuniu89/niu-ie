@@ -1,44 +1,49 @@
-import { Eye, ShieldCheck, Rocket } from "lucide-react";
+'use client';
 
-const philosophyData = [
-  {
-    title: "Transparent Pricing",
-    content: "No hidden fees or complex retainers. We bill straightforwardly in clear project phases, so you stay in complete control of your budget.",
-    icon: Eye,
-    iconBg: "bg-primary/10",
-    iconColor: "text-primary",
-  },
-  {
-    title: "Complete Ownership",
-    content: "You own your website 100%. No monthly website builder locks or mandatory platform retainers—your digital asset is entirely yours.",
-    icon: ShieldCheck,
-    iconBg: "bg-[#4a7c59]/10",
-    iconColor: "text-[#4a7c59]",
-  },
-  {
-    title: "Fast-Track Launch",
-    content: "We don't take months to deliver. We focus on getting your core website live and searchable quickly so local customers can start calling and booking right away.",
-    icon: Rocket,
-    iconBg: "bg-secondary-text/10",
-    iconColor: "text-secondary-text",
-  },
-];
+import { Eye, ShieldCheck, Rocket } from "lucide-react";
+import { useIntl } from "react-intl";
 
 export function Philosophy() {
+  const intl = useIntl();
+
+  const philosophyData = [
+    {
+      title: intl.formatMessage({ id: "values.pricing.title" }),
+      content: intl.formatMessage({ id: "values.pricing.desc" }),
+      icon: Eye,
+      iconBg: "bg-primary/10",
+      iconColor: "text-primary",
+    },
+    {
+      title: intl.formatMessage({ id: "values.ownership.title" }),
+      content: intl.formatMessage({ id: "values.ownership.desc" }),
+      icon: ShieldCheck,
+      iconBg: "bg-[#4a7c59]/10",
+      iconColor: "text-[#4a7c59]",
+    },
+    {
+      title: intl.formatMessage({ id: "values.launch.title" }),
+      content: intl.formatMessage({ id: "values.launch.desc" }),
+      icon: Rocket,
+      iconBg: "bg-secondary-text/10",
+      iconColor: "text-secondary-text",
+    },
+  ];
+
   return (
     <section id="about" className="py-24 bg-background overflow-hidden">
       <div className="container mx-auto px-4 md:px-8">
         <div className="text-center mb-20 space-y-4">
-          <h2 className="font-serif text-4xl text-primary">Our Core Values</h2>
+          <h2 className="font-serif text-4xl text-primary">{intl.formatMessage({ id: "values.title" })}</h2>
           <h3 className="font-sans font-bold text-2xl text-secondary">
-            Giving local services a powerful digital home.
+            {intl.formatMessage({ id: "values.subtitle" })}
           </h3>
           <div className="max-w-3xl mx-auto space-y-6 pt-4">
             <p className="font-condensed font-light text-lg text-foreground/80 leading-relaxed">
-              Too many great local businesses—from tradespeople and garages to tutors and boutique services—are buried in social media feeds or have no proper online presence at all.
+              {intl.formatMessage({ id: "values.p1" })}
             </p>
             <p className="font-condensed font-light text-lg text-foreground/80 leading-relaxed">
-              We exist to solve this. We build clean, high-performing websites that move your business out of the clutter and onto Google, where your local community can easily find, trust, and contact you.
+              {intl.formatMessage({ id: "values.p2" })}
             </p>
           </div>
         </div>

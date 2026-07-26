@@ -761,7 +761,7 @@ export function WebsiteSampleWizard() {
 
                 <div className="pt-2 flex flex-wrap items-center gap-3">
                   <a
-                    href={process.env.NEXT_PUBLIC_GOOGLE_DRIVE_UPLOAD_URL || "https://drive.google.com"}
+                    href={process.env.NEXT_PUBLIC_GOOGLE_DRIVE_UPLOAD_URL || "https://drive.google.com/drive/folders/1ZiVxr1gCyo-zmeX80l1yJvmEe5HWse8t?usp=drive_link"}
                     target="_blank"
                     rel="noopener noreferrer"
                   >

@@ -73,44 +73,33 @@ export function Header() {
             {intl.formatMessage({ id: "nav.portfolio" })}
           </Link>
 
-          <LanguageSelector />
-
-          {/* Unified Contact & Sample Request Dropdown Menu */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button className="font-condensed font-semibold text-sm rounded-md px-5 bg-primary text-primary-foreground hover:bg-primary/90 gap-1.5 cursor-pointer">
-                <span>Contact & Request</span>
-                <ChevronDown className="h-4 w-4 opacity-80" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-64 p-2 space-y-1">
-              <DropdownMenuItem asChild>
-                <Link
-                  href="/contact?mode=sample"
-                  className="flex items-center gap-2.5 p-2.5 rounded-lg cursor-pointer hover:bg-muted font-condensed font-bold text-sm text-foreground"
-                >
-                  <Sparkles className="w-4 h-4 text-secondary shrink-0" />
-                  <div className="flex flex-col">
+          {/* Contact Nav Item & Dropdown (Identical to Home Nav item) */}
+          <div className="flex items-center gap-1">
+            <Link href="/contact" className="font-condensed font-medium text-sm text-foreground hover:text-primary transition-colors">
+              {intl.formatMessage({ id: "nav.contact" })}
+            </Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger aria-label="Open sub-navigation for Contact options" className="flex items-center justify-center text-foreground hover:text-primary transition-colors focus:outline-none p-1 cursor-pointer">
+                <ChevronDown className="h-4 w-4" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56 p-1.5 space-y-1">
+                <DropdownMenuItem asChild>
+                  <Link href="/contact?mode=sample" className="font-condensed cursor-pointer flex items-center gap-2 p-2 rounded-md hover:bg-muted text-sm font-medium">
+                    <Sparkles className="w-4 h-4 text-secondary shrink-0" />
                     <span>Request Free Website Sample</span>
-                    <span className="text-[11px] font-normal text-muted-foreground">Try 3-page interactive wizard</span>
-                  </div>
-                </Link>
-              </DropdownMenuItem>
-
-              <DropdownMenuItem asChild>
-                <Link
-                  href="/contact?mode=inquiry"
-                  className="flex items-center gap-2.5 p-2.5 rounded-lg cursor-pointer hover:bg-muted font-condensed font-bold text-sm text-foreground"
-                >
-                  <MessageSquare className="w-4 h-4 text-primary shrink-0" />
-                  <div className="flex flex-col">
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/contact?mode=inquiry" className="font-condensed cursor-pointer flex items-center gap-2 p-2 rounded-md hover:bg-muted text-sm font-medium">
+                    <MessageSquare className="w-4 h-4 text-primary shrink-0" />
                     <span>General Inquiry</span>
-                    <span className="text-[11px] font-normal text-muted-foreground">Send a direct message or quote question</span>
-                  </div>
-                </Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+
+          <LanguageSelector />
         </nav>
 
         {/* Mobile Navigation */}
@@ -150,18 +139,14 @@ export function Header() {
 
                 <div className="pt-4 border-t space-y-2">
                   <span className="text-xs font-condensed uppercase tracking-wider text-muted-foreground font-semibold px-1">Contact Options</span>
-                  <Button asChild className="w-full justify-start font-condensed font-semibold text-sm h-11 bg-primary text-primary-foreground gap-2">
-                    <Link href="/contact?mode=sample">
-                      <Sparkles className="w-4 h-4 text-secondary" />
-                      Request Free Website Sample
-                    </Link>
-                  </Button>
-                  <Button asChild variant="outline" className="w-full justify-start font-condensed font-medium text-sm h-11 gap-2">
-                    <Link href="/contact?mode=inquiry">
-                      <MessageSquare className="w-4 h-4 text-primary" />
-                      General Inquiry
-                    </Link>
-                  </Button>
+                  <Link href="/contact?mode=sample" className="flex items-center gap-2 font-condensed font-medium text-base text-foreground hover:text-primary pl-2 py-1">
+                    <Sparkles className="w-4 h-4 text-secondary" />
+                    <span>Request Free Website Sample</span>
+                  </Link>
+                  <Link href="/contact?mode=inquiry" className="flex items-center gap-2 font-condensed font-medium text-base text-foreground hover:text-primary pl-2 py-1">
+                    <MessageSquare className="w-4 h-4 text-primary" />
+                    <span>General Inquiry</span>
+                  </Link>
                 </div>
 
                 <div className="mt-2">

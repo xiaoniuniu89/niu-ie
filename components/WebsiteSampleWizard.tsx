@@ -8,6 +8,7 @@ import { useIntl, FormattedMessage } from "react-intl";
 import { sendSampleRequestEmail } from "@/app/actions/contact";
 import { sampleRequestSchema, type SampleRequestData } from "@/lib/contact-schemas";
 import { KB_DESIGN_OPTIONS, KBDesignOption } from "@/lib/kb-designs";
+import { UploadButton } from "@/lib/uploadthing";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -44,7 +45,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Check,
-  UploadCloud,
   Paperclip,
   FileText,
   Image as ImageIcon,
@@ -178,33 +178,23 @@ export function WebsiteSampleWizard() {
     form.setValue("pages", current, { shouldValidate: true });
   };
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFiles = Array.from(e.target.files || []);
-    if (!selectedFiles.length) return;
-
-    const currentAttachments = form.getValues("attachments") || [];
-    const updatedAttachments = [...currentAttachments];
-
-    selectedFiles.forEach((file) => {
-      if (updatedAttachments.length >= 3) return;
-      if (file.size > 10 * 1024 * 1024) {
-        alert(`File "${file.name}" exceeds the 10MB limit.`);
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const base64Content = event.target?.result as string;
-        updatedAttachments.push({
-          name: file.name,
-          type: file.type || "application/octet-stream",
-          size: file.size,
-          content: base64Content,
-        });
-        form.setValue("attachments", [...updatedAttachments], { shouldValidate: true });
-      };
-      reader.readAsDataURL(file);
+  const handleUploadComplete = (res: { url: string; name: string; size?: number; type?: string }[]) => {
+    const current = form.getValues("attachments") || [];
+    const updated = [...current];
+    res.forEach((file) => {
+      if (updated.length >= 3) return;
+      updated.push({
+        name: file.name,
+        type: file.type || "application/octet-stream",
+        size: file.size || 0,
+        url: file.url,
+      });
     });
+    form.setValue("attachments", updated, { shouldValidate: true });
+  };
+
+  const handleUploadError = (error: Error) => {
+    console.error("UploadThing error:", error.message);
   };
 
   const removeAttachment = (indexToRemove: number) => {
@@ -793,18 +783,45 @@ export function WebsiteSampleWizard() {
                 </div>
 
                 <div className="pt-2">
-                  <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-primary/30 hover:border-primary/60 rounded-xl cursor-pointer bg-background hover:bg-muted/50 transition-all">
-                    <UploadCloud className="w-8 h-8 text-primary/70 mb-2" />
-                    <span className="text-xs font-bold text-foreground">Click to Browse or Drag & Drop Pamphlets / Scans</span>
-                    <span className="text-[11px] text-muted-foreground font-condensed mt-0.5">PDF flyers, business card photos, brand assets</span>
-                    <input
-                      type="file"
-                      multiple
-                      accept="application/pdf,image/png,image/jpeg,image/webp"
-                      onChange={handleFileUpload}
-                      className="hidden"
-                    />
-                  </label>
+                  <UploadButton
+                    endpoint="sampleAssetUploader"
+                    onClientUploadComplete={(res) => handleUploadComplete(res || [])}
+                    onUploadError={handleUploadError}
+                    appearance={{
+                      container: {
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: "24px",
+                        border: "2px dashed hsl(var(--primary) / 0.3)",
+                        borderRadius: "12px",
+                        cursor: "pointer",
+                        background: "hsl(var(--background))",
+                        transition: "all 0.2s",
+                      },
+                      button: {
+                        padding: "10px 20px",
+                        borderRadius: "8px",
+                        background: "hsl(var(--primary))",
+                        color: "hsl(var(--primary-foreground))",
+                        fontSize: "13px",
+                        fontWeight: 700,
+                        fontFamily: "var(--font-condensed), sans-serif",
+                        border: "none",
+                        cursor: "pointer",
+                      },
+                      allowedContent: {
+                        fontSize: "11px",
+                        color: "hsl(var(--muted-foreground))",
+                        fontFamily: "var(--font-condensed), sans-serif",
+                      },
+                    }}
+                    content={{
+                      button: "Choose Files to Upload",
+                      allowedContent: "PDF, PNG, JPG, WEBP • Max 3 files (Up to 8MB each)",
+                    }}
+                  />
                 </div>
 
                 {/* Attached File Chips */}

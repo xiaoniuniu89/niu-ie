@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Globe, Key, TrendingUp } from "lucide-react";
+import { Globe, Key, TrendingUp, ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
 import { CostComparison } from "@/components/CostComparison";
 
@@ -104,6 +104,28 @@ export default function WebPage() {
             <h3 className="font-serif text-lg text-foreground mb-2">3. Phase-by-Phase Iteration</h3>
             <p>A website is an active asset. As your business grows and your budget permits, we continuously build out advanced integrations and custom features (like booking systems or e-commerce) in manageable, affordable steps.</p>
           </div>
+        </div>
+      </section>
+
+      <section className="mb-16">
+        <div className="p-8 rounded-[25px] border border-primary/20 bg-primary/5 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+          <div className="max-w-xl">
+            <h3 className="font-serif text-2xl text-foreground mb-2">
+              Government Grants &amp; Funding Available
+            </h3>
+            <p className="font-condensed font-light text-sm md:text-base text-foreground/80 leading-relaxed">
+              Did you know you can get up to 50% co-funding (up to €5,000) for your web development and digital systems through the LEO Grow Digital and Trading Online Voucher programs?
+            </p>
+          </div>
+          <Button
+            asChild
+            className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-6 h-11 font-condensed font-medium shrink-0"
+          >
+            <Link href="/web/digital-grants" className="flex items-center gap-2">
+              View Funding Guide
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </Button>
         </div>
       </section>
 

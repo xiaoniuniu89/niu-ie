@@ -3,8 +3,6 @@
 import nodemailer from "nodemailer";
 import { contactFormSchema, sampleRequestSchema } from "@/lib/contact-schemas";
 import type { ContactFormData, SampleRequestData } from "@/lib/contact-schemas";
-import { generateLLMPrompt } from "@/lib/llm-prompt-generator";
-import crypto from "crypto";
 
 // In-memory rate limiter (Max 3 submissions per 15 minutes per IP session)
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
@@ -32,73 +30,16 @@ function checkRateLimit(clientId: string = "global_client"): { allowed: boolean;
   return { allowed: true };
 }
 
-function sanitizeUrlString(input?: string): string {
-  if (!input) return "";
-  return input
-    .split("\n")
-    .map((line) => line.trim())
-    .filter((line) => line.length > 0)
-    .map((line) => {
-      try {
-        const url = new URL(line);
-        if (url.protocol === "http:" || url.protocol === "https:") {
-          return url.toString();
-        }
-      } catch {
-        // Safe string fallback
-      }
-      return line.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    })
-    .join("<br>");
-}
-
-function validateFileMagicBytes(buffer: Buffer, fileType: string): boolean {
-  if (buffer.length < 4) return false;
-  const hex = buffer.toString("hex", 0, 4).toUpperCase();
-  
-  if (fileType.includes("pdf")) {
-    return hex.startsWith("25504446"); // %PDF
-  }
-  if (fileType.includes("png")) {
-    return hex.startsWith("89504E47"); // PNG
-  }
-  if (fileType.includes("jpg") || fileType.includes("jpeg")) {
-    return hex.startsWith("FFD8FF"); // JPEG
-  }
-  if (fileType.includes("webp")) {
-    return buffer.toString("utf8", 8, 12) === "WEBP";
-  }
-  return false;
-}
-
-async function createGitHubIssueIfConfigured(payload: SampleRequestData, llmPrompt: string) {
+async function createGitHubIssueIfConfigured(payload: SampleRequestData): Promise<string | null> {
   const token = process.env.GITHUB_TOKEN;
   const repo = process.env.GITHUB_REPO || "xiaoniuniu89/nii-client-leads";
 
   if (!token) return null;
 
   try {
-    const issueTitle = `[Sample Request] ${payload.name} — ${payload.industry}`;
-    const issueBody = `## 🚀 Client Sample Request Overview
-
-- **Name**: ${payload.name}
-- **Email**: ${payload.email}
-- **Phone**: ${payload.phone || "N/A"}
-- **Company**: ${payload.company || "N/A"}
-- **Scope**: ${payload.siteStructure} (${payload.pages.join(", ")})
-- **Industry**: ${payload.industry}
-- **Primary Goal**: ${payload.primaryGoal}
-- **Resource Links**: ${payload.businessAssetLinks || "None"}
-- **Attachments Count**: ${payload.attachments?.length || 0}
-
----
-
-### 🤖 Copy-Ready AI Coding Prompt (Claude Code / Antigravity)
-
-\`\`\`markdown
-${llmPrompt}
-\`\`\`
-`;
+    const issueTitle = `[Lead] ${payload.name} — ${payload.company || payload.industry}`;
+    const jsonBody = JSON.stringify(payload, null, 2);
+    const issueBody = `\`\`\`json\n${jsonBody}\n\`\`\``;
 
     const res = await fetch(`https://api.github.com/repos/${repo}/issues`, {
       method: "POST",
@@ -196,7 +137,6 @@ export async function sendSampleRequestEmail(data: SampleRequestData & { website
   }
 
   const payload = result.data;
-  const llmPrompt = generateLLMPrompt(payload);
 
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -207,73 +147,28 @@ export async function sendSampleRequestEmail(data: SampleRequestData & { website
   });
 
   try {
-    const sanitizedDesignLink = sanitizeUrlString(payload.designLink);
-    const sanitizedReferenceLinks = sanitizeUrlString(payload.referenceLinks);
-    const sanitizedAssetLinks = sanitizeUrlString(payload.businessAssetLinks);
-
-    // Create GitHub Issue if GITHUB_TOKEN environment variable is set
-    const githubIssueUrl = await createGitHubIssueIfConfigured(payload, llmPrompt);
+    // Create GitHub Issue containing pure raw JSON payload metadata
+    const githubIssueUrl = await createGitHubIssueIfConfigured(payload);
 
     const emailSubject = `🚀 Website Sample Request: ${payload.name} (${payload.company || "Personal/Independent"})`;
 
     const htmlBody = `
-      <div style="font-family: Arial, sans-serif; max-width: 650px; margin: 0 auto; color: #333; line-height: 1.6;">
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333; line-height: 1.6;">
         <h2 style="color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px;">
-          🚀 New 3-Page Website Sample Request
+          🚀 New Website Sample Request
         </h2>
 
         ${
           githubIssueUrl
-            ? `<div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 12px; border-radius: 8px; margin-bottom: 16px; font-size: 14px;">
-                 <strong>GitHub Issue Created:</strong> <a href="${githubIssueUrl}" target="_blank" style="color: #16a34a; font-weight: bold;">View Issue ${githubIssueUrl}</a>
+            ? `<div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 14px; border-radius: 8px; margin-bottom: 20px;">
+                 <p style="margin: 0; font-size: 14px; font-weight: bold; color: #166534;">
+                   GitHub Issue Created: <a href="${githubIssueUrl}" target="_blank" style="color: #2563eb; text-decoration: underline;">${githubIssueUrl}</a>
+                 </p>
                </div>`
             : ""
         }
 
-        <h3 style="color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px;">1. Client & Contact Info</h3>
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 16px;">
-          <tr><td style="padding: 6px 0; font-weight: bold; width: 160px;">Name:</td><td>${payload.name}</td></tr>
-          <tr><td style="padding: 6px 0; font-weight: bold;">Email:</td><td><a href="mailto:${payload.email}">${payload.email}</a></td></tr>
-          <tr><td style="padding: 6px 0; font-weight: bold;">Phone:</td><td>${payload.phone || "Not provided"}</td></tr>
-          <tr><td style="padding: 6px 0; font-weight: bold;">Company/Brand:</td><td>${payload.company || "Not provided"}</td></tr>
-        </table>
-
-        <h3 style="color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px;">2. Target Pages Scope</h3>
-        <p><strong>Site Structure:</strong> ${payload.siteStructure === "single-page" ? "Single-Page (1-Page Scroll)" : "Multi-Page Website (Up to 3 Pages)"}</p>
-        <p><strong>Selected Target Pages (${payload.pages.length} / 3):</strong> ${payload.pages.join(", ")}</p>
-
-        <h3 style="color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px;">3. Design Preferences</h3>
-        <p><strong>Has Design / Reference:</strong> ${payload.hasDesign.toUpperCase()}</p>
-        ${
-          payload.hasDesign === "yes"
-            ? `<p><strong>Design Link:</strong> ${
-                sanitizedDesignLink
-                  ? `<a href="${sanitizedDesignLink}" target="_blank">${sanitizedDesignLink}</a>`
-                  : "None provided"
-              }</p>
-               <p><strong>Reference Links:</strong> ${sanitizedReferenceLinks || "None provided"}</p>`
-            : `<p><strong>Selected KB Visual Vibes:</strong> ${payload.selectedKbDesigns?.length ? payload.selectedKbDesigns.join(", ") : "None selected"}</p>`
-        }
-
-        <h3 style="color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px;">4. Business Context & Assets</h3>
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 16px;">
-          <tr><td style="padding: 6px 0; font-weight: bold; width: 160px;">Industry:</td><td>${payload.industry}</td></tr>
-          <tr><td style="padding: 6px 0; font-weight: bold;">Primary Goal:</td><td>${payload.primaryGoal}</td></tr>
-          <tr><td style="padding: 6px 0; font-weight: bold;">Resource / Asset Links:</td><td>${sanitizedAssetLinks || "None provided"}</td></tr>
-          <tr><td style="padding: 6px 0; font-weight: bold;">Direct Email Attachments:</td><td style="color: #0284c7; font-weight: bold;">${payload.attachments?.length ? `${payload.attachments.length} file(s) attached below` : "None attached"}</td></tr>
-        </table>
-
-        ${
-          payload.additionalNotes
-            ? `<h3 style="color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px;">5. Additional Notes</h3>
-               <p style="white-space: pre-wrap; background: #f8fafc; padding: 12px; border-radius: 6px; font-size: 14px;">${payload.additionalNotes}</p>`
-            : ""
-        }
-
-        <h3 style="color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px; margin-top: 24px;">
-          🤖 Copy-Ready AI Coding Prompt (Claude Code / Antigravity)
-        </h3>
-        <pre style="background: #0f172a; color: #f8fafc; padding: 14px; border-radius: 8px; font-size: 12px; overflow-x: auto; white-space: pre-wrap;">${llmPrompt.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</pre>
+        <p style="font-size: 14px;">A new website sample request was submitted by <strong>${payload.name}</strong> (&lt;${payload.email}&gt;).</p>
 
         <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b; text-align: center;">
           Sent automatically from www.niu.ie/contact
@@ -281,40 +176,13 @@ export async function sendSampleRequestEmail(data: SampleRequestData & { website
       </div>
     `;
 
-    const mailAttachments = [];
-    if (payload.attachments && payload.attachments.length > 0) {
-      for (const att of payload.attachments) {
-        if (att.content) {
-          const base64Data = att.content.includes(";base64,")
-            ? att.content.split(";base64,")[1]
-            : att.content;
-          const fileBuffer = Buffer.from(base64Data, "base64");
-
-          const isValidBinary = validateFileMagicBytes(fileBuffer, att.type);
-          if (!isValidBinary) {
-            return {
-              success: false,
-              message: `Security validation failed: File "${att.name}" does not match valid PDF or image binary signatures. Please attach genuine PDF, PNG, or JPG files.`,
-            };
-          }
-
-          mailAttachments.push({
-            filename: att.name.replace(/[^a-zA-Z0-9_.-]/g, "_"),
-            content: fileBuffer,
-            contentType: att.type,
-          });
-        }
-      }
-    }
-
     await transporter.sendMail({
       from: process.env.GMAIL_USER,
       to: process.env.GMAIL_USER,
       replyTo: payload.email,
       subject: emailSubject,
-      text: JSON.stringify(payload, null, 2),
+      text: `New Website Sample Request from ${payload.name}. GitHub Issue: ${githubIssueUrl || "Not configured"}`,
       html: htmlBody,
-      attachments: mailAttachments,
     });
 
     return {

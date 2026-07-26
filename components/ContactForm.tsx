@@ -122,13 +122,20 @@ export function ContactForm() {
           
           {submitStatus && (
             <div
-              className={`p-3 rounded-md text-sm font-condensed ${
+              className={`p-3 rounded-md text-sm font-condensed flex items-center justify-between gap-3 ${
                 submitStatus.success
                   ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"
                   : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300"
               }`}
             >
-              {submitStatus.message}
+              <span>{submitStatus.message}</span>
+              <button
+                type="button"
+                onClick={() => setSubmitStatus(null)}
+                className="text-xs font-bold underline text-current hover:opacity-80"
+              >
+                Dismiss
+              </button>
             </div>
           )}
 

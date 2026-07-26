@@ -197,7 +197,23 @@ export function WebsiteSampleWizard() {
       });
 
       if (result.success) {
-        // Leave at summary step
+        form.reset({
+          name: "",
+          email: "",
+          phone: "",
+          company: "",
+          siteStructure: "multi-page",
+          pages: ["Home Page", "About Us Page", "Contact / Inquiry Page"],
+          hasDesign: "no",
+          designLink: "",
+          referenceLinks: "",
+          selectedKbDesigns: ["clean-service-branding"],
+          industry: INDUSTRIES[0],
+          primaryGoal: PRIMARY_GOALS[0],
+          timeline: TIMELINES[0],
+          additionalNotes: "",
+        });
+        setCurrentStep(1);
       }
     } catch {
       setSubmitStatus({
@@ -240,6 +256,27 @@ export function WebsiteSampleWizard() {
           ))}
         </div>
       </div>
+
+      {submitStatus && (
+        <div
+          className={`mb-6 p-4 rounded-xl text-sm font-condensed flex items-center justify-between gap-3 ${
+            submitStatus.success
+              ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 border border-green-300"
+              : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300 border border-red-300"
+          }`}
+        >
+          <span>{submitStatus.message}</span>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => setSubmitStatus(null)}
+            className="text-xs font-bold underline p-0 h-auto text-current hover:bg-transparent"
+          >
+            Dismiss
+          </Button>
+        </div>
+      )}
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">

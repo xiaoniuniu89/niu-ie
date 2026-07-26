@@ -85,6 +85,7 @@ export function WebsiteSampleWizard() {
   const intl = useIntl();
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isSubmittedSuccessfully, setIsSubmittedSuccessfully] = useState<boolean>(false);
   const [submitStatus, setSubmitStatus] = useState<{
     success: boolean;
     message: string;
@@ -232,6 +233,7 @@ export function WebsiteSampleWizard() {
       });
 
       if (result.success) {
+        setIsSubmittedSuccessfully(true);
         form.reset({
           name: "",
           email: "",
@@ -249,7 +251,6 @@ export function WebsiteSampleWizard() {
           attachments: [],
           additionalNotes: "",
         });
-        setCurrentStep(1);
       }
     } catch {
       setSubmitStatus({
@@ -259,6 +260,34 @@ export function WebsiteSampleWizard() {
     } finally {
       setIsSubmitting(false);
     }
+  }
+
+  if (isSubmittedSuccessfully) {
+    return (
+      <div className="w-full max-w-4xl mx-auto bg-card p-8 md:p-12 rounded-2xl border shadow-sm text-center space-y-6 animate-in fade-in-50 duration-500">
+        <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 text-green-600 rounded-full flex items-center justify-center mx-auto shadow-sm">
+          <CheckCircle2 className="w-12 h-12" />
+        </div>
+        <div className="space-y-2">
+          <h3 className="text-3xl font-serif font-bold text-primary">Website Sample Request Received!</h3>
+          <p className="text-muted-foreground font-condensed text-base max-w-lg mx-auto leading-relaxed">
+            Thank you for providing your project details and visual design preferences. Our agency team is preparing your custom 3-page preview layout. We will be in touch shortly via email.
+          </p>
+        </div>
+        <div className="pt-4 border-t max-w-sm mx-auto">
+          <Button
+            type="button"
+            onClick={() => {
+              setIsSubmittedSuccessfully(false);
+              setCurrentStep(1);
+            }}
+            className="font-condensed font-bold bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl px-6 h-11 shadow-sm"
+          >
+            Submit Another Request
+          </Button>
+        </div>
+      </div>
+    );
   }
 
   return (

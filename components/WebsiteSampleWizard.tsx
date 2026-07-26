@@ -667,14 +667,17 @@ export function WebsiteSampleWizard() {
                       return (
                         <Card
                           key={option.id}
-                          className={`group cursor-pointer transition-all border rounded-xl overflow-hidden ${
+                          className={`group transition-all border rounded-xl overflow-hidden ${
                             isSelected
                               ? "border-primary ring-2 ring-primary/20 shadow-md bg-primary/[0.02]"
                               : "border-border hover:border-primary/40 bg-background"
                           }`}
                         >
-                          {/* Visual Screenshot Banner + Expand Zoom Hover Action */}
-                          <div className="relative w-full h-48 sm:h-52 overflow-hidden bg-muted">
+                          {/* Visual Screenshot Banner — click to preview */}
+                          <div
+                            className="relative w-full h-48 sm:h-52 overflow-hidden bg-muted cursor-pointer"
+                            onClick={() => setPreviewIndex(idx)}
+                          >
                             <Image
                               src={option.imageSrc}
                               alt={option.name}
@@ -682,59 +685,35 @@ export function WebsiteSampleWizard() {
                               sizes="(max-width: 640px) 100vw, 50vw"
                               className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent transition-opacity duration-300" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
 
                             {/* Category Badge */}
                             <Badge className="absolute bottom-3 left-3 bg-background/90 text-foreground backdrop-blur-sm text-[11px] font-semibold border shadow-sm">
                               {option.category}
                             </Badge>
 
-                            {/* Checkmark Indicator */}
-                            <div
-                              onClick={() => toggleKbDesign(option.id)}
-                              className={`absolute top-3 right-3 w-7 h-7 rounded-full border flex items-center justify-center transition-all ${
-                                isSelected ? "bg-primary border-primary text-primary-foreground shadow-md" : "bg-background/90 border-border text-muted-foreground hover:border-primary"
-                              }`}
-                            >
-                              <CheckCircle2 className="w-4 h-4" />
-                            </div>
+                            {/* Selected indicator */}
+                            {isSelected && (
+                              <div className="absolute top-3 right-3 w-7 h-7 rounded-full bg-primary border border-primary text-primary-foreground shadow-md flex items-center justify-center">
+                                <Check className="w-4 h-4" />
+                              </div>
+                            )}
 
-                            {/* Zoom Preview Trigger */}
-                            <div
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setPreviewIndex(idx);
-                              }}
-                              className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                            >
+                            {/* Hover preview prompt */}
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                               <Button
                                 type="button"
                                 size="sm"
                                 className="bg-background text-foreground hover:bg-background/90 font-condensed font-bold gap-1.5 shadow-lg border rounded-full text-xs"
                               >
                                 <Maximize2 className="w-3.5 h-3.5 text-primary" />
-                                Inspect Full Screenshot & Specs
+                                Preview Full Screenshot
                               </Button>
                             </div>
                           </div>
 
-                          <CardContent className="p-5 space-y-3" onClick={() => toggleKbDesign(option.id)}>
-                            <div className="flex items-start justify-between gap-2">
-                              <h4 className="font-bold text-base text-foreground leading-snug">{option.name}</h4>
-                              <Button
-                                type="button"
-                                variant="ghost"
-                                size="icon"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setPreviewIndex(idx);
-                                }}
-                                className="h-7 w-7 text-muted-foreground hover:text-primary shrink-0"
-                                title="Expand Preview"
-                              >
-                                <Maximize2 className="w-4 h-4" />
-                              </Button>
-                            </div>
+                          <CardContent className="p-5 space-y-3">
+                            <h4 className="font-bold text-base text-foreground leading-snug">{option.name}</h4>
 
                             <p className="text-xs text-muted-foreground font-condensed leading-relaxed">
                               {option.description}
@@ -769,6 +748,39 @@ export function WebsiteSampleWizard() {
                                   title={`Background ${option.colorPalette.backgroundHex}`}
                                 />
                               </div>
+                            </div>
+
+                            {/* Action Buttons: Preview + Select */}
+                            <div className="flex items-center gap-2 pt-2">
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setPreviewIndex(idx);
+                                }}
+                                className="flex-1 font-condensed font-semibold"
+                              >
+                                <Maximize2 className="w-3.5 h-3.5 mr-1.5" />
+                                Preview
+                              </Button>
+                              <Button
+                                type="button"
+                                size="sm"
+                                onClick={(e) => { e.stopPropagation(); toggleKbDesign(option.id); }}
+                                className={`flex-1 font-condensed font-bold ${
+                                  isSelected
+                                    ? "bg-secondary text-secondary-foreground hover:bg-secondary/90"
+                                    : "bg-primary text-primary-foreground hover:bg-primary/90"
+                                }`}
+                              >
+                                {isSelected ? (
+                                  <><Check className="w-4 h-4 mr-1.5" /> Selected</>
+                                ) : (
+                                  <><Sparkles className="w-4 h-4 mr-1.5" /> Select</>
+                                )}
+                              </Button>
                             </div>
                           </CardContent>
                         </Card>

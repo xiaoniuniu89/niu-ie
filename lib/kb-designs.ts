@@ -32,7 +32,7 @@ export const KB_DESIGN_OPTIONS: KBDesignOption[] = [
       mutedHex: "#596277"
     },
     keyFeatures: ["Emergency Phone CTA Bar", "Condensed Impact Headers", "Diagnostic Service Cards", "Instant Quote Request"],
-    sampleSites: ["Apex Auto Garage", "Alliance Ireland Plumbing", "Dublin Plumbing Services"]
+    sampleSites: ["Apex Auto Garage", "Alliance Ireland Plumbing", "Dublin Plumbing Services", "McCoy Motors", "Shine Window Cleaning", "Mr Brilliant Window Cleaner"]
   },
   {
     id: "luxury-beauty",
@@ -49,7 +49,7 @@ export const KB_DESIGN_OPTIONS: KBDesignOption[] = [
       mutedHex: "#757575"
     },
     keyFeatures: ["Editorial Image Showcases", "Pill-shaped Action Triggers", "Mobile 'Book Now' Floating Bar", "Service Pricing Cards"],
-    sampleSites: ["Dry & Fly Beauty Bar", "Hershesons Salon", "Peter Mark Hairdressers"]
+    sampleSites: ["Dry & Fly Beauty Bar", "Hershesons Salon", "Larry King Hair", "Peter Mark Hairdressers"]
   },
   {
     id: "healthcare-wellness",
@@ -66,7 +66,7 @@ export const KB_DESIGN_OPTIONS: KBDesignOption[] = [
       mutedHex: "#64748B"
     },
     keyFeatures: ["Empathetic Hero Headers", "Practitioner Profile Cards", "Confidential Inquiry Triggers", "FAQ Accordion"],
-    sampleSites: ["Mind & Body Works", "TalkHere Counseling"]
+    sampleSites: ["Mind & Body Works", "TalkHere Counselling"]
   },
   {
     id: "warm-editorial",

@@ -72,7 +72,7 @@ export function ContactForm() {
   }
 
   return (
-    <div className="w-full max-w-lg mx-auto bg-card p-6 md:p-10 rounded-xl shadow-sm border">
+    <div className="w-full max-w-4xl mx-auto bg-card p-6 md:p-10 rounded-2xl border shadow-sm">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" />

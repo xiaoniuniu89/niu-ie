@@ -53,7 +53,7 @@ export function Hero() {
           <div className="relative">
             <Image 
               src={imgImageNiuAgencyBull} 
-              alt={intl.formatMessage({ id: "hero.bullAlt" })} 
+              alt={intl.formatMessage({ id: "hero.bullAlt", defaultMessage: "Niu Agency Bull Illustration" })} 
               width={600}
               height={357}
               priority

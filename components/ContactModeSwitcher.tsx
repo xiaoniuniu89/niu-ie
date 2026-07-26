@@ -1,0 +1,60 @@
+"use client";
+
+import { useState } from "react";
+import { FormattedMessage } from "react-intl";
+import { ContactForm } from "@/components/ContactForm";
+import { WebsiteSampleWizard } from "@/components/WebsiteSampleWizard";
+import { MessageSquare, Sparkles } from "lucide-react";
+
+export function ContactModeSwitcher() {
+  const [activeMode, setActiveMode] = useState<"inquiry" | "sample">("inquiry");
+
+  return (
+    <div className="w-full max-w-5xl mx-auto space-y-8">
+      {/* Segmented Mode Switcher Bar */}
+      <div className="flex flex-col sm:flex-row p-1.5 bg-muted rounded-2xl border shadow-inner gap-1.5 max-w-2xl mx-auto">
+        <button
+          type="button"
+          onClick={() => setActiveMode("inquiry")}
+          className={`flex-1 flex items-center justify-center gap-2 py-3 px-5 rounded-xl font-condensed font-bold text-sm sm:text-base transition-all duration-200 ${
+            activeMode === "inquiry"
+              ? "bg-card text-primary shadow-sm ring-1 ring-border"
+              : "text-muted-foreground hover:text-foreground hover:bg-card/50"
+          }`}
+        >
+          <MessageSquare className={`w-4 h-4 ${activeMode === "inquiry" ? "text-primary" : ""}`} />
+          <span><FormattedMessage id="contact.tab.inquiry" /></span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveMode("sample")}
+          className={`flex-1 flex items-center justify-center gap-2 py-3 px-5 rounded-xl font-condensed font-bold text-sm sm:text-base transition-all duration-200 ${
+            activeMode === "sample"
+              ? "bg-card text-primary shadow-sm ring-1 ring-border"
+              : "text-muted-foreground hover:text-foreground hover:bg-card/50"
+          }`}
+        >
+          <Sparkles className={`w-4 h-4 ${activeMode === "sample" ? "text-secondary" : ""}`} />
+          <span><FormattedMessage id="contact.tab.sample" /></span>
+        </button>
+      </div>
+
+      {/* Dynamic Subhead Banner */}
+      <div className="text-center max-w-xl mx-auto">
+        <p className="text-muted-foreground font-condensed text-base sm:text-lg leading-relaxed">
+          {activeMode === "sample" ? (
+            <FormattedMessage id="contact.tab.sampleSub" />
+          ) : (
+            <FormattedMessage id="contact.tab.inquirySub" />
+          )}
+        </p>
+      </div>
+
+      {/* Render Selected View */}
+      <div className="transition-all duration-300">
+        {activeMode === "sample" ? <WebsiteSampleWizard /> : <ContactForm />}
+      </div>
+    </div>
+  );
+}

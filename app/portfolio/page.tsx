@@ -7,6 +7,7 @@ import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/comp
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import Script from "next/script";
 import { useIntl } from "react-intl";
 
 const imgBellaRose = "/bellarosebright.webp";
@@ -32,8 +33,25 @@ export default function Portfolio() {
     },
   ];
 
+  const collectionSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": intl.formatMessage({ id: "portfolio.title" }),
+    "description": intl.formatMessage({ id: "portfolio.intro" }),
+    "url": "https://www.niu.ie/portfolio",
+    "mainEntity": portfolioItems.map((item) => ({
+      "@type": "CreativeWork",
+      "name": item.title,
+      "description": item.description,
+      "url": item.link,
+    })),
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      <Script id="collection-schema" type="application/ld+json" strategy="beforeInteractive">
+        {JSON.stringify(collectionSchema)}
+      </Script>
       <Header />
 
       <main className="flex-1">
@@ -82,6 +100,13 @@ export default function Portfolio() {
                 </CardFooter>
               </Card>
             ))}
+          </div>
+
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full border border-dashed border-foreground/20 text-foreground/50 font-condensed text-sm">
+              <span className="w-2 h-2 rounded-full bg-accent/60 animate-pulse" />
+              More coming soon
+            </div>
           </div>
 
           <div className="bg-accent/10 rounded-3xl p-12 text-center max-w-4xl mx-auto mb-12">

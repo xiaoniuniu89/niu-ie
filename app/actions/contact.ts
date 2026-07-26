@@ -11,7 +11,9 @@ const contactFormSchema = z.object({
 
 type ContactFormData = z.infer<typeof contactFormSchema>;
 
-export async function sendEmail(data: ContactFormData) {
+export async function sendEmail(data: ContactFormData & { website?: string }) {
+  if (data.website) return { success: false, message: "Spam detected" };
+
   const result = contactFormSchema.safeParse(data);
 
   if (!result.success) {

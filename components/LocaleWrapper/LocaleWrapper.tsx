@@ -52,6 +52,9 @@ export const LocaleClientWrapper = ({
   useEffect(() => {
     document.cookie = `NEXT_LOCALE=${locale}; path=/; max-age=31536000; SameSite=Lax`;
 
+    const lang = localeCodeMap[locale] || "en";
+    document.documentElement.lang = lang;
+
     if (locale === "enUs") {
       setMessages(enMessages as Record<string, string>);
       return;

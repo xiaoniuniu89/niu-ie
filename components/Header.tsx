@@ -13,6 +13,7 @@ import {
   Sheet,
   SheetContent,
   SheetTrigger,
+  SheetTitle,
 } from "@/components/ui/sheet";
 import { ChevronDown, Menu } from "lucide-react";
 import { LanguageSelector } from "@/components/LanguageSelector";
@@ -43,7 +44,7 @@ export function Header() {
               {intl.formatMessage({ id: "nav.home" })}
             </Link>
             <DropdownMenu>
-              <DropdownMenuTrigger aria-label="Toggle home menu" className="flex items-center justify-center text-foreground hover:text-primary transition-colors focus:outline-none p-1">
+              <DropdownMenuTrigger aria-label="Open sub-navigation for Home page" className="flex items-center justify-center text-foreground hover:text-primary transition-colors focus:outline-none p-1">
                 <ChevronDown className="h-4 w-4" />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -81,7 +82,6 @@ export function Header() {
 
         {/* Mobile Navigation */}
         <div className="md:hidden flex items-center gap-3">
-          <LanguageSelector />
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" aria-label="Toggle navigation menu">
@@ -89,6 +89,7 @@ export function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+              <SheetTitle className="sr-only">Navigation</SheetTitle>
               <nav className="flex flex-col gap-6 mt-12">
                 <Link href="/" className="font-condensed font-medium text-lg text-foreground hover:text-primary">
                   {intl.formatMessage({ id: "nav.home" })}
@@ -116,6 +117,9 @@ export function Header() {
                 <Button asChild className="w-full font-condensed font-medium text-lg mt-4">
                   <Link href="/contact">{intl.formatMessage({ id: "nav.contact" })}</Link>
                 </Button>
+                <div className="mt-2">
+                  <LanguageSelector />
+                </div>
               </nav>
             </SheetContent>
           </Sheet>

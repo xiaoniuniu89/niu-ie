@@ -6,12 +6,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useMemo } from "react";
 import { useIntl } from "react-intl";
 
 export function FAQ() {
   const intl = useIntl();
 
-  const faqData = [
+  const faqData = useMemo(() => [
     {
       question: intl.formatMessage({ id: "faq.q1" }),
       answer: intl.formatMessage({ id: "faq.a1" }),
@@ -28,7 +29,7 @@ export function FAQ() {
       question: intl.formatMessage({ id: "faq.q4" }),
       answer: intl.formatMessage({ id: "faq.a4" }),
     },
-  ];
+  ], [intl]);
 
   return (
     <section id="faq" className="py-24 bg-background">
@@ -45,9 +46,9 @@ export function FAQ() {
             <AccordionItem 
               key={index} 
               value={`item-${index}`}
-              className="border-none"
+              className="border border-border/30 rounded-md"
             >
-              <AccordionTrigger className="bg-primary text-primary-foreground px-6 py-4 rounded-md hover:no-underline font-sans font-medium text-sm data-[state=open]:rounded-b-none transition-all text-left">
+              <AccordionTrigger className="bg-primary/10 text-primary hover:bg-primary/15 data-[state=open]:bg-primary data-[state=open]:text-primary-foreground px-6 py-4 rounded-md hover:no-underline font-sans font-medium text-sm data-[state=open]:rounded-b-none transition-all text-left">
                 {item.question}
               </AccordionTrigger>
               <AccordionContent className="bg-foreground/5 px-6 py-6 rounded-b-md font-condensed font-light text-base text-foreground leading-relaxed">

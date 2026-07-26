@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowRight, FileText, Calendar, Heart, ShieldAlert, BadgeCheck, Compass, Info, MapPin } from "lucide-react";
+import { ArrowRight, FileText, Calendar, Heart, ShieldAlert, BadgeCheck, ChevronRight, Compass, Info, MapPin } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { useIntl } from "react-intl";
@@ -125,8 +125,8 @@ export default function DigitalGrantsPage() {
 
       {/* Warning Callout */}
       <section className="mb-16">
-        <div className="p-6 md:p-8 rounded-[25px] border border-destructive bg-destructive/5 text-foreground flex flex-col md:flex-row gap-6 items-start">
-          <div className="p-3 rounded-full bg-destructive/10 text-destructive shrink-0">
+        <div className="p-6 md:p-8 rounded-[25px] border border-secondary bg-secondary/5 text-foreground flex flex-col md:flex-row gap-6 items-start">
+          <div className="p-3 rounded-full bg-secondary/10 text-secondary shrink-0">
             <ShieldAlert className="h-8 w-8" />
           </div>
           <div>
@@ -154,7 +154,7 @@ export default function DigitalGrantsPage() {
 
         <div className="grid gap-8 lg:grid-cols-3">
           {grantOptions.map((grant) => (
-            <Card key={grant.title} className="rounded-[25px] border border-border bg-card flex flex-col justify-between hover:-translate-y-1 transition-all duration-300">
+            <Card key={grant.title} className="rounded-2xl border border-border bg-card flex flex-col justify-between hover:-translate-y-1 transition-all duration-300">
               <CardHeader className="p-8 pb-4">
                 <div className="flex justify-between items-start mb-4">
                   <span className={`px-3 py-1 rounded-full text-xs font-condensed font-semibold ${grant.badgeColor}`}>
@@ -179,7 +179,7 @@ export default function DigitalGrantsPage() {
                   <ul className="space-y-2.5">
                     {grant.points.map((point, index) => (
                       <li key={index} className="flex gap-2.5 items-start text-xs font-condensed font-light text-foreground/70">
-                        <BadgeCheck className="h-4 w-4 text-accent shrink-0 mt-0.5" />
+                        <ChevronRight className="h-4 w-4 text-foreground/40 shrink-0 mt-0.5" />
                         <span>{point}</span>
                       </li>
                     ))}
@@ -205,8 +205,8 @@ export default function DigitalGrantsPage() {
 
         <div className="relative pl-6 border-l-2 border-border/60 ml-4 space-y-12 max-w-3xl">
           {timelineSteps.map((step) => (
-            <div key={step.step} className="relative">
-              <div className="absolute -left-[35px] top-0.5 bg-background border-2 border-primary rounded-full w-6 h-6 flex items-center justify-center font-condensed text-xs font-bold text-primary">
+            <div key={step.step} className="relative flex items-start gap-4">
+              <div className="bg-background border-2 border-primary rounded-full w-6 h-6 flex items-center justify-center shrink-0 mt-0.5 font-condensed text-xs font-bold text-primary">
                 {step.step}
               </div>
               <div>
@@ -224,7 +224,7 @@ export default function DigitalGrantsPage() {
 
       {/* Local Westmeath Travel Support & Maps callout */}
       <section className="mb-16">
-        <div className="p-6 md:p-8 rounded-[25px] border border-border bg-card flex flex-col md:flex-row gap-8 items-center">
+        <div className="p-6 md:p-8 rounded-2xl border border-border bg-card flex flex-col md:flex-row gap-8 items-center">
           <div className="p-4 rounded-2xl bg-secondary/10 text-secondary shrink-0">
             <MapPin className="h-10 w-10" />
           </div>
@@ -236,10 +236,11 @@ export default function DigitalGrantsPage() {
               {intl.formatMessage({ id: "grantsPage.westmeathDesc" })}
             </p>
             <div className="flex flex-wrap gap-4 text-xs font-condensed">
-              <a 
-                href="https://www.localenterprise.ie/westmeath" 
-                target="_blank" 
+              <a
+                href="https://www.localenterprise.ie/westmeath"
+                target="_blank"
                 rel="noopener noreferrer"
+                aria-label="LEO Westmeath website (opens in new tab)"
                 className="text-primary hover:underline font-semibold"
               >
                 Official LEO Westmeath Website
@@ -264,7 +265,7 @@ export default function DigitalGrantsPage() {
 
       {/* Charity Work Support Note */}
       <section className="mb-20">
-        <div className="p-8 rounded-[25px] border border-accent/20 bg-accent/5 flex flex-col md:flex-row gap-6 items-start">
+        <div className="p-8 rounded-2xl border border-accent/20 bg-accent/5 flex flex-col md:flex-row gap-6 items-start">
           <div className="p-3 rounded-full bg-accent/10 text-accent shrink-0">
             <Heart className="h-8 w-8" />
           </div>

@@ -20,13 +20,13 @@ import { useIntl } from "react-intl";
 
 const formSchema = z.object({
   name: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
+    message: "contact.validation.nameMin",
   }),
   email: z.string().email({
-    message: "Please enter a valid email address.",
+    message: "contact.validation.email",
   }),
   message: z.string().min(10, {
-    message: "Message must be at least 10 characters.",
+    message: "contact.validation.messageMin",
   }),
 });
 
@@ -75,6 +75,7 @@ export function ContactForm() {
     <div className="w-full max-w-lg mx-auto bg-card p-6 md:p-10 rounded-xl shadow-sm border">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" />
           <FormField
             control={form.control}
             name="name"
@@ -82,7 +83,7 @@ export function ContactForm() {
               <FormItem>
                 <FormLabel className="font-sans font-semibold text-foreground">{intl.formatMessage({ id: "contact.nameLabel" })}</FormLabel>
                 <FormControl>
-                  <Input placeholder="Your name" {...field} className="font-condensed" />
+                  <Input placeholder={intl.formatMessage({ id: "contact.namePlaceholder" })} autoComplete="name" {...field} className="font-condensed" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -95,7 +96,7 @@ export function ContactForm() {
               <FormItem>
                 <FormLabel className="font-sans font-semibold text-foreground">{intl.formatMessage({ id: "contact.emailLabel" })}</FormLabel>
                 <FormControl>
-                  <Input placeholder="your.email@example.com" {...field} className="font-condensed" />
+                  <Input placeholder={intl.formatMessage({ id: "contact.emailPlaceholder" })} autoComplete="email" {...field} className="font-condensed" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -109,7 +110,7 @@ export function ContactForm() {
                 <FormLabel className="font-sans font-semibold text-foreground">{intl.formatMessage({ id: "contact.messageLabel" })}</FormLabel>
                 <FormControl>
                   <Textarea 
-                    placeholder="Tell us about your project..." 
+                    placeholder={intl.formatMessage({ id: "contact.messagePlaceholder" })} 
                     className="min-h-[120px] font-condensed" 
                     {...field} 
                   />
@@ -133,7 +134,7 @@ export function ContactForm() {
 
           <Button 
             type="submit" 
-            className="w-full font-condensed font-medium" 
+            className="md:w-auto md:px-8 font-condensed font-medium" 
             disabled={isSubmitting}
           >
             {isSubmitting ? intl.formatMessage({ id: "contact.sending" }) : intl.formatMessage({ id: "contact.sendBtn" })}

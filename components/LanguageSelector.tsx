@@ -1,22 +1,22 @@
 'use client';
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useTransition } from "react";
 import { LocaleValue, useLocale } from "@/contexts/LocaleContext";
 import { useSetLocale } from "@/components/LocaleWrapper/LocaleWrapper";
 import { useRouter } from "next/navigation";
 import { Globe } from "lucide-react";
 
 export const languages: { code: LocaleValue; label: string; flag: string }[] = [
-  { code: "enUs", label: "English", flag: "🇬🇧" },
-  { code: "ga", label: "Gaeilge", flag: "🇮🇪" },
-  { code: "zhCn", label: "中文", flag: "🇨🇳" },
-  { code: "de", label: "Deutsch", flag: "🇩🇪" },
-  { code: "es", label: "Español", flag: "🇪🇸" },
-  { code: "fr", label: "Français", flag: "🇫🇷" },
-  { code: "pl", label: "Polski", flag: "🇵🇱" },
-  { code: "ro", label: "Română", flag: "🇷🇴" },
-  { code: "uk", label: "Українська", flag: "🇺🇦" },
-  { code: "lt", label: "Lietuvių", flag: "🇱🇹" },
-  { code: "pt", label: "Português", flag: "🇵🇹" },
+  { code: "enUs", label: "English", flag: "EN" },
+  { code: "ga", label: "Gaeilge", flag: "GA" },
+  { code: "zhCn", label: "中文", flag: "ZH" },
+  { code: "de", label: "Deutsch", flag: "DE" },
+  { code: "es", label: "Español", flag: "ES" },
+  { code: "fr", label: "Français", flag: "FR" },
+  { code: "pl", label: "Polski", flag: "PL" },
+  { code: "ro", label: "Română", flag: "RO" },
+  { code: "uk", label: "Українська", flag: "UK" },
+  { code: "lt", label: "Lietuvių", flag: "LT" },
+  { code: "pt", label: "Português", flag: "PT" },
 ];
 
 export const LanguageSelector: React.FC = () => {
@@ -24,6 +24,7 @@ export const LanguageSelector: React.FC = () => {
   const setLocale = useSetLocale();
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
@@ -31,7 +32,7 @@ export const LanguageSelector: React.FC = () => {
   const changeLanguage = (langCode: LocaleValue) => {
     setLocale(langCode);
     setIsOpen(false);
-    setTimeout(() => router.refresh(), 10);
+    startTransition(() => router.refresh());
   };
 
   useEffect(() => {

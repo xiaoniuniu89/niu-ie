@@ -22,7 +22,7 @@ export function GrantsBanner() {
           {intl.formatMessage({ id: "grants.bannerDesc" })}
         </p>
         <div className="pt-2">
-          <Button asChild size="lg" className="rounded-md font-condensed px-8">
+          <Button asChild variant="secondary" size="lg" className="rounded-md font-condensed px-8 shadow-lg">
             <Link href="/digital-grants">
               {intl.formatMessage({ id: "grants.bannerBtn" })}
               <ArrowRight className="ml-2 h-4 w-4" />

@@ -53,11 +53,11 @@ export function Hero() {
           <div className="relative">
             <Image 
               src={imgImageNiuAgencyBull} 
-              alt="Niu Web Bull" 
+              alt={intl.formatMessage({ id: "hero.bullAlt" })} 
               width={600}
               height={357}
               priority
-              className="w-full h-auto drop-shadow-[0_25px_50px_rgba(0,0,0,0.15)]"
+              className="w-full h-auto drop-shadow-[0_10px_20px_rgba(0,0,0,0.12)]"
             />
           </div>
         </div>

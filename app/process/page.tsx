@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import Script from "next/script";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -14,8 +15,42 @@ const imgImageMechanicWorkingOnCar = "/process/mechanic.webp";
 export default function ProcessPage() {
   const intl = useIntl();
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": intl.formatMessage({ id: "process.step1.title" }),
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": intl.formatMessage({ id: "process.step1.desc" }),
+        },
+      },
+      {
+        "@type": "Question",
+        "name": intl.formatMessage({ id: "process.step2.title" }),
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": intl.formatMessage({ id: "process.step2.desc" }),
+        },
+      },
+      {
+        "@type": "Question",
+        "name": intl.formatMessage({ id: "process.step3.title" }),
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": intl.formatMessage({ id: "process.step3.desc" }),
+        },
+      },
+    ],
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      <Script id="faq-schema" type="application/ld+json" strategy="beforeInteractive">
+        {JSON.stringify(faqSchema)}
+      </Script>
       <Header />
       <main className="flex-1 overflow-hidden">
         {/* Intro Section */}
@@ -31,7 +66,7 @@ export default function ProcessPage() {
         {/* The 3 Steps */}
         <section className="relative py-12">
           {/* Gradient Line */}
-          <div className="absolute top-[200px] left-0 right-0 h-1 bg-gradient-to-r from-accent/20 via-primary/20 to-secondary/20 w-full hidden md:block" />
+          <div className="absolute top-1/3 left-0 right-0 h-1 bg-gradient-to-r from-accent/20 via-primary/20 to-secondary/20 w-full hidden md:block" />
           
           <div className="container mx-auto px-4 md:px-8 grid md:grid-cols-3 gap-8 relative z-10">
             {/* Step 1: The Vision */}
@@ -97,7 +132,7 @@ export default function ProcessPage() {
                   <div className="bg-secondary-text/5 border border-secondary-text/20 rounded-2xl p-6">
                     <div className="flex items-center gap-3 mb-2">
                       <Target className="w-5 h-5 text-foreground" />
-                      <span className="font-sans font-bold text-lg text-foreground">The Ultimate Goal</span>
+                      <span className="font-sans font-bold text-lg text-foreground">{intl.formatMessage({ id: "process.ultimateGoal" })}</span>
                     </div>
                     <p className="font-condensed font-light text-foreground/80">
                       {intl.formatMessage({ id: "process.florist.ideal" })}
@@ -107,7 +142,7 @@ export default function ProcessPage() {
                   <div className="bg-primary/5 border border-primary/20 rounded-2xl p-6">
                     <div className="flex items-center gap-3 mb-2">
                       <Rocket className="w-5 h-5 text-foreground" />
-                      <span className="font-sans font-bold text-lg text-foreground">The Fast Launch</span>
+                      <span className="font-sans font-bold text-lg text-foreground">{intl.formatMessage({ id: "process.fastLaunch" })}</span>
                     </div>
                     <p className="font-condensed font-light text-foreground/80">
                       {intl.formatMessage({ id: "process.florist.launch" })}
@@ -116,7 +151,7 @@ export default function ProcessPage() {
 
                   <div className="bg-background border border-foreground/20 rounded-xl p-6">
                      <h4 className="font-sans font-bold text-lg text-foreground mb-6">{intl.formatMessage({ id: "process.roadmap" })}</h4>
-                     <div className="space-y-6 border-l-2 border-border ml-2 pl-6 relative">
+                     <div className="space-y-6 ml-2 pl-6 relative">
                         <div className="relative">
                            <span className="absolute -left-[31px] top-1.5 w-3 h-3 bg-accent rounded-full ring-4 ring-background"></span>
                            <p className="font-condensed font-bold text-sm text-accent">{intl.formatMessage({ id: "process.ownership" })}</p>
@@ -162,7 +197,7 @@ export default function ProcessPage() {
                   <div className="bg-secondary-text/5 border border-secondary-text/20 rounded-2xl p-6">
                     <div className="flex items-center gap-3 mb-2">
                       <Target className="w-5 h-5 text-foreground" />
-                      <span className="font-sans font-bold text-lg text-foreground">The Ultimate Goal</span>
+                      <span className="font-sans font-bold text-lg text-foreground">{intl.formatMessage({ id: "process.ultimateGoal" })}</span>
                     </div>
                     <p className="font-condensed font-light text-foreground/80">
                       {intl.formatMessage({ id: "process.auto.ideal" })}
@@ -172,7 +207,7 @@ export default function ProcessPage() {
                   <div className="bg-primary/5 border border-primary/20 rounded-2xl p-6">
                     <div className="flex items-center gap-3 mb-2">
                       <Rocket className="w-5 h-5 text-foreground" />
-                      <span className="font-sans font-bold text-lg text-foreground">The Fast Launch</span>
+                      <span className="font-sans font-bold text-lg text-foreground">{intl.formatMessage({ id: "process.fastLaunch" })}</span>
                     </div>
                     <p className="font-condensed font-light text-foreground/80">
                       {intl.formatMessage({ id: "process.auto.launch" })}
@@ -181,7 +216,7 @@ export default function ProcessPage() {
 
                   <div className="bg-background border border-foreground/20 rounded-xl p-6">
                      <h4 className="font-sans font-bold text-lg text-foreground mb-6">{intl.formatMessage({ id: "process.roadmap" })}</h4>
-                     <div className="space-y-6 border-l-2 border-border ml-2 pl-6 relative">
+                     <div className="space-y-6 ml-2 pl-6 relative">
                         <div className="relative">
                            <span className="absolute -left-[31px] top-1.5 w-3 h-3 bg-accent rounded-full ring-4 ring-background"></span>
                            <p className="font-condensed font-bold text-sm text-accent">{intl.formatMessage({ id: "process.ownership" })}</p>

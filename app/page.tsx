@@ -1,3 +1,4 @@
+import Script from "next/script";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { Expertise } from "@/components/Expertise";
@@ -14,7 +15,6 @@ export default function Home() {
     "image": "https://www.niu.ie/niu.webp",
     "@id": "https://www.niu.ie",
     "url": "https://www.niu.ie",
-    "telephone": "",
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "Westmeath",
@@ -43,10 +43,9 @@ export default function Home() {
 
   return (
     <main className="min-h-screen">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <Script id="schema" type="application/ld+json" strategy="beforeInteractive">
+        {JSON.stringify(jsonLd)}
+      </Script>
       <Header />
       <Hero />
       <Philosophy />

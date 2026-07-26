@@ -18,8 +18,8 @@ export function Philosophy() {
       title: intl.formatMessage({ id: "values.ownership.title" }),
       content: intl.formatMessage({ id: "values.ownership.desc" }),
       icon: ShieldCheck,
-      iconBg: "bg-[#4a7c59]/10",
-      iconColor: "text-[#4a7c59]",
+      iconBg: "bg-accent/10",
+      iconColor: "text-accent",
     },
     {
       title: intl.formatMessage({ id: "values.launch.title" }),

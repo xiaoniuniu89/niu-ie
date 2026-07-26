@@ -12,10 +12,10 @@ export function Footer({ showCTA = true }: FooterProps) {
   const intl = useIntl();
 
   return (
-    <footer className="bg-accent text-accent-foreground pt-20 pb-10">
+    <footer className="bg-foreground/5 text-foreground pt-20 pb-10">
       <div className="container mx-auto px-4 md:px-8">
         {showCTA && (
-          <div className="text-center mb-16 space-y-6">
+          <div className="bg-accent text-accent-foreground rounded-2xl p-10 md:p-16 text-center mb-16 space-y-6">
             <h2 className="font-serif text-3xl md:text-4xl text-white">
               Ready to upgrade your web presence?
             </h2>
@@ -30,18 +30,19 @@ export function Footer({ showCTA = true }: FooterProps) {
           </div>
         )}
         
-        <div className="mb-12 border-t border-white/20 pt-12 text-white/90">
+        <div className="mb-12 border-t border-foreground/20 pt-12 text-accent">
           <h4 className="font-serif text-lg mb-4 text-center md:text-left">Sitemap</h4>
-          <ul className="flex flex-wrap gap-x-8 gap-y-2 font-condensed font-light text-sm text-white/70 justify-center md:justify-start">
-            <li><Link href="/#about" className="hover:text-white transition-colors">{intl.formatMessage({ id: "nav.values" })}</Link></li>
-            <li><Link href="/#services" className="hover:text-white transition-colors">{intl.formatMessage({ id: "nav.services" })}</Link></li>
-            <li><Link href="/#faq" className="hover:text-white transition-colors">{intl.formatMessage({ id: "nav.faq" })}</Link></li>
-            <li><Link href="/portfolio" className="hover:text-white transition-colors">{intl.formatMessage({ id: "nav.portfolio" })}</Link></li>
-            <li><Link href="/digital-grants" className="hover:text-white transition-colors">{intl.formatMessage({ id: "nav.grants" })}</Link></li>
-            <li><Link href="/contact" className="hover:text-white transition-colors">{intl.formatMessage({ id: "nav.contact" })}</Link></li>
+          <ul className="flex flex-wrap gap-x-8 gap-y-2 font-condensed font-light text-sm text-accent/70 justify-center md:justify-start">
+            <li><Link href="/#about" className="hover:text-accent transition-colors">{intl.formatMessage({ id: "nav.values" })}</Link></li>
+            <li><Link href="/#services" className="hover:text-accent transition-colors">{intl.formatMessage({ id: "nav.services" })}</Link></li>
+            <li><Link href="/#faq" className="hover:text-accent transition-colors">{intl.formatMessage({ id: "nav.faq" })}</Link></li>
+            <li><Link href="/portfolio" className="hover:text-accent transition-colors">{intl.formatMessage({ id: "nav.portfolio" })}</Link></li>
+            <li><Link href="/digital-grants" className="hover:text-accent transition-colors">{intl.formatMessage({ id: "nav.grants" })}</Link></li>
+            <li><Link href="/contact" className="hover:text-accent transition-colors">{intl.formatMessage({ id: "nav.contact" })}</Link></li>
           </ul>
         </div>
-        <div className="pt-8 border-t border-white/20 flex flex-col md:flex-row items-center justify-between gap-6 opacity-70">
+        <div className="pt-8 border-t border-foreground/20 flex flex-col md:flex-row items-center justify-between gap-6">
+          <p className="text-foreground/60 text-xs font-condensed">&copy; {new Date().getFullYear()} Niu Web. All rights reserved.</p>
         </div>
       </div>
     </footer>

@@ -14,8 +14,8 @@ export function Expertise() {
       content: intl.formatMessage({ id: "expertise.design.desc" }),
       icon: Globe,
       bg: "bg-white",
-      iconBg: "bg-[#4a7c59]/10",
-      iconColor: "text-[#4a7c59]",
+      iconBg: "bg-accent/10",
+      iconColor: "text-accent",
     },
     {
       title: intl.formatMessage({ id: "expertise.retainers.title" }),
@@ -51,7 +51,7 @@ export function Expertise() {
           {expertiseData.map((item, index) => (
             <Card 
               key={index} 
-              className={`rounded-[25px] overflow-hidden shadow-sm border transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-primary/30 ${item.bg}`}
+              className={`rounded-2xl overflow-hidden shadow-sm border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-primary/30 ${item.bg}`}
             >
               <CardHeader className="p-6">
                 <div className={`w-12 h-12 rounded-lg ${item.iconBg} flex items-center justify-center mb-6`}>

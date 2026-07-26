@@ -151,6 +151,18 @@ export async function sendSampleRequestEmail(data: SampleRequestData & { website
       </div>
     `;
 
+    const mailAttachments = payload.attachments?.map((att) => {
+      const base64Data = att.content.includes(";base64,")
+        ? att.content.split(";base64,")[1]
+        : att.content;
+
+      return {
+        filename: att.name.replace(/[^a-zA-Z0-9_.-]/g, "_"),
+        content: Buffer.from(base64Data, "base64"),
+        contentType: att.type,
+      };
+    }) || [];
+
     await transporter.sendMail({
       from: process.env.GMAIL_USER,
       to: process.env.GMAIL_USER,
@@ -158,6 +170,7 @@ export async function sendSampleRequestEmail(data: SampleRequestData & { website
       subject: emailSubject,
       text: JSON.stringify(payload, null, 2),
       html: htmlBody,
+      attachments: mailAttachments,
     });
 
     return { success: true, message: "Sample request submitted successfully!" };

@@ -29,6 +29,12 @@ export const sampleRequestSchema = z.object({
   primaryGoal: z.string().min(1, { message: "Please select a primary goal." }),
   businessAssetLinks: z.string().optional(),
   uploadedDriveFileNames: z.string().optional(),
+  attachments: z.array(z.object({
+    name: z.string(),
+    type: z.string(),
+    size: z.number(),
+    content: z.string(),
+  })).max(3, { message: "Maximum 3 file attachments allowed." }).optional(),
   additionalNotes: z.string().optional(),
 });
 

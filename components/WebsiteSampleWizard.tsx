@@ -44,10 +44,11 @@ import {
   ChevronLeft,
   ChevronRight,
   Check,
-  FolderUp,
   UploadCloud,
-  ExternalLink,
-  ShieldCheck,
+  Paperclip,
+  FileText,
+  Image as ImageIcon,
+  X,
 } from "lucide-react";
 
 const AVAILABLE_PAGES = [
@@ -107,7 +108,7 @@ export function WebsiteSampleWizard() {
       industry: INDUSTRIES[0],
       primaryGoal: PRIMARY_GOALS[0],
       businessAssetLinks: "",
-      uploadedDriveFileNames: "",
+      attachments: [],
       additionalNotes: "",
     },
   });
@@ -116,6 +117,7 @@ export function WebsiteSampleWizard() {
   const watchHasDesign = form.watch("hasDesign");
   const watchSelectedKbDesigns = form.watch("selectedKbDesigns") || [];
   const watchPages = form.watch("pages") || [];
+  const watchAttachments = form.watch("attachments") || [];
 
   const activePreviewOption: KBDesignOption | null =
     previewIndex !== null ? KB_DESIGN_OPTIONS[previewIndex] : null;
@@ -171,6 +173,41 @@ export function WebsiteSampleWizard() {
     form.setValue("pages", current, { shouldValidate: true });
   };
 
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = Array.from(e.target.files || []);
+    if (!selectedFiles.length) return;
+
+    const currentAttachments = form.getValues("attachments") || [];
+    const updatedAttachments = [...currentAttachments];
+
+    selectedFiles.forEach((file) => {
+      if (updatedAttachments.length >= 3) return;
+      if (file.size > 10 * 1024 * 1024) {
+        alert(`File "${file.name}" exceeds the 10MB limit.`);
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const base64Content = event.target?.result as string;
+        updatedAttachments.push({
+          name: file.name,
+          type: file.type || "application/octet-stream",
+          size: file.size,
+          content: base64Content,
+        });
+        form.setValue("attachments", [...updatedAttachments], { shouldValidate: true });
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const removeAttachment = (indexToRemove: number) => {
+    const current = form.getValues("attachments") || [];
+    const updated = current.filter((_, idx) => idx !== indexToRemove);
+    form.setValue("attachments", updated, { shouldValidate: true });
+  };
+
   const navigatePreview = (direction: "prev" | "next") => {
     if (previewIndex === null) return;
     if (direction === "prev") {
@@ -208,7 +245,7 @@ export function WebsiteSampleWizard() {
           industry: INDUSTRIES[0],
           primaryGoal: PRIMARY_GOALS[0],
           businessAssetLinks: "",
-          uploadedDriveFileNames: "",
+          attachments: [],
           additionalNotes: "",
         });
         setCurrentStep(1);
@@ -740,72 +777,63 @@ export function WebsiteSampleWizard() {
                 )}
               />
 
-              {/* Secure Google Drive Upload Box */}
-              <div className="p-5 bg-muted/40 border border-dashed border-primary/30 rounded-2xl space-y-3">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex items-center gap-2.5">
-                    <div className="p-2.5 rounded-xl bg-primary/10 text-primary">
-                      <FolderUp className="w-5 h-5" />
-                    </div>
+              {/* Native In-Form File Drag & Drop Attachment Box */}
+              <div className="p-5 bg-muted/40 border border-dashed border-primary/40 rounded-2xl space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Paperclip className="w-5 h-5 text-primary" />
                     <div>
-                      <h4 className="font-bold text-sm text-foreground flex items-center gap-1.5">
-                        <FormattedMessage id="wizard.driveDropTitle" />
-                      </h4>
-                      <p className="text-xs text-muted-foreground font-condensed mt-0.5">
-                        <FormattedMessage id="wizard.driveDropSub" />
-                      </p>
+                      <h4 className="font-bold text-sm text-foreground">Attach Pamphlets, Flyers or Branding Files</h4>
+                      <p className="text-xs text-muted-foreground font-condensed">PDFs, PNG, JPG, WEBP • Max 3 files (Up to 10MB each)</p>
                     </div>
                   </div>
-                  <Badge variant="outline" className="hidden sm:flex items-center gap-1 text-[10px] bg-background text-green-700 dark:text-green-400 border-green-300 shrink-0">
-                    <ShieldCheck className="w-3 h-3" /> Virus Scanned
-                  </Badge>
+                  <Badge variant="outline" className="text-[10px] bg-background">Direct Email Attachment</Badge>
                 </div>
 
-                <div className="pt-2 flex flex-wrap items-center gap-3">
-                  <a
-                    href={process.env.NEXT_PUBLIC_GOOGLE_DRIVE_UPLOAD_URL || "https://drive.google.com/drive/folders/1ZiVxr1gCyo-zmeX80l1yJvmEe5HWse8t?usp=drive_link"}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Button
-                      type="button"
-                      className="bg-primary text-primary-foreground hover:bg-primary/90 font-condensed font-bold text-xs gap-2 rounded-xl h-10 px-5 shadow-sm"
-                    >
-                      <UploadCloud className="w-4 h-4 text-secondary" />
-                      <FormattedMessage id="wizard.driveDropBtn" />
-                      <ExternalLink className="w-3.5 h-3.5 opacity-80" />
-                    </Button>
-                  </a>
-                  <span className="text-xs text-muted-foreground font-condensed">
-                    Direct drop folder • No Google login required
-                  </span>
+                <div className="pt-2">
+                  <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-primary/30 hover:border-primary/60 rounded-xl cursor-pointer bg-background hover:bg-muted/50 transition-all">
+                    <UploadCloud className="w-8 h-8 text-primary/70 mb-2" />
+                    <span className="text-xs font-bold text-foreground">Click to Browse or Drag & Drop Pamphlets / Scans</span>
+                    <span className="text-[11px] text-muted-foreground font-condensed mt-0.5">PDF flyers, business card photos, brand assets</span>
+                    <input
+                      type="file"
+                      multiple
+                      accept="application/pdf,image/png,image/jpeg,image/webp"
+                      onChange={handleFileUpload}
+                      className="hidden"
+                    />
+                  </label>
                 </div>
 
-                {/* File Names Linkage Field */}
-                <div className="pt-2 border-t">
-                  <FormField
-                    control={form.control}
-                    name="uploadedDriveFileNames"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="font-sans font-semibold text-xs text-foreground">
-                          <FormattedMessage id="wizard.driveFileNamesLabel" />
-                        </FormLabel>
-                        <p className="text-[11px] text-muted-foreground font-condensed -mt-1">
-                          <FormattedMessage id="wizard.driveFileNamesSub" />
-                        </p>
-                        <FormControl>
-                          <Input
-                            placeholder={intl.formatMessage({ id: "wizard.driveFileNamesPlaceholder" })}
-                            className="font-condensed text-xs h-9 bg-background"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+                {/* Attached File Chips */}
+                {watchAttachments.length > 0 && (
+                  <div className="space-y-2 pt-2">
+                    <span className="text-xs font-bold text-foreground">Attached Files ({watchAttachments.length}/3):</span>
+                    <div className="flex flex-wrap gap-2">
+                      {watchAttachments.map((att, attIdx) => (
+                        <div
+                          key={attIdx}
+                          className="flex items-center gap-2 p-2 rounded-lg bg-card border text-xs font-condensed text-foreground shadow-xs"
+                        >
+                          {att.type.includes("pdf") ? (
+                            <FileText className="w-4 h-4 text-red-500 shrink-0" />
+                          ) : (
+                            <ImageIcon className="w-4 h-4 text-blue-500 shrink-0" />
+                          )}
+                          <span className="truncate max-w-[160px] font-medium">{att.name}</span>
+                          <span className="text-[10px] text-muted-foreground">({(att.size / (1024 * 1024)).toFixed(1)} MB)</span>
+                          <button
+                            type="button"
+                            onClick={() => removeAttachment(attIdx)}
+                            className="p-1 hover:bg-muted rounded-full text-muted-foreground hover:text-foreground"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Personal Resources & Branding Asset Links */}
@@ -915,9 +943,9 @@ export function WebsiteSampleWizard() {
                   <h4 className="font-bold text-xs uppercase text-muted-foreground mb-1">Scope & Assets</h4>
                   <p className="text-xs text-foreground"><strong>Industry:</strong> {form.getValues("industry")}</p>
                   <p className="text-xs text-foreground"><strong>Primary Goal:</strong> {form.getValues("primaryGoal")}</p>
-                  {form.getValues("uploadedDriveFileNames") && (
-                    <p className="text-xs text-primary font-semibold mt-1 break-all">
-                      <strong>Uploaded Drive Files:</strong> {form.getValues("uploadedDriveFileNames")}
+                  {watchAttachments.length > 0 && (
+                    <p className="text-xs text-primary font-semibold mt-1">
+                      <strong>Attached Files ({watchAttachments.length}):</strong> {watchAttachments.map((a) => a.name).join(", ")}
                     </p>
                   )}
                   {form.getValues("businessAssetLinks") && (

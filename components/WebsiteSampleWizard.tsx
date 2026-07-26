@@ -44,6 +44,10 @@ import {
   ChevronLeft,
   ChevronRight,
   Check,
+  FolderUp,
+  UploadCloud,
+  ExternalLink,
+  ShieldCheck,
 } from "lucide-react";
 
 const AVAILABLE_PAGES = [
@@ -733,6 +737,48 @@ export function WebsiteSampleWizard() {
                   </FormItem>
                 )}
               />
+
+              {/* Secure Google Drive Upload Box */}
+              <div className="p-5 bg-muted/40 border border-dashed border-primary/30 rounded-2xl space-y-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className="p-2.5 rounded-xl bg-primary/10 text-primary">
+                      <FolderUp className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-sm text-foreground flex items-center gap-1.5">
+                        <FormattedMessage id="wizard.driveDropTitle" />
+                      </h4>
+                      <p className="text-xs text-muted-foreground font-condensed mt-0.5">
+                        <FormattedMessage id="wizard.driveDropSub" />
+                      </p>
+                    </div>
+                  </div>
+                  <Badge variant="outline" className="hidden sm:flex items-center gap-1 text-[10px] bg-background text-green-700 dark:text-green-400 border-green-300 shrink-0">
+                    <ShieldCheck className="w-3 h-3" /> Virus Scanned
+                  </Badge>
+                </div>
+
+                <div className="pt-2 flex flex-wrap items-center gap-3">
+                  <a
+                    href={process.env.NEXT_PUBLIC_GOOGLE_DRIVE_UPLOAD_URL || "https://drive.google.com"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button
+                      type="button"
+                      className="bg-primary text-primary-foreground hover:bg-primary/90 font-condensed font-bold text-xs gap-2 rounded-xl h-10 px-5 shadow-sm"
+                    >
+                      <UploadCloud className="w-4 h-4 text-secondary" />
+                      <FormattedMessage id="wizard.driveDropBtn" />
+                      <ExternalLink className="w-3.5 h-3.5 opacity-80" />
+                    </Button>
+                  </a>
+                  <span className="text-xs text-muted-foreground font-condensed">
+                    Direct drop folder • No Google login required
+                  </span>
+                </div>
+              </div>
 
               {/* Personal Resources & Branding Asset Links */}
               <FormField

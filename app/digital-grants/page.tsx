@@ -302,15 +302,6 @@ export default function DigitalGrantsPage() {
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
-          <Button
-            asChild
-            variant="secondary"
-            className="rounded-md px-8 h-12 font-condensed font-medium text-base"
-          >
-            <Link href="/">
-              Services
-            </Link>
-          </Button>
         </div>
       </section>
       </main>

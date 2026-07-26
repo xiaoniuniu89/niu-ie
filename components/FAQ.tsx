@@ -16,7 +16,7 @@ const faqData = [
   },
   {
     question: "How long does it take to get live?",
-    answer: "Because we focus on a streamlined launch phase, we can get your essential website built, approved, and live on Google in weeks rather than months. You get online fast and can expand your site step-by-step as your business grows.",
+    answer: "Because we focus on a streamlined launch phase, we can get your essential website built, approved, and live on Google in hours to days, rather than waiting months. You get online fast and can expand your site step-by-step as your business grows.",
   },
   {
     question: "How do website updates work?",

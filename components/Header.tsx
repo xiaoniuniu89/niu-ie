@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -15,7 +15,7 @@ import {
   SheetTrigger,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { ChevronDown, Menu } from "lucide-react";
+import { ChevronDown, Menu, Sparkles, MessageSquare } from "lucide-react";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { useIntl } from "react-intl";
 
@@ -44,7 +44,7 @@ export function Header() {
               {intl.formatMessage({ id: "nav.home" })}
             </Link>
             <DropdownMenu>
-              <DropdownMenuTrigger aria-label="Open sub-navigation for Home page" className="flex items-center justify-center text-foreground hover:text-primary transition-colors focus:outline-none p-1">
+              <DropdownMenuTrigger aria-label="Open sub-navigation for Home page" className="flex items-center justify-center text-foreground hover:text-primary transition-colors focus:outline-none p-1 cursor-pointer">
                 <ChevronDown className="h-4 w-4" />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -75,12 +75,42 @@ export function Header() {
 
           <LanguageSelector />
 
-          <Button asChild variant="outline" className="font-condensed font-medium text-sm rounded-md px-4 border-primary/30 text-primary hover:bg-primary/10">
-            <Link href="/contact?mode=sample">Request Sample</Link>
-          </Button>
-          <Button asChild className="font-condensed font-medium text-sm rounded-md px-5 bg-primary text-primary-foreground hover:bg-primary/90">
-            <Link href="/contact?mode=inquiry">{intl.formatMessage({ id: "nav.contact" })}</Link>
-          </Button>
+          {/* Unified Contact & Sample Request Dropdown Menu */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button className="font-condensed font-semibold text-sm rounded-md px-5 bg-primary text-primary-foreground hover:bg-primary/90 gap-1.5 cursor-pointer">
+                <span>Contact & Request</span>
+                <ChevronDown className="h-4 w-4 opacity-80" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-64 p-2 space-y-1">
+              <DropdownMenuItem asChild>
+                <Link
+                  href="/contact?mode=sample"
+                  className="flex items-center gap-2.5 p-2.5 rounded-lg cursor-pointer hover:bg-muted font-condensed font-bold text-sm text-foreground"
+                >
+                  <Sparkles className="w-4 h-4 text-secondary shrink-0" />
+                  <div className="flex flex-col">
+                    <span>Request Free Website Sample</span>
+                    <span className="text-[11px] font-normal text-muted-foreground">Try 3-page interactive wizard</span>
+                  </div>
+                </Link>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem asChild>
+                <Link
+                  href="/contact?mode=inquiry"
+                  className="flex items-center gap-2.5 p-2.5 rounded-lg cursor-pointer hover:bg-muted font-condensed font-bold text-sm text-foreground"
+                >
+                  <MessageSquare className="w-4 h-4 text-primary shrink-0" />
+                  <div className="flex flex-col">
+                    <span>General Inquiry</span>
+                    <span className="text-[11px] font-normal text-muted-foreground">Send a direct message or quote question</span>
+                  </div>
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </nav>
 
         {/* Mobile Navigation */}
@@ -117,12 +147,23 @@ export function Header() {
                 <Link href="/portfolio" className="font-condensed font-medium text-lg text-foreground hover:text-primary">
                   {intl.formatMessage({ id: "nav.portfolio" })}
                 </Link>
-                <Button asChild className="w-full font-condensed font-semibold text-base mt-4 bg-primary text-primary-foreground">
-                  <Link href="/contact?mode=sample">Request Free Website Sample</Link>
-                </Button>
-                <Button asChild variant="outline" className="w-full font-condensed font-medium text-base mt-2">
-                  <Link href="/contact?mode=inquiry">{intl.formatMessage({ id: "nav.contact" })}</Link>
-                </Button>
+
+                <div className="pt-4 border-t space-y-2">
+                  <span className="text-xs font-condensed uppercase tracking-wider text-muted-foreground font-semibold px-1">Contact Options</span>
+                  <Button asChild className="w-full justify-start font-condensed font-semibold text-sm h-11 bg-primary text-primary-foreground gap-2">
+                    <Link href="/contact?mode=sample">
+                      <Sparkles className="w-4 h-4 text-secondary" />
+                      Request Free Website Sample
+                    </Link>
+                  </Button>
+                  <Button asChild variant="outline" className="w-full justify-start font-condensed font-medium text-sm h-11 gap-2">
+                    <Link href="/contact?mode=inquiry">
+                      <MessageSquare className="w-4 h-4 text-primary" />
+                      General Inquiry
+                    </Link>
+                  </Button>
+                </div>
+
                 <div className="mt-2">
                   <LanguageSelector />
                 </div>

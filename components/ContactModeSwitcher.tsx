@@ -9,16 +9,21 @@ import { MessageSquare, Sparkles } from "lucide-react";
 
 function ContactModeSwitcherContent() {
   const searchParams = useSearchParams();
-  const [activeMode, setActiveMode] = useState<"inquiry" | "sample">("inquiry");
+  const searchString = searchParams.toString();
+  const modeParam = searchParams.get("mode") || searchParams.get("tab");
+
+  const [activeMode, setActiveMode] = useState<"inquiry" | "sample">(
+    modeParam === "sample" || modeParam === "wizard" ? "sample" : "inquiry"
+  );
 
   useEffect(() => {
-    const modeParam = searchParams.get("mode") || searchParams.get("tab");
-    if (modeParam === "sample" || modeParam === "wizard") {
+    const currentMode = searchParams.get("mode") || searchParams.get("tab");
+    if (currentMode === "sample" || currentMode === "wizard") {
       setActiveMode("sample");
-    } else if (modeParam === "inquiry") {
+    } else if (currentMode === "inquiry") {
       setActiveMode("inquiry");
     }
-  }, [searchParams]);
+  }, [searchString, searchParams]);
 
   return (
     <div className="w-full max-w-5xl mx-auto space-y-8">

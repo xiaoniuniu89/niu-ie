@@ -320,8 +320,6 @@ export async function sendSampleRequestEmail(data: SampleRequestData & { website
     return {
       success: true,
       message: "Sample request submitted successfully!",
-      llmPrompt,
-      githubIssueUrl,
     };
   } catch (error) {
     console.error("Error sending sample request email:", error);

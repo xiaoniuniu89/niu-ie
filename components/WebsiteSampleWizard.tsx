@@ -88,10 +88,7 @@ export function WebsiteSampleWizard() {
   const [submitStatus, setSubmitStatus] = useState<{
     success: boolean;
     message: string;
-    llmPrompt?: string;
-    githubIssueUrl?: string;
   } | null>(null);
-  const [copiedPrompt, setCopiedPrompt] = useState<boolean>(false);
 
   // Modal Lightbox Carousel State
   const [previewIndex, setPreviewIndex] = useState<number | null>(null);
@@ -232,8 +229,6 @@ export function WebsiteSampleWizard() {
       setSubmitStatus({
         success: result.success,
         message: result.message,
-        llmPrompt: result.llmPrompt,
-        githubIssueUrl: result.githubIssueUrl,
       });
 
       if (result.success) {
@@ -299,88 +294,26 @@ export function WebsiteSampleWizard() {
       </div>
 
       {submitStatus && (
-        <div className="mb-6 space-y-3">
-          <div
-            className={`p-4 rounded-xl text-sm font-condensed flex items-center justify-between gap-3 ${
-              submitStatus.success
-                ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 border border-green-300"
-                : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300 border border-red-300"
-            }`}
-          >
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-green-600 shrink-0" />
-              <span>{submitStatus.message}</span>
-            </div>
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={() => setSubmitStatus(null)}
-              className="text-xs font-bold underline p-0 h-auto text-current hover:bg-transparent"
-            >
-              Dismiss
-            </Button>
+        <div
+          className={`mb-6 p-4 rounded-xl text-sm font-condensed flex items-center justify-between gap-3 ${
+            submitStatus.success
+              ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 border border-green-300"
+              : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300 border border-red-300"
+          }`}
+        >
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-5 h-5 text-green-600 shrink-0" />
+            <span>{submitStatus.message}</span>
           </div>
-
-          {submitStatus.success && submitStatus.llmPrompt && (
-            <div className="p-5 bg-slate-900 text-slate-100 rounded-2xl border border-slate-700 space-y-3 shadow-xl">
-              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
-                <div className="flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-amber-400" />
-                  <div>
-                    <h4 className="font-bold text-sm text-white">AI Coding Prompt Ready (Claude Code & Antigravity)</h4>
-                    <p className="text-xs text-slate-400 font-condensed">Copy & paste into your AI assistant to bootstrap this website layout instantly.</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  {submitStatus.githubIssueUrl && (
-                    <a
-                      href={submitStatus.githubIssueUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        className="bg-slate-800 text-slate-200 border-slate-700 hover:bg-slate-700 text-xs font-condensed font-bold gap-1.5"
-                      >
-                        <ExternalLink className="w-3.5 h-3.5" /> View GitHub Issue
-                      </Button>
-                    </a>
-                  )}
-
-                  <Button
-                    type="button"
-                    size="sm"
-                    onClick={() => {
-                      if (submitStatus.llmPrompt) {
-                        navigator.clipboard.writeText(submitStatus.llmPrompt);
-                        setCopiedPrompt(true);
-                        setTimeout(() => setCopiedPrompt(false), 3000);
-                      }
-                    }}
-                    className="bg-amber-400 text-slate-950 hover:bg-amber-300 font-condensed font-bold text-xs gap-1.5 shadow-md"
-                  >
-                    {copiedPrompt ? (
-                      <>
-                        <Check className="w-4 h-4 text-emerald-900" /> Copied to Clipboard!
-                      </>
-                    ) : (
-                      <>
-                        <Files className="w-4 h-4" /> Copy Prompt for Claude Code / Antigravity
-                      </>
-                    )}
-                  </Button>
-                </div>
-              </div>
-
-              <pre className="p-3 bg-slate-950 rounded-xl text-xs font-mono text-slate-300 max-h-48 overflow-y-auto whitespace-pre-wrap border border-slate-800">
-                {submitStatus.llmPrompt}
-              </pre>
-            </div>
-          )}
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => setSubmitStatus(null)}
+            className="text-xs font-bold underline p-0 h-auto text-current hover:bg-transparent"
+          >
+            Dismiss
+          </Button>
         </div>
       )}
 

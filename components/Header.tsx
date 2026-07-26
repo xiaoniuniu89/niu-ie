@@ -2,17 +2,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
   Sheet,
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { ChevronDown, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 
 const imgImageNiuLogo = "/niu-zi.webp";
 
@@ -32,33 +26,16 @@ export function Header() {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-6">
-          <div className="flex items-center gap-1">
-            <Link href="/" className="font-condensed font-medium text-sm text-foreground hover:text-primary transition-colors">
-              Home
-            </Link>
-            <DropdownMenu>
-              <DropdownMenuTrigger aria-label="Toggle services menu" className="flex items-center justify-center text-foreground hover:text-primary transition-colors focus:outline-none p-1">
-                <ChevronDown className="h-4 w-4" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem asChild>
-                  <Link href="/#about" className="font-condensed cursor-pointer">Our Core Values</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/#services" className="font-condensed cursor-pointer">Services</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/#faq" className="font-condensed cursor-pointer">FAQ</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/digital-grants" className="font-condensed cursor-pointer font-medium text-primary">LEO Grants & Funding</Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+          <Link href="/" className="font-condensed font-medium text-sm text-foreground hover:text-primary transition-colors">
+            Home
+          </Link>
 
           <Link href="/process" className="font-condensed font-medium text-sm text-foreground hover:text-primary transition-colors">
             Process
+          </Link>
+
+          <Link href="/digital-grants" className="font-condensed font-medium text-sm text-foreground hover:text-primary transition-colors">
+            Grants
           </Link>
 
           <Link href="/portfolio" className="font-condensed font-medium text-sm text-foreground hover:text-primary transition-colors">
@@ -83,22 +60,11 @@ export function Header() {
                 <Link href="/" className="font-condensed font-medium text-lg text-foreground hover:text-primary">
                   Home
                 </Link>
-                <div className="flex flex-col gap-4 pl-4 border-l border-foreground/10">
-                  <Link href="/#about" className="font-condensed text-base text-foreground/80 hover:text-primary">
-                    Our Core Values
-                  </Link>
-                  <Link href="/#services" className="font-condensed text-base text-foreground/80 hover:text-primary">
-                    Services
-                  </Link>
-                  <Link href="/#faq" className="font-condensed text-base text-foreground/80 hover:text-primary">
-                    FAQ
-                  </Link>
-                  <Link href="/digital-grants" className="font-condensed text-base text-primary hover:text-primary font-medium">
-                    LEO Grants & Funding
-                  </Link>
-                </div>
                 <Link href="/process" className="font-condensed font-medium text-lg text-foreground hover:text-primary">
                   Process
+                </Link>
+                <Link href="/digital-grants" className="font-condensed font-medium text-lg text-foreground hover:text-primary">
+                  Grants
                 </Link>
                 <Link href="/portfolio" className="font-condensed font-medium text-lg text-foreground hover:text-primary">
                   Portfolio

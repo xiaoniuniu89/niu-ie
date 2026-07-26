@@ -10,7 +10,7 @@ export function Hero() {
         <div className="flex flex-col gap-8 z-10">
           <div className="flex flex-col">
             <h1 className="font-serif text-5xl md:text-7xl leading-tight text-primary">
-              Daniel Callaghan <span className="text-secondary block">小牛 / xiǎo niú</span>
+              Daniel Callaghan <span className="text-secondary-text block">小牛 / xiǎo niú</span>
             </h1>
           </div>
           <p className="font-condensed font-light text-xl text-foreground leading-relaxed max-w-lg">

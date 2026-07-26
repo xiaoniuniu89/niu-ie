@@ -23,7 +23,7 @@ const services = [
     title: "Complete Ownership",
     description:
       "You own 100% of your code, content, and hosting from day one. Manage updates yourself using a simple, integrated editor, with zero vendor lock-in.",
-    color: "hsl(var(--secondary))",
+    color: "var(--secondary-text)",
   },
   {
     icon: TrendingUp,
@@ -98,7 +98,7 @@ export default function WebPage() {
           </div>
           <div>
             <h3 className="font-serif text-lg text-foreground mb-2">2. Full Self-Management</h3>
-            <p>Once live, you can edit text, publish articles, or update images yourself using an intuitive visual editor. You aren't tied to ongoing developer retainers or custom platforms.</p>
+            <p>Once live, you can edit text, publish articles, or update images yourself using an intuitive visual editor. You aren&apos;t tied to ongoing developer retainers or custom platforms.</p>
           </div>
           <div>
             <h3 className="font-serif text-lg text-foreground mb-2">3. Phase-by-Phase Iteration</h3>

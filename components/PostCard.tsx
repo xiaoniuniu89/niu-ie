@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Post } from "@/lib/posts";
 
 const categoryColors: Record<string, string> = {
-  music: "bg-secondary/15 text-secondary",
+  music: "bg-secondary-text/15 text-secondary-text",
   games: "bg-accent/15 text-accent",
   software: "bg-primary/15 text-primary",
 };

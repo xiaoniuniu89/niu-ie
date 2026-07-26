@@ -204,7 +204,7 @@ export default function DigitalGrantsPage() {
           {timelineSteps.map((step) => (
             <div key={step.step} className="relative">
               {/* Timeline dot */}
-              <div className="absolute -left-[35px] top-0.5 bg-background border-2 border-primary rounded-full w-6 h-6 flex items-center justify-center font-condensed text-[10px] font-bold text-primary">
+              <div className="absolute -left-[35px] top-0.5 bg-background border-2 border-primary rounded-full w-6 h-6 flex items-center justify-center font-condensed text-xs font-bold text-primary">
                 {step.step}
               </div>
               <div>

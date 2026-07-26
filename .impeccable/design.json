@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-26T09:52:33Z",
+  "title": "Design System: niu.ie",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Oceanic Cobalt",
+        "canonical": "#3871c1",
+        "tonalRamp": ["#173054", "#204273", "#2a5592", "#3871c1", "#588bcc", "#7ea7db", "#a9c5eb", "#d9e5f7"]
+      },
+      "secondary": {
+        "role": "secondary",
+        "displayName": "Tangerine Peel",
+        "canonical": "#f3a257",
+        "tonalRamp": ["#5e340a", "#854911", "#ae611a", "#d87a26", "#f3a257", "#f7be85", "#fadbb8", "#fdf4eb"]
+      },
+      "accent": {
+        "role": "accent",
+        "displayName": "Muted Sage",
+        "canonical": "#4a7c59",
+        "tonalRamp": ["#182e20", "#24442f", "#315d3f", "#407952", "#4a7c59", "#729b7e", "#a1bda9", "#d3e2d6"]
+      },
+      "background": {
+        "role": "neutral",
+        "displayName": "Warm Paper",
+        "canonical": "#faf9f6",
+        "tonalRamp": ["#444342", "#62615f", "#838280", "#a5a4a1", "#c8c7c4", "#eae9e6", "#f5f4f0", "#faf9f6"]
+      },
+      "foreground": {
+        "role": "neutral",
+        "displayName": "Charcoal Orchid",
+        "canonical": "#615766",
+        "tonalRamp": ["#0b0a0c", "#1a181b", "#2a262c", "#3c373f", "#4e4751", "#615766", "#7e7484", "#a29ca6"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Names, hero headers, and main titles"
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Paragraphs and long-form article text"
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Buttons, tags, navigation, and metadata labels"
+      }
+    },
+    "shadows": [
+      {
+        "name": "resting-shadow",
+        "value": "0 1px 2px 0 rgba(0,0,0,0.05)",
+        "purpose": "Anchors cards and buttons at rest."
+      },
+      {
+        "name": "elevated-shadow",
+        "value": "0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06)",
+        "purpose": "Dynamic hover state for interactive elements."
+      }
+    ],
+    "motion": [
+      {
+        "name": "lift-transition",
+        "value": "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+        "purpose": "Smooth transition for hovers and focuses."
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Standard action button in primary Cobalt coloring.",
+      "html": "<button class=\"ds-btn ds-btn-primary\">View Web Services</button>",
+      "css": ".ds-btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; white-space: nowrap; border-radius: 6px; font-family: var(--font-roboto-condensed), sans-serif; font-size: 0.875rem; font-weight: 500; height: 2.25rem; padding: 0 1rem; border: none; cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); outline: none; } .ds-btn-primary { background-color: #3871c1; color: #faf9f6; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); } .ds-btn-primary:hover { background-color: rgba(56, 113, 193, 0.9); transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06); } .ds-btn-primary:focus-visible { border-color: #3871c1; box-shadow: 0 0 0 3px rgba(56, 113, 193, 0.5); }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Warm Tangerine Peel accent button for contact form actions.",
+      "html": "<button class=\"ds-btn ds-btn-secondary\">Contact Me</button>",
+      "css": ".ds-btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; white-space: nowrap; border-radius: 6px; font-family: var(--font-roboto-condensed), sans-serif; font-size: 0.875rem; font-weight: 500; height: 2.25rem; padding: 0 1rem; border: none; cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); outline: none; } .ds-btn-secondary { background-color: #f3a257; color: #24265d; } .ds-btn-secondary:hover { background-color: rgba(243, 162, 87, 0.9); transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06); } .ds-btn-secondary:focus-visible { border-color: #3871c1; box-shadow: 0 0 0 3px rgba(56, 113, 193, 0.5); }"
+    },
+    {
+      "name": "Post Card",
+      "kind": "card",
+      "refersTo": "card-base",
+      "description": "Content card displaying category, date, title, and excerpt.",
+      "html": "<div class=\"ds-card\"><div class=\"ds-card-header\"><span class=\"ds-badge ds-badge-music\">Music</span><time class=\"ds-card-time\">July 26, 2026</time></div><h3 class=\"ds-card-title\">Video Game Soundtracks</h3><p class=\"ds-card-desc\">An exploration of how sound design and audio technology shaped early 8-bit games.</p></div>",
+      "css": ".ds-card { display: flex; flex-direction: column; gap: 1.5rem; border-radius: 12px; border: 1px solid #e2e8f0; background-color: #ffffff; padding: 1.5rem; color: #615766; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; text-decoration: none; } .ds-card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); border-color: #3871c1; } .ds-card-header { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; } .ds-badge { font-family: var(--font-roboto-condensed), sans-serif; font-size: 0.75rem; font-weight: 500; padding: 0.25rem 0.625rem; border-radius: 9999px; text-transform: capitalize; } .ds-badge-music { background-color: rgba(243, 162, 87, 0.15); color: #f3a257; } .ds-card-time { font-family: var(--font-roboto-condensed), sans-serif; font-size: 0.75rem; color: rgba(97, 87, 102, 0.5); } .ds-card-title { font-family: var(--font-lora), Georgia, serif; font-size: 1.25rem; color: #615766; margin: 0; } .ds-card:hover .ds-card-title { color: #3871c1; } .ds-card-desc { font-family: var(--font-roboto-condensed), sans-serif; font-size: 0.875rem; font-weight: 300; color: rgba(97, 87, 102, 0.7); margin: 0; line-height: 1.5; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "card-base",
+      "description": "Standard textual input field for client lead contact forms.",
+      "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"Enter your name\" />",
+      "css": ".ds-input { height: 2.25rem; width: 100%; border-radius: 8px; border: 1px solid #e2e8f0; background-color: transparent; padding: 0.25rem 0.75rem; font-family: var(--font-nunito), sans-serif; font-size: 1rem; color: #615766; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); outline: none; } .ds-input:focus { border-color: #3871c1; box-shadow: 0 0 0 3px rgba(56, 113, 193, 0.5); } .ds-input::placeholder { color: #64748b; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Developer's Atelier",
+    "overview": "The Developer's Atelier blends rigorous technical layout structure with warm, hand-crafted editorial details. The visual interface is designed to feel highly customized, clean, and interactive, letting the content lead while presenting a polished, premium aesthetic for potential freelance client leads.",
+    "keyCharacteristics": [
+      "Atelier Editorial: Classic serif fonts for prominent headings and article titles, paired with a soft, readable sans font for body reading.",
+      "Warm Contrast Canvas: A default light-mode background on warm paper (#faf9f6) and a deep charcoal orchid dark-mode canvas, accented by cobalt, warm orange, and sage.",
+      "Tactile Depth: Clean container grids featuring subtle borders, distinct shadows, and responsive vertical offsets on hover."
+    ],
+    "rules": [
+      {
+        "name": "The Accent Rarity Rule",
+        "body": "Colorful accents (Cobalt, Tangerine, and Sage) must never collectively cover more than 15% of any given viewport layout. Their purpose is to command visual attention to specific details.",
+        "section": "colors"
+      },
+      {
+        "name": "The Editorial Width Rule",
+        "body": "Any block of body or prose copy must have a maximum width of 65ch (characters) to guarantee comfortable horizontal eye tracking.",
+        "section": "typography"
+      },
+      {
+        "name": "The Lift-On-Hover Rule",
+        "body": "All interactive card blocks must translate vertically upwards by -4px (transform: translateY(-4px)) and shift shadow state to Elevated Shadow when hovered, returning smoothly when at rest.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do wrap all article reading text inside container constraints that limit content width to max-w-3xl and max-w-prose.",
+      "Do color-code categories consistently using Cobalt (#3871c1) for software, Orange (#f3a257) for music, and Sage (#4a7c59) for games.",
+      "Do use a sticky header with a backdrop-blur filter to preserve scroll visibility."
+    ],
+    "donts": [
+      "Don't use solid saturated colors for dark backgrounds. Keep dark mode backgrounds to muted tones like oklch(0.145 0 0).",
+      "Don't use full-width buttons on desktop screens; restrict their width to the content size or a maximum of max-w-xs."
+    ]
+  }
+}

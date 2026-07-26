@@ -132,7 +132,6 @@ export async function sendSampleRequestEmail(data: SampleRequestData & { website
         <table style="width: 100%; border-collapse: collapse; margin-bottom: 16px;">
           <tr><td style="padding: 6px 0; font-weight: bold; width: 140px;">Industry:</td><td>${payload.industry}</td></tr>
           <tr><td style="padding: 6px 0; font-weight: bold;">Primary Goal:</td><td>${payload.primaryGoal}</td></tr>
-          <tr><td style="padding: 6px 0; font-weight: bold;">Timeline:</td><td>${payload.timeline}</td></tr>
         </table>
 
         ${

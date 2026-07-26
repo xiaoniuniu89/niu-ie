@@ -17,7 +17,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
@@ -76,13 +75,6 @@ const PRIMARY_GOALS = [
   "Modernize an old / outdated existing website",
 ];
 
-const TIMELINES = [
-  "Urgent — Need live site in 1-2 weeks",
-  "Standard — Next 3-4 weeks",
-  "Flexible — Within 1-2 months",
-  "Researching / Grant application phase",
-];
-
 export function WebsiteSampleWizard() {
   const intl = useIntl();
   const [currentStep, setCurrentStep] = useState<number>(1);
@@ -110,7 +102,6 @@ export function WebsiteSampleWizard() {
       selectedKbDesigns: ["clean-service-branding"],
       industry: INDUSTRIES[0],
       primaryGoal: PRIMARY_GOALS[0],
-      timeline: TIMELINES[0],
       additionalNotes: "",
     },
   });
@@ -130,7 +121,7 @@ export function WebsiteSampleWizard() {
     } else if (currentStep === 2) {
       fieldsToValidate = ["hasDesign", "designLink", "selectedKbDesigns"];
     } else if (currentStep === 3) {
-      fieldsToValidate = ["industry", "primaryGoal", "timeline"];
+      fieldsToValidate = ["industry", "primaryGoal"];
     }
 
     const isStepValid = await form.trigger(fieldsToValidate);
@@ -210,7 +201,6 @@ export function WebsiteSampleWizard() {
           selectedKbDesigns: ["clean-service-branding"],
           industry: INDUSTRIES[0],
           primaryGoal: PRIMARY_GOALS[0],
-          timeline: TIMELINES[0],
           additionalNotes: "",
         });
         setCurrentStep(1);
@@ -742,32 +732,6 @@ export function WebsiteSampleWizard() {
                 )}
               />
 
-              {/* Timeline Selection */}
-              <FormField
-                control={form.control}
-                name="timeline"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="font-sans font-semibold block">
-                      <FormattedMessage id="wizard.timelineLabel" /> *
-                    </FormLabel>
-                    <FormControl>
-                      <select
-                        {...field}
-                        className="w-full h-11 rounded-md border border-input bg-background px-3 py-2 text-sm font-condensed focus:outline-none focus:ring-2 focus:ring-primary"
-                      >
-                        {TIMELINES.map((tl) => (
-                          <option key={tl} value={tl}>
-                            {tl}
-                          </option>
-                        ))}
-                      </select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
               {/* Additional Notes */}
               <FormField
                 control={form.control}
@@ -851,7 +815,6 @@ export function WebsiteSampleWizard() {
                   <h4 className="font-bold text-xs uppercase text-muted-foreground mb-1">Scope & Goals</h4>
                   <p className="text-xs text-foreground"><strong>Industry:</strong> {form.getValues("industry")}</p>
                   <p className="text-xs text-foreground"><strong>Primary Goal:</strong> {form.getValues("primaryGoal")}</p>
-                  <p className="text-xs text-foreground"><strong>Timeline:</strong> {form.getValues("timeline")}</p>
                 </div>
               </div>
 

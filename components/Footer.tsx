@@ -23,8 +23,11 @@ export function Footer({ showCTA = true }: FooterProps) {
               Let&apos;s build something remarkable together. Contact us today for a free consultation.
             </p>
             <div className="flex flex-wrap justify-center gap-4 pt-4">
-              <Button asChild className="bg-secondary text-secondary-foreground hover:bg-secondary/90 rounded-md px-8 h-10 font-condensed font-medium">
-                <Link href="/contact">{intl.formatMessage({ id: "nav.contact" })}</Link>
+              <Button asChild className="bg-secondary text-secondary-foreground hover:bg-secondary/90 rounded-md px-8 h-10 font-condensed font-bold">
+                <Link href="/contact?mode=sample">Request Free Website Sample</Link>
+              </Button>
+              <Button asChild variant="outline" className="bg-transparent border-white/40 text-white hover:bg-white/10 rounded-md px-6 h-10 font-condensed font-medium">
+                <Link href="/contact?mode=inquiry">General Inquiry</Link>
               </Button>
             </div>
           </div>
@@ -38,7 +41,8 @@ export function Footer({ showCTA = true }: FooterProps) {
             <li><Link href="/#faq" className="hover:text-accent transition-colors">{intl.formatMessage({ id: "nav.faq" })}</Link></li>
             <li><Link href="/portfolio" className="hover:text-accent transition-colors">{intl.formatMessage({ id: "nav.portfolio" })}</Link></li>
             <li><Link href="/digital-grants" className="hover:text-accent transition-colors">{intl.formatMessage({ id: "nav.grants" })}</Link></li>
-            <li><Link href="/contact" className="hover:text-accent transition-colors">{intl.formatMessage({ id: "nav.contact" })}</Link></li>
+            <li><Link href="/contact?mode=sample" className="hover:text-accent transition-colors">Website Sample Wizard</Link></li>
+            <li><Link href="/contact?mode=inquiry" className="hover:text-accent transition-colors">{intl.formatMessage({ id: "nav.contact" })}</Link></li>
           </ul>
         </div>
         <div className="pt-8 border-t border-foreground/20 flex flex-col md:flex-row items-center justify-between gap-6">

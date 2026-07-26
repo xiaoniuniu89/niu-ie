@@ -240,7 +240,7 @@ export default function ProcessPage() {
                {intl.formatMessage({ id: "process.cta.sub" })}
              </p>
              <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 font-condensed text-lg px-8 h-12 shadow-lg">
-               <Link href="/contact">{intl.formatMessage({ id: "process.cta.btn" })}</Link>
+               <Link href="/contact?mode=sample">{intl.formatMessage({ id: "process.cta.btn" })}</Link>
              </Button>
           </div>
         </section>

@@ -296,8 +296,8 @@ export default function DigitalGrantsPage() {
             asChild
             className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-8 h-12 font-condensed font-medium text-base shadow-lg shadow-primary/20"
           >
-            <Link href="/contact">
-              {intl.formatMessage({ id: "grantsPage.ctaBtn" })}
+            <Link href="/contact?mode=sample">
+              Request Sample & Grant Advice
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>

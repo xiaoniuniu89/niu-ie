@@ -75,8 +75,11 @@ export function Header() {
 
           <LanguageSelector />
 
-          <Button asChild className="font-condensed font-medium text-sm rounded-md px-6 bg-primary text-primary-foreground hover:bg-primary/90">
-            <Link href="/contact">{intl.formatMessage({ id: "nav.contact" })}</Link>
+          <Button asChild variant="outline" className="font-condensed font-medium text-sm rounded-md px-4 border-primary/30 text-primary hover:bg-primary/10">
+            <Link href="/contact?mode=sample">Request Sample</Link>
+          </Button>
+          <Button asChild className="font-condensed font-medium text-sm rounded-md px-5 bg-primary text-primary-foreground hover:bg-primary/90">
+            <Link href="/contact?mode=inquiry">{intl.formatMessage({ id: "nav.contact" })}</Link>
           </Button>
         </nav>
 
@@ -114,8 +117,11 @@ export function Header() {
                 <Link href="/portfolio" className="font-condensed font-medium text-lg text-foreground hover:text-primary">
                   {intl.formatMessage({ id: "nav.portfolio" })}
                 </Link>
-                <Button asChild className="w-full font-condensed font-medium text-lg mt-4">
-                  <Link href="/contact">{intl.formatMessage({ id: "nav.contact" })}</Link>
+                <Button asChild className="w-full font-condensed font-semibold text-base mt-4 bg-primary text-primary-foreground">
+                  <Link href="/contact?mode=sample">Request Free Website Sample</Link>
+                </Button>
+                <Button asChild variant="outline" className="w-full font-condensed font-medium text-base mt-2">
+                  <Link href="/contact?mode=inquiry">{intl.formatMessage({ id: "nav.contact" })}</Link>
                 </Button>
                 <div className="mt-2">
                   <LanguageSelector />

@@ -1,13 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { FormattedMessage } from "react-intl";
 import { ContactForm } from "@/components/ContactForm";
 import { WebsiteSampleWizard } from "@/components/WebsiteSampleWizard";
 import { MessageSquare, Sparkles } from "lucide-react";
 
-export function ContactModeSwitcher() {
+function ContactModeSwitcherContent() {
+  const searchParams = useSearchParams();
   const [activeMode, setActiveMode] = useState<"inquiry" | "sample">("inquiry");
+
+  useEffect(() => {
+    const modeParam = searchParams.get("mode") || searchParams.get("tab");
+    if (modeParam === "sample" || modeParam === "wizard") {
+      setActiveMode("sample");
+    } else if (modeParam === "inquiry") {
+      setActiveMode("inquiry");
+    }
+  }, [searchParams]);
 
   return (
     <div className="w-full max-w-5xl mx-auto space-y-8">
@@ -56,5 +67,13 @@ export function ContactModeSwitcher() {
         {activeMode === "sample" ? <WebsiteSampleWizard /> : <ContactForm />}
       </div>
     </div>
+  );
+}
+
+export function ContactModeSwitcher() {
+  return (
+    <Suspense fallback={<div className="w-full max-w-4xl mx-auto bg-card p-10 rounded-2xl border text-center font-condensed text-muted-foreground">Loading inquiry options...</div>}>
+      <ContactModeSwitcherContent />
+    </Suspense>
   );
 }

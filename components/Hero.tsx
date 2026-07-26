@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useIntl } from "react-intl";
@@ -25,13 +25,14 @@ export function Hero() {
             {intl.formatMessage({ id: "hero.subtext" })}
           </p>
           <div className="flex flex-wrap gap-4">
-            <Button asChild size="lg" className="rounded-md px-8 h-12 bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/90">
-              <Link href="/contact">
-                {intl.formatMessage({ id: "hero.startProject" })}
+            <Button asChild size="lg" className="rounded-md px-8 h-12 bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/90 font-condensed font-bold text-base">
+              <Link href="/contact?mode=sample">
+                <Sparkles className="mr-2 h-4 w-4 text-secondary" />
+                Request Free Website Sample
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-            <Button asChild size="lg" variant="secondary" className="rounded-md px-8 h-12 bg-secondary text-secondary-foreground hover:bg-secondary/90">
+            <Button asChild size="lg" variant="outline" className="rounded-md px-8 h-12 font-condensed font-semibold text-base">
               <Link href="/process">
                 {intl.formatMessage({ id: "hero.ourProcess" })}
               </Link>

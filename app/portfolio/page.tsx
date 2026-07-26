@@ -116,8 +116,8 @@ export default function Portfolio() {
             <p className="font-condensed font-light text-lg text-foreground/80 mb-8 max-w-lg mx-auto">
               {intl.formatMessage({ id: "portfolio.cta.sub" })}
             </p>
-            <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-condensed px-8">
-              <Link href="/contact">{intl.formatMessage({ id: "portfolio.cta.btn" })}</Link>
+            <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-condensed font-bold px-8">
+              <Link href="/contact?mode=sample">Request Free Website Sample</Link>
             </Button>
           </div>
         </div>

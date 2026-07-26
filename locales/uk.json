@@ -1,8 +1,11 @@
 {
   "contact.emailLabel": "Електронна пошта",
+  "contact.emailPlaceholder": "ви@приклад.com",
   "contact.error": "Щось пішло не так. Будь ласка, спробуйте ще раз або напишіть нам безпосередньо.",
   "contact.messageLabel": "Повідомлення",
+  "contact.messagePlaceholder": "Розкажіть нам про свій проект...",
   "contact.nameLabel": "Ім'я",
+  "contact.namePlaceholder": "Ваше ім'я",
   "contact.sendBtn": "Надіслати повідомлення",
   "contact.sending": "Надсилання...",
   "contact.sub": "Ми готові почати ваш проект. Заповніть форму нижче, і ми зв'яжемося з вами якомога швидше.",

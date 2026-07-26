@@ -1,8 +1,11 @@
 {
   "contact.emailLabel": "Email",
+  "contact.emailPlaceholder": "vous@exemple.com",
   "contact.error": "Une erreur s'est produite. Veuillez réessayer ou nous envoyer un email directement.",
   "contact.messageLabel": "Message",
+  "contact.messagePlaceholder": "Parlez-nous de votre projet...",
   "contact.nameLabel": "Nom",
+  "contact.namePlaceholder": "Votre nom",
   "contact.sendBtn": "Envoyer le message",
   "contact.sending": "Envoi...",
   "contact.sub": "Nous sommes prêts à commencer votre projet. Remplissez le formulaire ci-dessous et nous vous répondrons dès que possible.",

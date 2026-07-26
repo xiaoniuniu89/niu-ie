@@ -1,8 +1,11 @@
 {
   "contact.emailLabel": "Email",
+  "contact.emailPlaceholder": "tu@exemplu.com",
   "contact.error": "Ceva a mers prost. Te rugăm să încerci din nou sau să ne scrii direct.",
   "contact.messageLabel": "Mesaj",
+  "contact.messagePlaceholder": "Spune-ne despre proiectul tău...",
   "contact.nameLabel": "Nume",
+  "contact.namePlaceholder": "Numele tău",
   "contact.sendBtn": "Trimite Mesaj",
   "contact.sending": "Se trimite...",
   "contact.sub": "Suntem gata să începem proiectul tău. Completează formularul de mai jos și îți vom răspunde cât mai curând posibil.",

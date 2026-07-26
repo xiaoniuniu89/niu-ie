@@ -1,8 +1,11 @@
 {
   "contact.emailLabel": "El. paštas",
+  "contact.emailPlaceholder": "jusu@el.pastas",
   "contact.error": "Įvyko klaida. Prašome bandyti dar kartą arba tiesiogiai mums atsiųsti el. laišką.",
   "contact.messageLabel": "Žinutė",
+  "contact.messagePlaceholder": "Papasakokite apie savo projektą...",
   "contact.nameLabel": "Vardas",
+  "contact.namePlaceholder": "Jūsų vardas",
   "contact.sendBtn": "Siųsti žinutę",
   "contact.sending": "Siunčiama...",
   "contact.sub": "Mes pasiruošę pradėti jūsų projektą. Užpildykite žemiau esančią formą ir mes susisieksime su jumis kuo greičiau.",

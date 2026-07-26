@@ -1,8 +1,11 @@
 {
   "contact.emailLabel": "E-Mail",
+  "contact.emailPlaceholder": "ihre@email.de",
   "contact.error": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut oder senden Sie uns direkt eine E-Mail.",
   "contact.messageLabel": "Nachricht",
+  "contact.messagePlaceholder": "Erzählen Sie uns von Ihrem Projekt...",
   "contact.nameLabel": "Name",
+  "contact.namePlaceholder": "Ihr Name",
   "contact.sendBtn": "Nachricht senden",
   "contact.sending": "Wird gesendet...",
   "contact.sub": "Wir sind bereit, Ihr Projekt zu starten. Füllen Sie das Formular unten aus und wir werden uns so schnell wie möglich bei Ihnen melden.",

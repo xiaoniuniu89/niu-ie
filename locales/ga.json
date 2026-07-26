@@ -1,8 +1,11 @@
 {
   "contact.emailLabel": "Ríomhphoist",
+  "contact.emailPlaceholder": "tú@sampla.com",
   "contact.error": "Tá rud éigin mícheart. Le do thoil, déan iarracht arís nó seol ríomhphost chugainn go díreach.",
   "contact.messageLabel": "Teachtaireacht",
+  "contact.messagePlaceholder": "Inis dúinn faoi do thionscadal...",
   "contact.nameLabel": "Ainm",
+  "contact.namePlaceholder": "D'ainm",
   "contact.sendBtn": "Seol Teachtaireacht",
   "contact.sending": "Ag Seoladh...",
   "contact.sub": "Táimid réidh chun do thionscadal a thosú. Líon amach an foirm thíos agus fillefaidh muid ar ais chugat chomh luath agus is féidir.",

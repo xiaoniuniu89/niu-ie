@@ -1,8 +1,11 @@
 {
   "contact.emailLabel": "电子邮件",
+  "contact.emailPlaceholder": "您@邮箱.com",
   "contact.error": "出现问题。请再试一次或直接发邮件给我们。",
   "contact.messageLabel": "信息",
+  "contact.messagePlaceholder": "告诉我们您的项目...",
   "contact.nameLabel": "姓名",
+  "contact.namePlaceholder": "您的姓名",
   "contact.sendBtn": "发送信息",
   "contact.sending": "发送中...",
   "contact.sub": "我们准备开始您的项目。请填写下面的表单，我们将尽快与您联系。",

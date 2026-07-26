@@ -1,21 +1,19 @@
-import { Metadata } from "next";
+'use client';
+
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Sparkles, Zap, Hammer, Target, Rocket } from "lucide-react";
+import { useIntl } from "react-intl";
 
-// Local images (keeping photography)
 const imgImageFloristArrangingFlowers = "/process/florist.webp";
 const imgImageMechanicWorkingOnCar = "/process/mechanic.webp";
 
-export const metadata: Metadata = {
-  title: "The Niu Process | Clear, Fast, Phased Web Design",
-  description: "Our 3-step approach: The Vision, The Launch, and The Growth. We help local businesses get online fast with high-quality web solutions.",
-};
-
 export default function ProcessPage() {
+  const intl = useIntl();
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Header />
@@ -23,10 +21,10 @@ export default function ProcessPage() {
         {/* Intro Section */}
         <section className="container mx-auto px-4 md:px-8 py-16 md:py-24 max-w-5xl">
           <h1 className="font-serif text-5xl md:text-6xl text-primary mb-6">
-            The Niu Process
+            {intl.formatMessage({ id: "process.title" })}
           </h1>
           <p className="font-condensed font-light text-xl md:text-2xl text-foreground max-w-3xl leading-relaxed">
-            We don&apos;t sell you a black box. We work with you to outline your goals, launch a fast, high-performing initial site so local customers can find you right away, and expand additional features whenever your business is ready.
+            {intl.formatMessage({ id: "process.intro" })}
           </p>
         </section>
 
@@ -42,10 +40,10 @@ export default function ProcessPage() {
                  <Sparkles className="w-8 h-8 text-accent" />
               </div>
               <h3 className="font-sans font-light text-2xl text-primary mb-4">
-                1. The Vision
+                {intl.formatMessage({ id: "process.step1.title" })}
               </h3>
               <p className="font-condensed font-light text-foreground/80 leading-relaxed">
-                We map out everything your business might need online—from booking forms to digital shopfronts. We prioritize what matters most so you only spend budget on what drives real customer leads.
+                {intl.formatMessage({ id: "process.step1.desc" })}
               </p>
             </div>
 
@@ -55,10 +53,10 @@ export default function ProcessPage() {
                  <Zap className="w-8 h-8 text-primary" />
               </div>
               <h3 className="font-sans font-light text-2xl text-primary mb-4">
-                2. The Launch
+                {intl.formatMessage({ id: "process.step2.title" })}
               </h3>
               <p className="font-condensed font-light text-foreground/80 leading-relaxed">
-                We build and launch your core website fast. You get a sleek, professional digital home that ranks on Google and makes it effortless for local clients to call, visit, or request quotes.
+                {intl.formatMessage({ id: "process.step2.desc" })}
               </p>
             </div>
 
@@ -68,10 +66,10 @@ export default function ProcessPage() {
                  <Hammer className="w-8 h-8 text-secondary-text" />
               </div>
               <h3 className="font-sans font-light text-2xl text-primary mb-4">
-                3. The Growth
+                {intl.formatMessage({ id: "process.step3.title" })}
               </h3>
               <p className="font-condensed font-light text-foreground/80 leading-relaxed">
-                Once live, we expand step-by-step. Add automated booking or online payments when your business volume justifies it. You stay in control of your budget with 100% site ownership.
+                {intl.formatMessage({ id: "process.step3.desc" })}
               </p>
             </div>
           </div>
@@ -80,9 +78,9 @@ export default function ProcessPage() {
         {/* See It In Action */}
         <section className="py-24 bg-background">
           <div className="container mx-auto px-4 md:px-8 mb-16 text-center">
-            <h2 className="font-serif text-4xl text-primary mb-4">See It In Action</h2>
+            <h2 className="font-serif text-4xl text-primary mb-4">{intl.formatMessage({ id: "process.actionTitle" })}</h2>
             <p className="font-condensed font-light text-xl text-foreground">
-              Real examples of how we turn big client goals into immediate digital results.
+              {intl.formatMessage({ id: "process.actionSub" })}
             </p>
           </div>
 
@@ -91,57 +89,39 @@ export default function ProcessPage() {
             <div className="grid lg:grid-cols-2 gap-12 items-start">
               <div className="space-y-8">
                 <div className="inline-block bg-accent/20 rounded-full px-4 py-1">
-                  <span className="font-condensed font-bold text-accent text-sm">Case Study: The Local Florist</span>
+                  <span className="font-condensed font-bold text-accent text-sm">{intl.formatMessage({ id: "process.florist.case" })}</span>
                 </div>
-                <h3 className="font-sans font-light text-3xl text-primary">&quot;I want to sell flowers online.&quot;</h3>
+                <h3 className="font-sans font-light text-3xl text-primary">{intl.formatMessage({ id: "process.florist.q" })}</h3>
                 
                 <div className="space-y-6">
-                  {/* The Ultimate Goal Card */}
                   <div className="bg-secondary-text/5 border border-secondary-text/20 rounded-2xl p-6">
                     <div className="flex items-center gap-3 mb-2">
                       <Target className="w-5 h-5 text-foreground" />
                       <span className="font-sans font-bold text-lg text-foreground">The Ultimate Goal</span>
                     </div>
                     <p className="font-condensed font-light text-foreground/80">
-                      A full e-commerce online shop with inventory tracking, delivery zone calculation, and automated email receipts.
+                      {intl.formatMessage({ id: "process.florist.ideal" })}
                     </p>
                   </div>
 
-                  {/* The Fast Launch Card */}
                   <div className="bg-primary/5 border border-primary/20 rounded-2xl p-6">
                     <div className="flex items-center gap-3 mb-2">
                       <Rocket className="w-5 h-5 text-foreground" />
                       <span className="font-sans font-bold text-lg text-foreground">The Fast Launch</span>
                     </div>
-                    <p className="font-condensed font-normal text-foreground/80 mb-1">
-                      A beautiful bouquet gallery & a prominent phone number.
-                    </p>
                     <p className="font-condensed font-light text-foreground/80">
-                      A simple, elegant showcase for locals to view floral arrangements and call to order immediately. We got them online quickly with direct &quot;Call to Order&quot; buttons.
+                      {intl.formatMessage({ id: "process.florist.launch" })}
                     </p>
                   </div>
 
-                  {/* The Roadmap */}
                   <div className="bg-background border border-foreground/20 rounded-xl p-6">
-                     <h4 className="font-sans font-bold text-lg text-foreground mb-6">The Expansion Roadmap</h4>
+                     <h4 className="font-sans font-bold text-lg text-foreground mb-6">{intl.formatMessage({ id: "process.roadmap" })}</h4>
                      <div className="space-y-6 border-l-2 border-border ml-2 pl-6 relative">
                         <div className="relative">
-                          <span className="absolute -left-[31px] top-1.5 w-3 h-3 bg-primary rounded-full ring-4 ring-background"></span>
-                          <p className="font-condensed font-medium text-sm text-foreground">Core website live (Done)</p>
-                        </div>
-                        <div className="relative">
-                          <span className="absolute -left-[31px] top-1.5 w-3 h-3 bg-foreground/30 rounded-full ring-4 ring-background"></span>
-                          <p className="font-condensed font-medium text-sm text-foreground/70">Add simple online &quot;Inquiry &amp; Order Form&quot;</p>
-                        </div>
-                        <div className="relative">
-                          <span className="absolute -left-[31px] top-1.5 w-3 h-3 bg-foreground/30 rounded-full ring-4 ring-background"></span>
-                          <p className="font-condensed font-medium text-sm text-foreground/70">Full Stripe payment integration for instant checkout</p>
-                        </div>
-                        <div className="relative">
                            <span className="absolute -left-[31px] top-1.5 w-3 h-3 bg-accent rounded-full ring-4 ring-background"></span>
-                           <p className="font-condensed font-bold text-sm text-accent">100% Ownership &amp; Flexible Support</p>
+                           <p className="font-condensed font-bold text-sm text-accent">{intl.formatMessage({ id: "process.ownership" })}</p>
                            <p className="font-condensed font-light text-xs text-foreground mt-1">
-                             You own the site completely with zero monthly fees. Edit content yourself, or reach out anytime for on-demand developer updates.
+                             {intl.formatMessage({ id: "process.ownershipDesc" })}
                            </p>
                         </div>
                      </div>
@@ -163,7 +143,6 @@ export default function ProcessPage() {
           {/* Case Study 2: Auto Shop */}
           <div className="container mx-auto px-4 md:px-8">
             <div className="grid lg:grid-cols-2 gap-12 items-start">
-               {/* Image on Left for Desktop, Top for Mobile */}
               <div className="relative h-[500px] rounded-3xl overflow-hidden shadow-2xl order-2 lg:order-1">
                 <Image 
                   src={imgImageMechanicWorkingOnCar} 
@@ -175,57 +154,39 @@ export default function ProcessPage() {
 
               <div className="space-y-8 order-1 lg:order-2">
                 <div className="inline-block bg-secondary-text/15 rounded-full px-4 py-1">
-                  <span className="font-condensed font-bold text-secondary-text text-sm">Case Study: The Auto Shop</span>
+                  <span className="font-condensed font-bold text-secondary-text text-sm">{intl.formatMessage({ id: "process.auto.case" })}</span>
                 </div>
-                <h3 className="font-sans font-light text-3xl text-primary">&quot;I need an online booking system.&quot;</h3>
+                <h3 className="font-sans font-light text-3xl text-primary">{intl.formatMessage({ id: "process.auto.q" })}</h3>
                 
                 <div className="space-y-6">
-                  {/* The Ultimate Goal Card */}
                   <div className="bg-secondary-text/5 border border-secondary-text/20 rounded-2xl p-6">
                     <div className="flex items-center gap-3 mb-2">
                       <Target className="w-5 h-5 text-foreground" />
                       <span className="font-sans font-bold text-lg text-foreground">The Ultimate Goal</span>
                     </div>
                     <p className="font-condensed font-light text-foreground/80">
-                      A real-time calendar where customers select their service, pick a time slot, and sync with garage management software.
+                      {intl.formatMessage({ id: "process.auto.ideal" })}
                     </p>
                   </div>
 
-                  {/* The Fast Launch Card */}
                   <div className="bg-primary/5 border border-primary/20 rounded-2xl p-6">
                     <div className="flex items-center gap-3 mb-2">
                       <Rocket className="w-5 h-5 text-foreground" />
                       <span className="font-sans font-bold text-lg text-foreground">The Fast Launch</span>
                     </div>
-                    <p className="font-condensed font-normal text-foreground/80 mb-1">
-                      Location, opening hours &amp; a &quot;Request Appointment&quot; form.
-                    </p>
                     <p className="font-condensed font-light text-foreground/80">
-                      Automated booking tools can be complicated to manage. We launched a clean page with location maps and an instant email request form—getting appointments booked immediately.
+                      {intl.formatMessage({ id: "process.auto.launch" })}
                     </p>
                   </div>
 
-                  {/* The Roadmap */}
                   <div className="bg-background border border-foreground/20 rounded-xl p-6">
-                     <h4 className="font-sans font-bold text-lg text-foreground mb-6">The Expansion Roadmap</h4>
+                     <h4 className="font-sans font-bold text-lg text-foreground mb-6">{intl.formatMessage({ id: "process.roadmap" })}</h4>
                      <div className="space-y-6 border-l-2 border-border ml-2 pl-6 relative">
                         <div className="relative">
-                          <span className="absolute -left-[31px] top-1.5 w-3 h-3 bg-primary rounded-full ring-4 ring-background"></span>
-                          <p className="font-condensed font-medium text-sm text-foreground">Site live with Google maps &amp; phone link (Done)</p>
-                        </div>
-                        <div className="relative">
-                          <span className="absolute -left-[31px] top-1.5 w-3 h-3 bg-foreground/30 rounded-full ring-4 ring-background"></span>
-                          <p className="font-condensed font-medium text-sm text-foreground/70">Add simple appointment request form</p>
-                        </div>
-                        <div className="relative">
-                          <span className="absolute -left-[31px] top-1.5 w-3 h-3 bg-foreground/30 rounded-full ring-4 ring-background"></span>
-                          <p className="font-condensed font-medium text-sm text-foreground/70">Full calendar integration (when booking volume demands it)</p>
-                        </div>
-                        <div className="relative">
                            <span className="absolute -left-[31px] top-1.5 w-3 h-3 bg-accent rounded-full ring-4 ring-background"></span>
-                           <p className="font-condensed font-bold text-sm text-accent">100% Ownership &amp; Flexible Support</p>
+                           <p className="font-condensed font-bold text-sm text-accent">{intl.formatMessage({ id: "process.ownership" })}</p>
                            <p className="font-condensed font-light text-xs text-foreground mt-1">
-                             You own the site completely with zero monthly fees. Edit content yourself, or reach out anytime for on-demand developer updates.
+                             {intl.formatMessage({ id: "process.ownershipDesc" })}
                            </p>
                         </div>
                      </div>
@@ -239,12 +200,12 @@ export default function ProcessPage() {
         {/* CTA Section */}
         <section className="container mx-auto px-4 md:px-8 pb-24">
           <div className="bg-secondary/10 rounded-3xl p-12 text-center max-w-4xl mx-auto">
-             <h2 className="font-serif text-4xl text-primary mb-6">Ready to get your business online?</h2>
+             <h2 className="font-serif text-4xl text-primary mb-6">{intl.formatMessage({ id: "process.cta.title" })}</h2>
              <p className="font-condensed font-light text-xl text-foreground mb-8 max-w-2xl mx-auto">
-               Let&apos;s chat about your project goals and map out a clear, fast-track launch plan. No pressure, just a friendly strategy consultation.
+               {intl.formatMessage({ id: "process.cta.sub" })}
              </p>
              <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 font-condensed text-lg px-8 h-12 shadow-lg">
-               <Link href="/contact">Contact Us</Link>
+               <Link href="/contact">{intl.formatMessage({ id: "process.cta.btn" })}</Link>
              </Button>
           </div>
         </section>

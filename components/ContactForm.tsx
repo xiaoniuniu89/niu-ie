@@ -16,6 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { sendEmail } from "@/app/actions/contact";
+import { useIntl } from "react-intl";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -30,6 +31,7 @@ const formSchema = z.object({
 });
 
 export function ContactForm() {
+  const intl = useIntl();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<{
     success: boolean;
@@ -62,7 +64,7 @@ export function ContactForm() {
     } catch {
       setSubmitStatus({
         success: false,
-        message: "Something went wrong. Please try again.",
+        message: intl.formatMessage({ id: "contact.error" }),
       });
     } finally {
       setIsSubmitting(false);
@@ -78,7 +80,7 @@ export function ContactForm() {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="font-sans font-semibold text-foreground">Name</FormLabel>
+                <FormLabel className="font-sans font-semibold text-foreground">{intl.formatMessage({ id: "contact.nameLabel" })}</FormLabel>
                 <FormControl>
                   <Input placeholder="Your name" {...field} className="font-condensed" />
                 </FormControl>
@@ -91,7 +93,7 @@ export function ContactForm() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="font-sans font-semibold text-foreground">Email</FormLabel>
+                <FormLabel className="font-sans font-semibold text-foreground">{intl.formatMessage({ id: "contact.emailLabel" })}</FormLabel>
                 <FormControl>
                   <Input placeholder="your.email@example.com" {...field} className="font-condensed" />
                 </FormControl>
@@ -104,7 +106,7 @@ export function ContactForm() {
             name="message"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="font-sans font-semibold text-foreground">Message</FormLabel>
+                <FormLabel className="font-sans font-semibold text-foreground">{intl.formatMessage({ id: "contact.messageLabel" })}</FormLabel>
                 <FormControl>
                   <Textarea 
                     placeholder="Tell us about your project..." 
@@ -134,7 +136,7 @@ export function ContactForm() {
             className="w-full font-condensed font-medium" 
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Sending..." : "Send Message"}
+            {isSubmitting ? intl.formatMessage({ id: "contact.sending" }) : intl.formatMessage({ id: "contact.sendBtn" })}
           </Button>
         </form>
       </Form>

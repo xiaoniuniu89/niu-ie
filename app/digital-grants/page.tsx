@@ -1,17 +1,16 @@
+'use client';
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, FileText, Calendar, Heart, ShieldAlert, BadgeCheck, Compass, Info, MapPin } from "lucide-react";
-import type { Metadata } from "next";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-
-export const metadata: Metadata = {
-  title: "Irish Government Digital Grants & Web Funding Guide | niu.ie",
-  description: "A comprehensive guide on LEO Grow Digital Voucher (€5,000), Trading Online Voucher (€2,500), and free Digital for Business consultancy for Irish small businesses.",
-};
+import { useIntl } from "react-intl";
 
 export default function DigitalGrantsPage() {
+  const intl = useIntl();
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -114,17 +113,17 @@ export default function DigitalGrantsPage() {
       <section className="max-w-3xl mb-16">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 text-xs font-condensed font-semibold mb-4">
           <BadgeCheck className="h-4 w-4" />
-          Government Funding Available
+          {intl.formatMessage({ id: "grantsPage.badge" })}
         </div>
         <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-foreground mb-6 leading-tight">
-          Funding &amp; Grants for Your Web Project
+          {intl.formatMessage({ id: "grantsPage.title" })}
         </h1>
         <p className="font-condensed font-light text-lg md:text-xl text-foreground/80 leading-relaxed">
-          Irish small businesses can access government funding of up to 50% through Local Enterprise Office (LEO) initiatives to cover modern web development, online systems, and software integration.
+          {intl.formatMessage({ id: "grantsPage.intro" })}
         </p>
       </section>
 
-      {/* Warning Callout - CRITICAL: Retrospective Cost Warning */}
+      {/* Warning Callout */}
       <section className="mb-16">
         <div className="p-6 md:p-8 rounded-[25px] border border-destructive bg-destructive/5 text-foreground flex flex-col md:flex-row gap-6 items-start">
           <div className="p-3 rounded-full bg-destructive/10 text-destructive shrink-0">
@@ -132,13 +131,13 @@ export default function DigitalGrantsPage() {
           </div>
           <div>
             <h3 className="font-serif text-xl text-foreground mb-2 font-semibold">
-              Crucial Rule: No Retrospective Funding
+              {intl.formatMessage({ id: "grantsPage.warningTitle" })}
             </h3>
             <p className="font-condensed font-light text-sm md:text-base text-foreground/80 leading-relaxed mb-3">
-              Local Enterprise Offices operate a strict policy: <strong>absolutely no work can commence, and no payments can be made, prior to receiving your official Letter of Offer.</strong>
+              {intl.formatMessage({ id: "grantsPage.warningText1" })}
             </p>
             <p className="font-condensed font-light text-sm md:text-base text-foreground/80 leading-relaxed">
-              If you pay a deposit or if design/development work starts before your application is approved and the Letter of Offer is issued, that work becomes entirely ineligible for funding.
+              {intl.formatMessage({ id: "grantsPage.warningText2" })}
             </p>
           </div>
         </div>
@@ -147,10 +146,10 @@ export default function DigitalGrantsPage() {
       {/* Voucher Options Grid */}
       <section className="mb-20">
         <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-3">
-          Available Support Programs
+          {intl.formatMessage({ id: "grantsPage.programsTitle" })}
         </h2>
         <p className="font-condensed font-light text-foreground/75 mb-10 max-w-2xl">
-          Compare the three main programs designed to fund digital progress, web design, and consultancy for Irish SMEs.
+          {intl.formatMessage({ id: "grantsPage.programsSub" })}
         </p>
 
         <div className="grid gap-8 lg:grid-cols-3">
@@ -198,16 +197,15 @@ export default function DigitalGrantsPage() {
       {/* Step-by-Step Timeline */}
       <section className="mb-20 py-12 border-y border-border/60">
         <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-3">
-          Application Timeline
+          {intl.formatMessage({ id: "grantsPage.timelineTitle" })}
         </h2>
         <p className="font-condensed font-light text-foreground/75 mb-12 max-w-2xl">
-          Follow this roadmap to secure your funding and launch your project smoothly.
+          {intl.formatMessage({ id: "grantsPage.timelineSub" })}
         </p>
 
         <div className="relative pl-6 border-l-2 border-border/60 ml-4 space-y-12 max-w-3xl">
           {timelineSteps.map((step) => (
             <div key={step.step} className="relative">
-              {/* Timeline dot */}
               <div className="absolute -left-[35px] top-0.5 bg-background border-2 border-primary rounded-full w-6 h-6 flex items-center justify-center font-condensed text-xs font-bold text-primary">
                 {step.step}
               </div>
@@ -232,10 +230,10 @@ export default function DigitalGrantsPage() {
           </div>
           <div className="flex-1">
             <h3 className="font-serif text-xl text-foreground mb-2">
-              Based in Co. Westmeath? Apply Locally
+              {intl.formatMessage({ id: "grantsPage.westmeathTitle" })}
             </h3>
             <p className="font-condensed font-light text-sm md:text-base text-foreground/80 leading-relaxed mb-4">
-              We are located near Kinnegad, Co. Westmeath. For local clients, we recommend coordinating with the Westmeath Local Enterprise Office (LEO) based in Mullingar.
+              {intl.formatMessage({ id: "grantsPage.westmeathDesc" })}
             </p>
             <div className="flex flex-wrap gap-4 text-xs font-condensed">
               <a 
@@ -272,13 +270,13 @@ export default function DigitalGrantsPage() {
           </div>
           <div>
             <h3 className="font-serif text-xl text-foreground mb-2 font-semibold">
-              Supporting Registered Local Charities
+              {intl.formatMessage({ id: "grantsPage.charityTitle" })}
             </h3>
             <p className="font-condensed font-light text-sm md:text-base text-foreground/80 leading-relaxed mb-4">
-              We believe in giving back to local communities. We reserve a portion of our calendar to provide <strong>free web design, development, and tech support</strong> for registered local charities in Ireland (particularly within Westmeath and the Midlands).
+              {intl.formatMessage({ id: "grantsPage.charityDesc1" })}
             </p>
             <p className="font-condensed font-light text-sm md:text-base text-foreground/80 leading-relaxed">
-              If your charity needs a new site or needs technical upgrades to accept donations, please reach out directly via the contact form and mention your charity registration details.
+              {intl.formatMessage({ id: "grantsPage.charityDesc2" })}
             </p>
           </div>
         </div>
@@ -287,10 +285,10 @@ export default function DigitalGrantsPage() {
       {/* Final Call to Action */}
       <section className="text-center py-8">
         <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-4">
-          Ready to Start Your Digital Journey?
+          {intl.formatMessage({ id: "grantsPage.ctaTitle" })}
         </h2>
         <p className="font-condensed font-light text-lg text-foreground/70 mb-8 max-w-xl mx-auto">
-          Get in touch today to discuss your website project specification and LEO grant readiness.
+          {intl.formatMessage({ id: "grantsPage.ctaSub" })}
         </p>
         <div className="flex justify-center gap-4">
           <Button
@@ -298,7 +296,7 @@ export default function DigitalGrantsPage() {
             className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-8 h-12 font-condensed font-medium text-base shadow-lg shadow-primary/20"
           >
             <Link href="/contact">
-              Get in Touch
+              {intl.formatMessage({ id: "grantsPage.ctaBtn" })}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>

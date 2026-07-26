@@ -86,10 +86,6 @@ export function WebsiteSampleWizard() {
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isSubmittedSuccessfully, setIsSubmittedSuccessfully] = useState<boolean>(false);
-  const [submitStatus, setSubmitStatus] = useState<{
-    success: boolean;
-    message: string;
-  } | null>(null);
 
   // Modal Lightbox Carousel State
   const [previewIndex, setPreviewIndex] = useState<number | null>(null);
@@ -124,12 +120,21 @@ export function WebsiteSampleWizard() {
   const activePreviewOption: KBDesignOption | null =
     previewIndex !== null ? KB_DESIGN_OPTIONS[previewIndex] : null;
 
-  const handleNextStep = async () => {
+  const handleNextStep = async (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     let fieldsToValidate: (keyof SampleRequestData)[] = [];
     if (currentStep === 1) {
       fieldsToValidate = ["name", "email", "siteStructure", "pages"];
     } else if (currentStep === 2) {
-      fieldsToValidate = ["hasDesign", "designLink", "selectedKbDesigns"];
+      const hasDesign = form.getValues("hasDesign");
+      if (hasDesign === "yes") {
+        fieldsToValidate = ["hasDesign", "designLink"];
+      } else {
+        fieldsToValidate = ["hasDesign", "selectedKbDesigns"];
+      }
     }
 
     const isStepValid = await form.trigger(fieldsToValidate);
@@ -221,14 +226,9 @@ export function WebsiteSampleWizard() {
 
   async function onSubmit(values: SampleRequestData) {
     setIsSubmitting(true);
-    setSubmitStatus(null);
 
     try {
       const result = await sendSampleRequestEmail(values);
-      setSubmitStatus({
-        success: result.success,
-        message: result.message,
-      });
 
       if (result.success) {
         setIsSubmittedSuccessfully(true);
@@ -251,10 +251,7 @@ export function WebsiteSampleWizard() {
         });
       }
     } catch {
-      setSubmitStatus({
-        success: false,
-        message: intl.formatMessage({ id: "contact.error" }),
-      });
+      console.error("Sample request submission failed");
     } finally {
       setIsSubmitting(false);
     }
@@ -318,30 +315,6 @@ export function WebsiteSampleWizard() {
           ))}
         </div>
       </div>
-
-      {submitStatus && (
-        <div
-          className={`mb-6 p-4 rounded-xl text-sm font-condensed flex items-center justify-between gap-3 ${
-            submitStatus.success
-              ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 border border-green-300"
-              : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300 border border-red-300"
-          }`}
-        >
-          <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-5 h-5 text-green-600 shrink-0" />
-            <span>{submitStatus.message}</span>
-          </div>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={() => setSubmitStatus(null)}
-            className="text-xs font-bold underline p-0 h-auto text-current hover:bg-transparent"
-          >
-            Dismiss
-          </Button>
-        </div>
-      )}
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -941,7 +914,7 @@ export function WebsiteSampleWizard() {
             ) : (
               <Button
                 type="submit"
-                disabled={isSubmitting || submitStatus?.success}
+                disabled={isSubmitting}
                 className="font-condensed font-bold bg-secondary text-secondary-foreground hover:bg-secondary/90 px-8"
               >
                 {isSubmitting ? (

@@ -28,6 +28,7 @@ export const sampleRequestSchema = z.object({
   industry: z.string().min(1, { message: "Please select an industry." }),
   primaryGoal: z.string().min(1, { message: "Please select a primary goal." }),
   businessAssetLinks: z.string().optional(),
+  uploadedDriveFileNames: z.string().optional(),
   additionalNotes: z.string().optional(),
 });
 

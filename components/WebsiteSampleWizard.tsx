@@ -107,6 +107,7 @@ export function WebsiteSampleWizard() {
       industry: INDUSTRIES[0],
       primaryGoal: PRIMARY_GOALS[0],
       businessAssetLinks: "",
+      uploadedDriveFileNames: "",
       additionalNotes: "",
     },
   });
@@ -207,6 +208,7 @@ export function WebsiteSampleWizard() {
           industry: INDUSTRIES[0],
           primaryGoal: PRIMARY_GOALS[0],
           businessAssetLinks: "",
+          uploadedDriveFileNames: "",
           additionalNotes: "",
         });
         setCurrentStep(1);
@@ -778,6 +780,32 @@ export function WebsiteSampleWizard() {
                     Direct drop folder • No Google login required
                   </span>
                 </div>
+
+                {/* File Names Linkage Field */}
+                <div className="pt-2 border-t">
+                  <FormField
+                    control={form.control}
+                    name="uploadedDriveFileNames"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="font-sans font-semibold text-xs text-foreground">
+                          <FormattedMessage id="wizard.driveFileNamesLabel" />
+                        </FormLabel>
+                        <p className="text-[11px] text-muted-foreground font-condensed -mt-1">
+                          <FormattedMessage id="wizard.driveFileNamesSub" />
+                        </p>
+                        <FormControl>
+                          <Input
+                            placeholder={intl.formatMessage({ id: "wizard.driveFileNamesPlaceholder" })}
+                            className="font-condensed text-xs h-9 bg-background"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
 
               {/* Personal Resources & Branding Asset Links */}
@@ -887,6 +915,11 @@ export function WebsiteSampleWizard() {
                   <h4 className="font-bold text-xs uppercase text-muted-foreground mb-1">Scope & Assets</h4>
                   <p className="text-xs text-foreground"><strong>Industry:</strong> {form.getValues("industry")}</p>
                   <p className="text-xs text-foreground"><strong>Primary Goal:</strong> {form.getValues("primaryGoal")}</p>
+                  {form.getValues("uploadedDriveFileNames") && (
+                    <p className="text-xs text-primary font-semibold mt-1 break-all">
+                      <strong>Uploaded Drive Files:</strong> {form.getValues("uploadedDriveFileNames")}
+                    </p>
+                  )}
                   {form.getValues("businessAssetLinks") && (
                     <p className="text-xs text-foreground mt-1 break-all">
                       <strong>Resource & Branding Links:</strong> {form.getValues("businessAssetLinks")}

@@ -131,9 +131,11 @@ export async function sendSampleRequestEmail(data: SampleRequestData & { website
 
         <h3 style="color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px;">4. Business Context & Assets</h3>
         <table style="width: 100%; border-collapse: collapse; margin-bottom: 16px;">
-          <tr><td style="padding: 6px 0; font-weight: bold; width: 140px;">Industry:</td><td>${payload.industry}</td></tr>
+          <tr><td style="padding: 6px 0; font-weight: bold; width: 160px;">Industry:</td><td>${payload.industry}</td></tr>
           <tr><td style="padding: 6px 0; font-weight: bold;">Primary Goal:</td><td>${payload.primaryGoal}</td></tr>
-          <tr><td style="padding: 6px 0; font-weight: bold;">Branding & Asset Links:</td><td>${sanitizedAssetLinks || "None provided"}</td></tr>
+          <tr><td style="padding: 6px 0; font-weight: bold;">Resource / Asset Links:</td><td>${sanitizedAssetLinks || "None provided"}</td></tr>
+          <tr><td style="padding: 6px 0; font-weight: bold;">Uploaded Drive File(s):</td><td style="color: #0284c7; font-weight: bold;">${payload.uploadedDriveFileNames || "None specified"}</td></tr>
+          <tr><td style="padding: 6px 0; font-weight: bold;">Agency Drive Folder:</td><td><a href="https://drive.google.com/drive/folders/1ZiVxr1gCyo-zmeX80l1yJvmEe5HWse8t?usp=drive_link" target="_blank" style="color: #2563eb;">Open Google Drive Folder</a></td></tr>
         </table>
 
         ${

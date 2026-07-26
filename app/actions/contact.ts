@@ -131,6 +131,17 @@ export async function sendSampleRequestEmail(data: SampleRequestData & { website
   });
 
   try {
+    // Build clean metadata payload (no base64 content, no internal fields)
+    const metadataPayload = {
+      ...payload,
+      attachments: payload.attachments?.map((a) => ({
+        name: a.name,
+        type: a.type,
+        size: a.size,
+      })),
+    };
+    const metadataJson = JSON.stringify(metadataPayload, null, 2);
+
     const emailSubject = `🚀 Website Sample Request Lead: ${payload.name} (${payload.company || "Personal/Independent"})`;
 
     const htmlBody = `
@@ -141,8 +152,10 @@ export async function sendSampleRequestEmail(data: SampleRequestData & { website
 
         <p style="font-size: 14px;">A new website sample request was submitted by <strong>${payload.name}</strong> (&lt;<a href="mailto:${payload.email}">${payload.email}</a>&gt;).</p>
 
+        <pre style="background: #f1f5f9; padding: 16px; border-radius: 8px; font-size: 12px; line-height: 1.5; overflow-x: auto; white-space: pre-wrap; word-break: break-word;">${metadataJson}</pre>
+
         <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b; text-align: center;">
-          Sent automatically from www.niu.ie/contact
+          Full metadata attached as lead-data.json for programmatic parsing.
         </div>
       </div>
     `;
@@ -154,12 +167,19 @@ export async function sendSampleRequestEmail(data: SampleRequestData & { website
       encoding: "base64",
     })) || [];
 
+    // Attach clean metadata JSON for future Gmail API parsing
+    emailAttachments.push({
+      filename: "lead-data.json",
+      content: Buffer.from(metadataJson, "utf-8"),
+      encoding: "utf-8",
+    });
+
     await transporter.sendMail({
       from: process.env.GMAIL_USER,
       to: process.env.GMAIL_USER,
       replyTo: payload.email,
       subject: emailSubject,
-      text: `New Website Sample Request Lead from ${payload.name}.\nAttachments attached directly.`,
+      text: `New Website Sample Request Lead from ${payload.name}.\n\n${metadataJson}`,
       html: htmlBody,
       attachments: emailAttachments,
     });

@@ -30,7 +30,7 @@ const services = [
     title: "Iterative Growth",
     description:
       "Start with a solid, budget-friendly launch version and scale when you are ready. We add new features step-by-step as your business grows.",
-    color: "#9d3860",
+    color: "#3871c1",
   },
 ];
 

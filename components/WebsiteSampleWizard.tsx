@@ -130,13 +130,11 @@ export function WebsiteSampleWizard() {
       fieldsToValidate = ["name", "email", "siteStructure", "pages"];
     } else if (currentStep === 2) {
       fieldsToValidate = ["hasDesign", "designLink", "selectedKbDesigns"];
-    } else if (currentStep === 3) {
-      fieldsToValidate = ["industry", "primaryGoal"];
     }
 
     const isStepValid = await form.trigger(fieldsToValidate);
     if (isStepValid) {
-      setCurrentStep((prev) => Math.min(prev + 1, 4));
+      setCurrentStep((prev) => Math.min(prev + 1, 3));
     }
   };
 
@@ -298,20 +296,19 @@ export function WebsiteSampleWizard() {
           <span>
             <FormattedMessage
               id="wizard.step"
-              values={{ current: currentStep, total: 4 }}
+              values={{ current: currentStep, total: 3 }}
             />
           </span>
           <span className="text-primary font-bold">
             {currentStep === 1 && "1. Contact & Scope"}
             {currentStep === 2 && "2. Design Preferences"}
             {currentStep === 3 && "3. Business Context & Assets"}
-            {currentStep === 4 && "4. Review & Submit"}
           </span>
         </div>
 
         {/* Step Indicator Bar */}
         <div className="w-full h-2 bg-muted rounded-full overflow-hidden flex gap-1">
-          {[1, 2, 3, 4].map((step) => (
+          {[1, 2, 3].map((step) => (
             <div
               key={step}
               className={`h-full flex-1 transition-all duration-300 ${
@@ -820,7 +817,6 @@ export function WebsiteSampleWizard() {
                       <p className="text-xs text-muted-foreground font-condensed">PDFs, PNG, JPG, WEBP • Max 3 files (Up to 10MB each)</p>
                     </div>
                   </div>
-                  <Badge variant="outline" className="text-[10px] bg-background">Direct Email Attachment</Badge>
                 </div>
 
                 <div className="pt-2">
@@ -916,93 +912,6 @@ export function WebsiteSampleWizard() {
             </div>
           )}
 
-          {/* STEP 4: Review & Submit Summary */}
-          {currentStep === 4 && (
-            <div className="space-y-6 animate-in fade-in-50 duration-300">
-              <div>
-                <h3 className="text-2xl font-serif text-primary flex items-center gap-2">
-                  <FileCheck className="w-6 h-6 text-secondary" />
-                  <FormattedMessage id="wizard.step4.title" />
-                </h3>
-                <p className="text-sm text-muted-foreground font-condensed mt-1">
-                  <FormattedMessage id="wizard.step4.sub" />
-                </p>
-              </div>
-
-              {/* Summary Card */}
-              <div className="bg-muted/40 p-6 rounded-xl border space-y-4 font-condensed">
-                <div className="border-b pb-3">
-                  <h4 className="font-bold text-xs uppercase text-muted-foreground mb-1">Contact Details</h4>
-                  <p className="text-sm font-semibold text-foreground">{form.getValues("name")} &lt;{form.getValues("email")}&gt;</p>
-                  {form.getValues("phone") && <p className="text-xs text-muted-foreground">Phone: {form.getValues("phone")}</p>}
-                  {form.getValues("company") && <p className="text-xs text-muted-foreground">Company: {form.getValues("company")}</p>}
-                </div>
-
-                <div className="border-b pb-3">
-                  <h4 className="font-bold text-xs uppercase text-muted-foreground mb-1">Site Layout & Target Pages</h4>
-                  <p className="text-xs text-foreground font-medium mb-1.5">
-                    <strong>Structure:</strong> {watchSiteStructure === "single-page" ? "Single-Page (1-Page Scroll)" : "Multi-Page (Up to 3 Pages)"}
-                  </p>
-                  <div className="flex flex-wrap gap-1.5 mt-1">
-                    {watchPages.map((page) => (
-                      <Badge key={page} variant="outline" className="bg-background text-xs">
-                        {page}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="border-b pb-3">
-                  <h4 className="font-bold text-xs uppercase text-muted-foreground mb-1">Design Path & Concept Styles</h4>
-                  {watchHasDesign === "yes" ? (
-                    <p className="text-sm text-primary font-semibold break-all">
-                      Design Link: {form.getValues("designLink") || "Not specified"}
-                    </p>
-                  ) : (
-                    <div className="flex flex-wrap gap-1.5 mt-1">
-                      {watchSelectedKbDesigns.map((id) => {
-                        const opt = KB_DESIGN_OPTIONS.find((k) => k.id === id);
-                        return (
-                          <Badge key={id} className="bg-secondary text-secondary-foreground text-xs">
-                            {opt?.name || id}
-                          </Badge>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-
-                <div>
-                  <h4 className="font-bold text-xs uppercase text-muted-foreground mb-1">Scope & Assets</h4>
-                  <p className="text-xs text-foreground"><strong>Industry:</strong> {form.getValues("industry")}</p>
-                  <p className="text-xs text-foreground"><strong>Primary Goal:</strong> {form.getValues("primaryGoal")}</p>
-                  {watchAttachments.length > 0 && (
-                    <p className="text-xs text-primary font-semibold mt-1">
-                      <strong>Attached Files ({watchAttachments.length}):</strong> {watchAttachments.map((a) => a.name).join(", ")}
-                    </p>
-                  )}
-                  {form.getValues("businessAssetLinks") && (
-                    <p className="text-xs text-foreground mt-1 break-all">
-                      <strong>Resource & Branding Links:</strong> {form.getValues("businessAssetLinks")}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              {submitStatus && (
-                <div
-                  className={`p-4 rounded-xl text-sm font-condensed ${
-                    submitStatus.success
-                      ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 border border-green-300"
-                      : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300 border border-red-300"
-                  }`}
-                >
-                  {submitStatus.message}
-                </div>
-              )}
-            </div>
-          )}
-
           {/* Navigation Control Buttons */}
           <div className="flex items-center justify-between pt-6 border-t mt-8">
             {currentStep > 1 ? (
@@ -1020,7 +929,7 @@ export function WebsiteSampleWizard() {
               <div />
             )}
 
-            {currentStep < 4 ? (
+            {currentStep < 3 ? (
               <Button
                 type="button"
                 onClick={handleNextStep}
@@ -1040,7 +949,7 @@ export function WebsiteSampleWizard() {
                 ) : (
                   <>
                     <Send className="w-4 h-4 mr-2" />
-                    <FormattedMessage id="wizard.submitBtn" />
+                    Submit Request
                   </>
                 )}
               </Button>

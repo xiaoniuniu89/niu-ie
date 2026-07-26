@@ -4,6 +4,8 @@ import nodemailer from "nodemailer";
 import { contactFormSchema, sampleRequestSchema } from "@/lib/contact-schemas";
 import type { ContactFormData, SampleRequestData } from "@/lib/contact-schemas";
 
+import crypto from "crypto";
+
 function sanitizeUrlString(input?: string): string {
   if (!input) return "";
   return input
@@ -22,6 +24,25 @@ function sanitizeUrlString(input?: string): string {
       return line.replace(/</g, "&lt;").replace(/>/g, "&gt;");
     })
     .join("<br>");
+}
+
+function validateFileMagicBytes(buffer: Buffer, fileType: string): boolean {
+  if (buffer.length < 4) return false;
+  const hex = buffer.toString("hex", 0, 4).toUpperCase();
+  
+  if (fileType.includes("pdf")) {
+    return hex.startsWith("25504446"); // %PDF
+  }
+  if (fileType.includes("png")) {
+    return hex.startsWith("89504E47"); // PNG
+  }
+  if (fileType.includes("jpg") || fileType.includes("jpeg")) {
+    return hex.startsWith("FFD8FF"); // JPEG
+  }
+  if (fileType.includes("webp")) {
+    return buffer.toString("utf8", 8, 12) === "WEBP";
+  }
+  return false;
 }
 
 export async function sendEmail(data: ContactFormData & { website?: string }) {
@@ -151,17 +172,29 @@ export async function sendSampleRequestEmail(data: SampleRequestData & { website
       </div>
     `;
 
-    const mailAttachments = payload.attachments?.map((att) => {
-      const base64Data = att.content.includes(";base64,")
-        ? att.content.split(";base64,")[1]
-        : att.content;
+    const mailAttachments = [];
+    if (payload.attachments && payload.attachments.length > 0) {
+      for (const att of payload.attachments) {
+        const base64Data = att.content.includes(";base64,")
+          ? att.content.split(";base64,")[1]
+          : att.content;
+        const fileBuffer = Buffer.from(base64Data, "base64");
 
-      return {
-        filename: att.name.replace(/[^a-zA-Z0-9_.-]/g, "_"),
-        content: Buffer.from(base64Data, "base64"),
-        contentType: att.type,
-      };
-    }) || [];
+        const isValidBinary = validateFileMagicBytes(fileBuffer, att.type);
+        if (!isValidBinary) {
+          return {
+            success: false,
+            message: `Security validation failed: File "${att.name}" does not match valid PDF or image binary signatures. Please attach genuine PDF, PNG, or JPG files.`,
+          };
+        }
+
+        mailAttachments.push({
+          filename: att.name.replace(/[^a-zA-Z0-9_.-]/g, "_"),
+          content: fileBuffer,
+          contentType: att.type,
+        });
+      }
+    }
 
     await transporter.sendMail({
       from: process.env.GMAIL_USER,

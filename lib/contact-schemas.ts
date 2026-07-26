@@ -27,6 +27,7 @@ export const sampleRequestSchema = z.object({
   selectedKbDesigns: z.array(z.string()).max(3, { message: "Select up to 3 design inspirations." }).optional(),
   industry: z.string().min(1, { message: "Please select an industry." }),
   primaryGoal: z.string().min(1, { message: "Please select a primary goal." }),
+  businessAssetLinks: z.string().optional(),
   additionalNotes: z.string().optional(),
 });
 

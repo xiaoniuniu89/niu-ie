@@ -97,6 +97,7 @@ export async function sendSampleRequestEmail(data: SampleRequestData & { website
 
     const sanitizedDesignLink = sanitizeUrlString(payload.designLink);
     const sanitizedReferenceLinks = sanitizeUrlString(payload.referenceLinks);
+    const sanitizedAssetLinks = sanitizeUrlString(payload.businessAssetLinks);
 
     const emailSubject = `🚀 Website Sample Request: ${payload.name} (${payload.company || "Personal/Independent"})`;
 
@@ -128,10 +129,11 @@ export async function sendSampleRequestEmail(data: SampleRequestData & { website
             : `<p><strong>Selected KB Visual Vibes:</strong> ${payload.selectedKbDesigns?.length ? payload.selectedKbDesigns.join(", ") : "None selected"}</p>`
         }
 
-        <h3 style="color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px;">4. Business Context</h3>
+        <h3 style="color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px;">4. Business Context & Assets</h3>
         <table style="width: 100%; border-collapse: collapse; margin-bottom: 16px;">
           <tr><td style="padding: 6px 0; font-weight: bold; width: 140px;">Industry:</td><td>${payload.industry}</td></tr>
           <tr><td style="padding: 6px 0; font-weight: bold;">Primary Goal:</td><td>${payload.primaryGoal}</td></tr>
+          <tr><td style="padding: 6px 0; font-weight: bold;">Branding & Asset Links:</td><td>${sanitizedAssetLinks || "None provided"}</td></tr>
         </table>
 
         ${

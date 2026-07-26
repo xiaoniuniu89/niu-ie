@@ -102,6 +102,7 @@ export function WebsiteSampleWizard() {
       selectedKbDesigns: ["clean-service-branding"],
       industry: INDUSTRIES[0],
       primaryGoal: PRIMARY_GOALS[0],
+      businessAssetLinks: "",
       additionalNotes: "",
     },
   });
@@ -201,6 +202,7 @@ export function WebsiteSampleWizard() {
           selectedKbDesigns: ["clean-service-branding"],
           industry: INDUSTRIES[0],
           primaryGoal: PRIMARY_GOALS[0],
+          businessAssetLinks: "",
           additionalNotes: "",
         });
         setCurrentStep(1);
@@ -229,7 +231,7 @@ export function WebsiteSampleWizard() {
           <span className="text-primary font-bold">
             {currentStep === 1 && "1. Contact & Scope"}
             {currentStep === 2 && "2. Design Preferences"}
-            {currentStep === 3 && "3. Business Context"}
+            {currentStep === 3 && "3. Business Context & Assets"}
             {currentStep === 4 && "4. Review & Submit"}
           </span>
         </div>
@@ -667,7 +669,7 @@ export function WebsiteSampleWizard() {
             </div>
           )}
 
-          {/* STEP 3: Business Context & Goals */}
+          {/* STEP 3: Business Context & Assets */}
           {currentStep === 3 && (
             <div className="space-y-6 animate-in fade-in-50 duration-300">
               <div>
@@ -726,6 +728,30 @@ export function WebsiteSampleWizard() {
                           </option>
                         ))}
                       </select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Personal Resources & Branding Asset Links */}
+              <FormField
+                control={form.control}
+                name="businessAssetLinks"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-sans font-semibold">
+                      <FormattedMessage id="wizard.assetLinksLabel" />
+                    </FormLabel>
+                    <p className="text-xs text-muted-foreground font-condensed -mt-1">
+                      <FormattedMessage id="wizard.assetLinksSub" />
+                    </p>
+                    <FormControl>
+                      <Textarea
+                        placeholder={intl.formatMessage({ id: "wizard.assetLinksPlaceholder" })}
+                        className="min-h-[90px] font-condensed text-sm"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -812,9 +838,14 @@ export function WebsiteSampleWizard() {
                 </div>
 
                 <div>
-                  <h4 className="font-bold text-xs uppercase text-muted-foreground mb-1">Scope & Goals</h4>
+                  <h4 className="font-bold text-xs uppercase text-muted-foreground mb-1">Scope & Assets</h4>
                   <p className="text-xs text-foreground"><strong>Industry:</strong> {form.getValues("industry")}</p>
                   <p className="text-xs text-foreground"><strong>Primary Goal:</strong> {form.getValues("primaryGoal")}</p>
+                  {form.getValues("businessAssetLinks") && (
+                    <p className="text-xs text-foreground mt-1 break-all">
+                      <strong>Resource & Branding Links:</strong> {form.getValues("businessAssetLinks")}
+                    </p>
+                  )}
                 </div>
               </div>
 

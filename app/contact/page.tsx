@@ -27,7 +27,7 @@ export default function Contact() {
         <h1 className="font-serif text-4xl sm:text-5xl text-primary mb-4 text-center">
           {intl.formatMessage({ id: "contact.title" })}
         </h1>
-        <p className="font-condensed font-light text-muted-foreground text-lg sm:text-xl max-w-lg mb-10 text-center">
+        <p className="font-condensed font-light text-muted-foreground text-lg sm:text-xl max-w-lg mb-8 text-center">
           {intl.formatMessage({ id: "contact.sub" })}
         </p>
 

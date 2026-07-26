@@ -122,26 +122,26 @@ export function ContactForm() {
           
           {submitStatus && (
             <div
-              className={`p-3 rounded-md text-sm font-condensed flex items-center justify-between gap-3 ${
+              className={`p-4 rounded-xl text-sm font-condensed flex items-center justify-between gap-3 ${
                 submitStatus.success
                   ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"
                   : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300"
               }`}
             >
-              <span>{submitStatus.message}</span>
+              <span className="leading-relaxed">{submitStatus.message}</span>
               <button
                 type="button"
                 onClick={() => setSubmitStatus(null)}
-                className="text-xs font-bold underline text-current hover:opacity-80"
+                className="text-xs font-bold underline text-current hover:opacity-80 shrink-0"
               >
                 Dismiss
               </button>
             </div>
           )}
 
-          <Button 
-            type="submit" 
-            className="md:w-auto md:px-8 font-condensed font-medium" 
+          <Button
+            type="submit"
+            className="w-full md:w-auto md:px-8 font-condensed font-medium"
             disabled={isSubmitting}
           >
             {isSubmitting ? intl.formatMessage({ id: "contact.sending" }) : intl.formatMessage({ id: "contact.sendBtn" })}

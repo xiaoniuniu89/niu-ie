@@ -1,0 +1,20 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-font-size",
+        "value": "10px",
+        "createdAt": "2026-07-26T18:56:50.645Z",
+        "reason": "Micro-typography for badges, file metadata, color tokens"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "11px",
+        "createdAt": "2026-07-26T18:57:08.285Z",
+        "reason": "Micro-typography for compact badge/category labels"
+      }
+    ]
+  }
+}

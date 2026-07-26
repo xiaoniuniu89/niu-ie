@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,7 +8,8 @@ import { useIntl, FormattedMessage } from "react-intl";
 import { sendSampleRequestEmail } from "@/app/actions/contact";
 import { sampleRequestSchema, type SampleRequestData } from "@/lib/contact-schemas";
 import { KB_DESIGN_OPTIONS, KBDesignOption } from "@/lib/kb-designs";
-import { UploadButton } from "@/lib/uploadthing";
+import { generateReactHelpers } from "@uploadthing/react";
+import type { OurFileRouter } from "@/app/api/uploadthing/core";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -38,7 +39,6 @@ import {
   Layers,
   Building2,
   Send,
-  FileCheck,
   FileCode,
   Files,
   Maximize2,
@@ -49,7 +49,8 @@ import {
   FileText,
   Image as ImageIcon,
   X,
-  ExternalLink,
+  Upload,
+  Loader2,
 } from "lucide-react";
 
 const AVAILABLE_PAGES = [
@@ -81,11 +82,27 @@ const PRIMARY_GOALS = [
   "Modernize an old / outdated existing website",
 ];
 
+const { useUploadThing: useUT } = generateReactHelpers<OurFileRouter>();
+
 export function WebsiteSampleWizard() {
   const intl = useIntl();
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isSubmittedSuccessfully, setIsSubmittedSuccessfully] = useState<boolean>(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  // File upload state: local files before submit
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [isUploadingFiles, setIsUploadingFiles] = useState<boolean>(false);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [currentUploadingFile, setCurrentUploadingFile] = useState<string>("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const { startUpload } = useUT("sampleAssetUploader", {
+    onUploadProgress: (p) => {
+      setUploadProgress(p);
+    },
+  });
 
   // Modal Lightbox Carousel State
   const [previewIndex, setPreviewIndex] = useState<number | null>(null);
@@ -137,14 +154,21 @@ export function WebsiteSampleWizard() {
       }
     }
 
+    setSubmitError(null);
     const isStepValid = await form.trigger(fieldsToValidate);
     if (isStepValid) {
       setCurrentStep((prev) => Math.min(prev + 1, 3));
+      // Scroll to top of wizard on step change
+      const wizardEl = document.getElementById("wizard-top");
+      wizardEl?.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
   const handlePrevStep = () => {
+    setSubmitError(null);
     setCurrentStep((prev) => Math.max(prev - 1, 1));
+    const wizardEl = document.getElementById("wizard-top");
+    wizardEl?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   const toggleKbDesign = (designId: string) => {
@@ -178,29 +202,34 @@ export function WebsiteSampleWizard() {
     form.setValue("pages", current, { shouldValidate: true });
   };
 
-  const handleUploadComplete = (res: { url: string; name: string; size?: number; type?: string }[]) => {
-    const current = form.getValues("attachments") || [];
-    const updated = [...current];
-    res.forEach((file) => {
-      if (updated.length >= 3) return;
-      updated.push({
-        name: file.name,
-        type: file.type || "application/octet-stream",
-        size: file.size || 0,
-        url: file.url,
-      });
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    const allowedTypes = ["image/png", "image/jpeg", "image/webp", "application/pdf"];
+    const maxSize = 10 * 1024 * 1024; // 10MB
+
+    const valid = files.filter((f) => {
+      if (!allowedTypes.includes(f.type)) {
+        console.warn(`Skipped ${f.name}: unsupported type`);
+        return false;
+      }
+      if (f.size > maxSize) {
+        console.warn(`Skipped ${f.name}: exceeds 10MB limit`);
+        return false;
+      }
+      return true;
     });
-    form.setValue("attachments", updated, { shouldValidate: true });
+
+    setSelectedFiles((prev) => {
+      const combined = [...prev, ...valid];
+      return combined.slice(0, 3);
+    });
+
+    // Reset input so same file can be re-selected
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  const handleUploadError = (error: Error) => {
-    console.error("UploadThing error:", error.message);
-  };
-
-  const removeAttachment = (indexToRemove: number) => {
-    const current = form.getValues("attachments") || [];
-    const updated = current.filter((_, idx) => idx !== indexToRemove);
-    form.setValue("attachments", updated, { shouldValidate: true });
+  const removeSelectedFile = (indexToRemove: number) => {
+    setSelectedFiles((prev) => prev.filter((_, idx) => idx !== indexToRemove));
   };
 
   const navigatePreview = (direction: "prev" | "next") => {
@@ -216,12 +245,56 @@ export function WebsiteSampleWizard() {
 
   async function onSubmit(values: SampleRequestData) {
     setIsSubmitting(true);
+    setSubmitError(null);
 
     try {
-      const result = await sendSampleRequestEmail(values);
+      let attachments = values.attachments || [];
+
+      // Upload files on submit — only if there are files to upload
+      if (selectedFiles.length > 0) {
+        setIsUploadingFiles(true);
+        setUploadProgress(0);
+        setCurrentUploadingFile("");
+
+        // Upload one file at a time for per-file progress tracking
+        const uploadedResults: { name: string; type: string; size: number; url: string }[] = [];
+
+        for (let i = 0; i < selectedFiles.length; i++) {
+          const file = selectedFiles[i];
+          setCurrentUploadingFile(file.name);
+          setUploadProgress(0);
+
+          try {
+            const result = await startUpload([file]);
+
+            if (result && result.length > 0) {
+              uploadedResults.push({
+                name: result[0].name || file.name,
+                type: result[0].type || file.type,
+                size: result[0].size || file.size,
+                url: result[0].url || result[0].appUrl || "",
+              });
+            }
+          } catch (uploadErr) {
+            console.error(`Upload failed for ${file.name}:`, uploadErr);
+          }
+        }
+
+        setIsUploadingFiles(false);
+        attachments = uploadedResults;
+        form.setValue("attachments", attachments, { shouldValidate: true });
+      }
+
+      const result = await sendSampleRequestEmail({
+        ...values,
+        attachments,
+      });
 
       if (result.success) {
         setIsSubmittedSuccessfully(true);
+        setSelectedFiles([]);
+        setUploadProgress(0);
+        setCurrentUploadingFile("");
         form.reset({
           name: "",
           email: "",
@@ -240,20 +313,22 @@ export function WebsiteSampleWizard() {
           additionalNotes: "",
         });
       }
-    } catch {
-      console.error("Sample request submission failed");
+    } catch (err) {
+      console.error("Sample request submission failed", err);
+      setSubmitError("Submission failed. Please try again or email us directly.");
     } finally {
       setIsSubmitting(false);
+      setIsUploadingFiles(false);
     }
   }
 
   if (isSubmittedSuccessfully) {
     return (
-      <div className="w-full max-w-4xl mx-auto bg-card p-8 md:p-12 rounded-2xl border shadow-sm text-center space-y-6 animate-in fade-in-50 duration-500">
+      <div className="w-full max-w-4xl mx-auto bg-card p-8 md:p-12 rounded-2xl border shadow-sm text-center space-y-8 animate-in fade-in-50 duration-500">
         <div className="w-20 h-20 bg-green-100 dark:bg-green-900/30 text-green-600 rounded-full flex items-center justify-center mx-auto shadow-sm">
           <CheckCircle2 className="w-12 h-12" />
         </div>
-        <div className="space-y-2">
+        <div className="space-y-3">
           <h3 className="text-3xl font-serif font-bold text-primary">Website Sample Request Received!</h3>
           <p className="text-muted-foreground font-condensed text-base max-w-lg mx-auto leading-relaxed">
             Thank you for providing your project details and visual design preferences. Our agency team is preparing your custom 3-page preview layout. We will be in touch shortly via email.
@@ -276,7 +351,7 @@ export function WebsiteSampleWizard() {
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto bg-card p-6 md:p-10 rounded-2xl border shadow-sm">
+    <div id="wizard-top" className="w-full max-w-4xl mx-auto bg-card p-6 md:p-10 rounded-2xl border shadow-sm">
       {/* Wizard Progress Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between text-xs font-condensed font-semibold uppercase tracking-wider text-muted-foreground mb-3">
@@ -312,7 +387,7 @@ export function WebsiteSampleWizard() {
 
           {/* STEP 1: Contact & Target Page Scope */}
           {currentStep === 1 && (
-            <div className="space-y-6 animate-in fade-in-50 duration-300">
+            <div className="space-y-8 animate-in fade-in-50 duration-300">
               <div>
                 <h3 className="text-2xl font-serif text-primary flex items-center gap-2">
                   <Layers className="w-6 h-6 text-secondary" />
@@ -483,7 +558,7 @@ export function WebsiteSampleWizard() {
 
           {/* STEP 2: Design Preference & Concept Style Showcase */}
           {currentStep === 2 && (
-            <div className="space-y-6 animate-in fade-in-50 duration-300">
+            <div className="space-y-8 animate-in fade-in-50 duration-300">
               <div>
                 <h3 className="text-2xl font-serif text-primary flex items-center gap-2">
                   <Sparkles className="w-6 h-6 text-secondary" />
@@ -498,7 +573,7 @@ export function WebsiteSampleWizard() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div
                   onClick={() => form.setValue("hasDesign", "no")}
-                  className={`p-4.5 rounded-xl border cursor-pointer transition-all ${
+                  className={`p-5 rounded-xl border cursor-pointer transition-all ${
                     watchHasDesign === "no"
                       ? "border-primary bg-primary/10 ring-1 ring-primary"
                       : "border-border hover:border-primary/40 bg-background"
@@ -515,7 +590,7 @@ export function WebsiteSampleWizard() {
 
                 <div
                   onClick={() => form.setValue("hasDesign", "yes")}
-                  className={`p-4.5 rounded-xl border cursor-pointer transition-all ${
+                  className={`p-5 rounded-xl border cursor-pointer transition-all ${
                     watchHasDesign === "yes"
                       ? "border-primary bg-primary/10 ring-1 ring-primary"
                       : "border-border hover:border-primary/40 bg-background"
@@ -643,7 +718,7 @@ export function WebsiteSampleWizard() {
                             </div>
                           </div>
 
-                          <CardContent className="p-4.5 space-y-3" onClick={() => toggleKbDesign(option.id)}>
+                          <CardContent className="p-5 space-y-3" onClick={() => toggleKbDesign(option.id)}>
                             <div className="flex items-start justify-between gap-2">
                               <h4 className="font-bold text-base text-foreground leading-snug">{option.name}</h4>
                               <Button
@@ -707,7 +782,7 @@ export function WebsiteSampleWizard() {
 
           {/* STEP 3: Business Context & Assets */}
           {currentStep === 3 && (
-            <div className="space-y-6 animate-in fade-in-50 duration-300">
+            <div className="space-y-8 animate-in fade-in-50 duration-300">
               <div>
                 <h3 className="text-2xl font-serif text-primary flex items-center gap-2">
                   <Building2 className="w-6 h-6 text-secondary" />
@@ -783,51 +858,99 @@ export function WebsiteSampleWizard() {
                 </div>
 
                 <div className="pt-2">
-                  <UploadButton
-                    endpoint="sampleAssetUploader"
-                    onClientUploadComplete={(res) => handleUploadComplete(res || [])}
-                    onUploadError={handleUploadError}
-                    appearance={{
-                      container: {
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        padding: "24px",
-                        border: "2px dashed hsl(var(--primary) / 0.3)",
-                        borderRadius: "12px",
-                        cursor: "pointer",
-                        background: "hsl(var(--background))",
-                        transition: "all 0.2s",
-                      },
-                      button: {
-                        padding: "10px 20px",
-                        borderRadius: "8px",
-                        background: "hsl(var(--primary))",
-                        color: "hsl(var(--primary-foreground))",
-                        fontSize: "13px",
-                        fontWeight: 700,
-                        fontFamily: "var(--font-condensed), sans-serif",
-                        border: "none",
-                        cursor: "pointer",
-                      },
-                      allowedContent: {
-                        fontSize: "11px",
-                        color: "hsl(var(--muted-foreground))",
-                        fontFamily: "var(--font-condensed), sans-serif",
-                      },
-                    }}
-                    content={{
-                      button: "Choose Files to Upload",
-                      allowedContent: "PDF, PNG, JPG, WEBP • Max 3 files (Up to 8MB each)",
-                    }}
+                  {/* Hidden file input */}
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".pdf,.png,.jpg,.jpeg,.webp"
+                    multiple
+                    onChange={handleFileSelect}
+                    className="hidden"
+                    id="file-upload-input"
                   />
+
+                  {/* Custom file picker button */}
+                  <label
+                    htmlFor="file-upload-input"
+                    className={`flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-xl cursor-pointer transition-all ${
+                      selectedFiles.length >= 3
+                        ? "border-muted bg-muted/20 cursor-not-allowed opacity-60"
+                        : "border-primary/30 hover:border-primary/60 hover:bg-primary/5 bg-background"
+                    }`}
+                  >
+                    <Upload className="w-8 h-8 text-primary/60 mb-2" />
+                    <span className="text-sm font-condensed font-bold text-foreground">
+                      {selectedFiles.length >= 3
+                        ? "Maximum 3 files selected"
+                        : "Choose Files to Upload"}
+                    </span>
+                    <span className="text-xs text-muted-foreground font-condensed mt-1">
+                      PDF, PNG, JPG, WEBP • Max 3 files (Up to 10MB each)
+                    </span>
+                  </label>
                 </div>
 
-                {/* Attached File Chips */}
-                {watchAttachments.length > 0 && (
+                {/* Selected File List (local, not yet uploaded) */}
+                {selectedFiles.length > 0 && (
                   <div className="space-y-2 pt-2">
-                    <span className="text-xs font-bold text-foreground">Attached Files ({watchAttachments.length}/3):</span>
+                    <span className="text-xs font-bold text-foreground">
+                      Selected Files ({selectedFiles.length}/3)
+                      <span className="font-normal text-muted-foreground ml-1">— will upload on submit</span>
+                    </span>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedFiles.map((file, fileIdx) => (
+                        <div
+                          key={fileIdx}
+                          className="flex items-center gap-2 p-2 rounded-lg bg-card border text-xs font-condensed text-foreground shadow-xs"
+                        >
+                          {file.type === "application/pdf" ? (
+                            <FileText className="w-4 h-4 text-red-500 shrink-0" />
+                          ) : (
+                            <ImageIcon className="w-4 h-4 text-blue-500 shrink-0" />
+                          )}
+                          <span className="truncate max-w-[160px] font-medium">{file.name}</span>
+                          <span className="text-[10px] text-muted-foreground">
+                            ({(file.size / (1024 * 1024)).toFixed(1)} MB)
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => removeSelectedFile(fileIdx)}
+                            className="p-1 hover:bg-muted rounded-full text-muted-foreground hover:text-foreground"
+                          >
+                            <X className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Upload Progress Bar (visible during file upload on submit) */}
+                {isUploadingFiles && (
+                  <div className="space-y-2 pt-2 border-t border-dashed border-muted-foreground/20">
+                    <div className="flex items-center gap-2 text-xs font-condensed">
+                      <Loader2 className="w-3.5 h-3.5 text-primary animate-spin shrink-0" />
+                      <span className="text-foreground font-semibold">
+                        Uploading{currentUploadingFile ? ` ${currentUploadingFile}` : "..."}
+                      </span>
+                      <span className="text-muted-foreground ml-auto">{uploadProgress}%</span>
+                    </div>
+                    <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-primary rounded-full transition-all duration-300 ease-out"
+                        style={{ width: `${uploadProgress}%` }}
+                      />
+                    </div>
+                    <p className="text-[10px] text-muted-foreground font-condensed">
+                      Files are uploaded securely on submit. Cancel or navigate away to skip.
+                    </p>
+                  </div>
+                )}
+
+                {/* Already uploaded attachments (from previous state) */}
+                {!isUploadingFiles && watchAttachments.length > 0 && (
+                  <div className="space-y-2 pt-2">
+                    <span className="text-xs font-bold text-foreground">Uploaded Files ({watchAttachments.length}/3):</span>
                     <div className="flex flex-wrap gap-2">
                       {watchAttachments.map((att, attIdx) => (
                         <div
@@ -841,13 +964,6 @@ export function WebsiteSampleWizard() {
                           )}
                           <span className="truncate max-w-[160px] font-medium">{att.name}</span>
                           <span className="text-[10px] text-muted-foreground">({(att.size / (1024 * 1024)).toFixed(1)} MB)</span>
-                          <button
-                            type="button"
-                            onClick={() => removeAttachment(attIdx)}
-                            className="p-1 hover:bg-muted rounded-full text-muted-foreground hover:text-foreground"
-                          >
-                            <X className="w-3.5 h-3.5" />
-                          </button>
                         </div>
                       ))}
                     </div>
@@ -902,8 +1018,16 @@ export function WebsiteSampleWizard() {
             </div>
           )}
 
+          {/* Submit Error Alert */}
+          {submitError && (
+            <div className="p-4 rounded-lg bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 text-sm font-condensed text-red-700 dark:text-red-400 flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-red-500 shrink-0" />
+              {submitError}
+            </div>
+          )}
+
           {/* Navigation Control Buttons */}
-          <div className="flex items-center justify-between pt-6 border-t mt-8">
+          <div className="flex items-center justify-between pt-6 border-t mt-6">
             {currentStep > 1 ? (
               <Button
                 type="button"
@@ -931,10 +1055,15 @@ export function WebsiteSampleWizard() {
             ) : (
               <Button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || isUploadingFiles}
                 className="font-condensed font-bold bg-secondary text-secondary-foreground hover:bg-secondary/90 px-8"
               >
-                {isSubmitting ? (
+                {isUploadingFiles ? (
+                  <span className="flex items-center gap-2">
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    Uploading Files ({uploadProgress}%)...
+                  </span>
+                ) : isSubmitting ? (
                   <FormattedMessage id="wizard.submitting" />
                 ) : (
                   <>
@@ -1080,7 +1209,7 @@ export function WebsiteSampleWizard() {
                   <h4 className="font-bold text-xs uppercase text-muted-foreground tracking-wider">
                     Theme Palette: {activePreviewOption.colorPalette.name}
                   </h4>
-                  <div className="grid grid-cols-2 gap-2 text-xs font-condensed">
+                  <div className="grid grid-cols-1 gap-2 text-xs font-condensed">
                     <div className="flex items-center gap-2">
                       <div
                         className="w-4 h-4 rounded-full border shadow-xs"

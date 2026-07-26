@@ -60,11 +60,8 @@ export default function WebPage() {
         <h1 className="font-serif text-4xl md:text-5xl text-foreground mb-4">
           Web Design & Development in Ireland
         </h1>
-        <p className="font-condensed font-light text-lg text-foreground/80 leading-relaxed mb-4">
-          I build high-performance websites for small businesses and community organisations across Ireland. My process focuses on launching a solid, lightweight foundation quickly and expanding it iteratively as your business grows.
-        </p>
         <p className="font-condensed font-light text-lg text-foreground/80 leading-relaxed">
-          No complex monthly retainers, no proprietary platforms, and no vendor lock-in. You get clean code, an intuitive editor to manage your content, and complete ownership of your site from day one.
+          I work on a transparent, hourly basis with zero-retainer commitments. You get premium, hand-crafted engineering, clear milestone-based tracking, and complete ownership of your site from day one.
         </p>
       </section>
 
@@ -103,6 +100,10 @@ export default function WebPage() {
           <div>
             <h3 className="font-serif text-lg text-foreground mb-2">3. Phase-by-Phase Iteration</h3>
             <p>A website is an active asset. As your business grows and your budget permits, we continuously build out advanced integrations and custom features (like booking systems or e-commerce) in manageable, affordable steps.</p>
+          </div>
+          <div>
+            <h3 className="font-serif text-lg text-foreground mb-2">4. Hourly Engagement</h3>
+            <p>All subsequent updates, custom features, or consulting hours are billed on a transparent, hourly basis. You only pay for active engineering work with zero retainer requirements or hidden costs.</p>
           </div>
         </div>
       </section>

@@ -70,6 +70,8 @@
   "process.auto.q": "\"I need an online booking system.\"",
   "process.auto.ideal": "A real-time calendar where customers select their service, pick a time slot, and sync with garage management software.",
   "process.auto.launch": "Automated booking tools can be complicated to manage. We launched a clean page with location maps and an instant email request form—getting appointments booked immediately.",
+  "process.ultimateGoal": "Ultimate Goal",
+  "process.fastLaunch": "Fast Launch",
   "process.roadmap": "The Expansion Roadmap",
   "process.ownership": "100% Ownership & Flexible Support",
   "process.ownershipDesc": "You own the site completely with zero monthly fees. Edit content yourself, or reach out anytime for on-demand developer updates.",

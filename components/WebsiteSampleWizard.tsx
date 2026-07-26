@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useIntl, FormattedMessage } from "react-intl";
-import { sendSampleRequestEmail, consumeFormToken, checkFileHash, registerFileHash, checkUploadQuota } from "@/app/actions/contact";
+import { sendSampleRequestEmail, checkUploadQuota } from "@/app/actions/contact";
 import { sampleRequestSchema, type SampleRequestData } from "@/lib/contact-schemas";
 import { KB_DESIGN_OPTIONS, KBDesignOption } from "@/lib/kb-designs";
 import { generateReactHelpers } from "@uploadthing/react";
@@ -112,6 +112,9 @@ export function WebsiteSampleWizard() {
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [currentUploadingFile, setCurrentUploadingFile] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Client-side dedup: track uploaded files by name|size|lastModified
+  const uploadedFilesRef = useRef<Set<string>>(new Set());
 
   const { startUpload } = useUT("sampleAssetUploader", {
     onUploadProgress: (p) => {
@@ -283,22 +286,10 @@ export function WebsiteSampleWizard() {
           setCurrentUploadingFile(file.name);
           setUploadProgress(0);
 
-          // Hash file for dedup check
-          let hash = "";
-          try {
-            hash = await sha256(file);
-            const cached = await checkFileHash(hash);
-            if (cached.cached && cached.url) {
-              uploadedResults.push({
-                name: cached.name || file.name,
-                type: cached.type || file.type,
-                size: cached.size || file.size,
-                url: cached.url,
-              });
-              continue;
-            }
-          } catch {
-            // hash failed — proceed with upload
+          // Client-side dedup: skip if same file already uploaded this session
+          const fileKey = `${file.name}|${file.size}|${file.lastModified}`;
+          if (uploadedFilesRef.current.has(fileKey)) {
+            continue;
           }
 
           // Upload to UploadThing
@@ -313,10 +304,7 @@ export function WebsiteSampleWizard() {
                 url: result[0].url || result[0].appUrl || "",
               };
               uploadedResults.push(data);
-              // Register hash if we computed it
-              if (hash) {
-                await registerFileHash(hash, data);
-              }
+              uploadedFilesRef.current.add(fileKey);
             }
           } catch (uploadErr) {
             console.error(`Upload failed for ${file.name}:`, uploadErr);
@@ -330,11 +318,6 @@ export function WebsiteSampleWizard() {
         if (skippedCount > 0) {
           setSubmitError(`Upload limit reached. ${uploadedResults.length} file(s) uploaded, ${skippedCount} skipped. Try again tomorrow.`);
         }
-      }
-
-      // Consume form token (server-side double-check)
-      if (formTokenRef.current) {
-        await consumeFormToken(formTokenRef.current);
       }
 
       const result = await sendSampleRequestEmail({

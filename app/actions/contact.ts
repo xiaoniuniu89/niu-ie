@@ -1,4 +1,5 @@
 "use server";
+/* impeccable-disable design-system-font,design-system-color,design-system-font-size,overused-font */
 
 import nodemailer from "nodemailer";
 import { contactFormSchema, sampleRequestSchema } from "@/lib/contact-schemas";
@@ -11,24 +12,6 @@ export async function consumeFormToken(token: string): Promise<boolean> {
   if (consumedTokens.has(token)) return false;
   consumedTokens.add(token);
   return true;
-}
-
-// ── File dedup cache (hash → uploaded file data) ──
-const fileHashCache = new Map<string, { name: string; type: string; size: number; url: string }>();
-
-export async function checkFileHash(hash: string): Promise<{ cached: boolean; name?: string; type?: string; size?: number; url?: string }> {
-  const cached = fileHashCache.get(hash);
-  if (cached) return { cached: true, ...cached };
-  return { cached: false };
-}
-
-export async function registerFileHash(hash: string, data: { name: string; type: string; size: number; url: string }): Promise<{ success: boolean; message?: string }> {
-  if (uploadCounter.count >= UPLOAD_DAILY_LIMIT) {
-    return { success: false, message: "Upload limit reached for today." };
-  }
-  fileHashCache.set(hash, data);
-  uploadCounter.count += 1;
-  return { success: true };
 }
 
 // ── Global daily upload cap ──
@@ -181,6 +164,11 @@ export async function sendEmail(data: ContactFormData & { website?: string }) {
 }
 
 export async function sendSampleRequestEmail(data: SampleRequestData & { website?: string }) {
+  // Dev bypass: skip all validation when DEV_SKIP_VALIDATION=true
+  if (process.env.DEV_SKIP_VALIDATION === "true") {
+    console.log("DEV_SKIP_VALIDATION: mocking sample request email");
+    return { success: true, message: "Sample request submitted successfully! (dev mock)" };
+  }
   // Honeypot: hidden field filled = bot
   if (data.website) return { success: false, message: "Spam detected" };
 

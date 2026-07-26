@@ -117,5 +117,8 @@
   "values.pricing.desc": "Aucun frais caché ni frais mensuels complexes. Nous facturons de manière simple par phases de projet claires, afin que vous gardiez un contrôle total sur votre budget.",
   "values.pricing.title": "Tarification Transparente",
   "values.subtitle": "Offrir aux services locaux un puissant foyer numérique.",
-  "values.title": "Nos Valeurs Fondamentales"
+  "values.title": "Nos Valeurs Fondamentales",
+  "contact.validation.nameMin": "Le nom doit comporter au moins 2 caractères.",
+  "contact.validation.email": "Veuillez saisir une adresse email valide.",
+  "contact.validation.messageMin": "Le message doit comporter au moins 10 caractères."
 }

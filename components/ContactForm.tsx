@@ -17,21 +17,21 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { sendEmail } from "@/app/actions/contact";
 import { useIntl } from "react-intl";
-
-const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "contact.validation.nameMin",
-  }),
-  email: z.string().email({
-    message: "contact.validation.email",
-  }),
-  message: z.string().min(10, {
-    message: "contact.validation.messageMin",
-  }),
-});
+import { useMemo } from "react";
 
 export function ContactForm() {
   const intl = useIntl();
+  const formSchema = useMemo(() => z.object({
+    name: z.string().min(2, {
+      message: intl.formatMessage({ id: "contact.validation.nameMin" }),
+    }),
+    email: z.string().email({
+      message: intl.formatMessage({ id: "contact.validation.email" }),
+    }),
+    message: z.string().min(10, {
+      message: intl.formatMessage({ id: "contact.validation.messageMin" }),
+    }),
+  }), [intl]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<{
     success: boolean;

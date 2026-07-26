@@ -117,5 +117,8 @@
   "values.pricing.desc": "Brak ukrytych opłat lub skomplikowanych umów. Rozliczamy się w prosty sposób w jasnych fazach projektu, abyś miał pełną kontrolę nad swoim budżetem.",
   "values.pricing.title": "Przejrzyste Ceny",
   "values.subtitle": "Dajemy lokalnym usługom potężny cyfrowy dom.",
-  "values.title": "Nasze Kluczowe Wartości"
+  "values.title": "Nasze Kluczowe Wartości",
+  "contact.validation.nameMin": "Nazwa musi mieć co najmniej 2 znaki.",
+  "contact.validation.email": "Proszę podać prawidłowy adres email.",
+  "contact.validation.messageMin": "Wiadomość musi mieć co najmniej 10 znaków."
 }

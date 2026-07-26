@@ -117,5 +117,8 @@
   "values.pricing.desc": "Keine versteckten Gebühren oder komplexen Honorare. Wir rechnen klar in übersichtlichen Projektphasen ab, damit Sie die vollständige Kontrolle über Ihr Budget behalten.",
   "values.pricing.title": "Transparente Preisgestaltung",
   "values.subtitle": "Lokalen Dienstleistungen ein kraftvolles digitales Zuhause geben.",
-  "values.title": "Unsere Grundwerte"
+  "values.title": "Unsere Grundwerte",
+  "contact.validation.nameMin": "Name muss mindestens 2 Zeichen lang sein.",
+  "contact.validation.email": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+  "contact.validation.messageMin": "Nachricht muss mindestens 10 Zeichen lang sein."
 }

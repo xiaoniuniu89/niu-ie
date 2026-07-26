@@ -117,5 +117,8 @@
   "values.pricing.desc": "没有隐藏费用或复杂的保留费用。我们按照明确的项目阶段进行简单计费，您完全掌控预算。",
   "values.pricing.title": "透明定价",
   "values.subtitle": "为本地服务提供强大的数字家园。",
-  "values.title": "我们的核心价值观"
+  "values.title": "我们的核心价值观",
+  "contact.validation.nameMin": "名称至少需要2个字符。",
+  "contact.validation.email": "请输入有效的电子邮件地址。",
+  "contact.validation.messageMin": "消息至少需要10个字符。"
 }

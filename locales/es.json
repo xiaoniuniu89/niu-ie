@@ -117,5 +117,8 @@
   "values.pricing.desc": "Sin tarifas ocultas ni retenciones complejas. Facturamos de manera clara en fases de proyecto, para que mantengas el control total de tu presupuesto.",
   "values.pricing.title": "Precios Transparentes",
   "values.subtitle": "Dando a los servicios locales un poderoso hogar digital.",
-  "values.title": "Nuestros Valores Fundamentales"
+  "values.title": "Nuestros Valores Fundamentales",
+  "contact.validation.nameMin": "El nombre debe tener al menos 2 caracteres.",
+  "contact.validation.email": "Por favor, introduzca un correo electrónico válido.",
+  "contact.validation.messageMin": "El mensaje debe tener al menos 10 caracteres."
 }

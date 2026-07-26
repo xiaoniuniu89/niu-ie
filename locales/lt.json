@@ -117,5 +117,8 @@
   "values.pricing.desc": "Nėra paslėptų mokesčių ar sudėtingų mokėjimų. Mes sąskaitas pateikiame aiškiai, projektų etapais, todėl visiškai kontroliuojate savo biudžetą.",
   "values.pricing.title": "Sklandi Kainodara",
   "values.subtitle": "Suteikiame vietinėms paslaugoms galingą skaitmeninį namą.",
-  "values.title": "Mūsų Pagrindinės Vertybės"
+  "values.title": "Mūsų Pagrindinės Vertybės",
+  "contact.validation.nameMin": "Vardas turi būti bent 2 simboliai.",
+  "contact.validation.email": "Įveskite galiojantį el. pašto adresą.",
+  "contact.validation.messageMin": "Žinutė turi būti bent 10 simbolių."
 }

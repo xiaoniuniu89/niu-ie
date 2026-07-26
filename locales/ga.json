@@ -117,5 +117,8 @@
   "values.pricing.desc": "Níl aon táillí ceiltte nó ghoverní casta. Cuireann muid muncha in phasanna soiléire tionscadail, ionas go maireann tú i gceannas iomlán ar do bhuiséad.",
   "values.pricing.title": "Praghasanna Soiléire",
   "values.subtitle": "Ag tabhairt seirbhísí áitiúla baile digiteach láidir.",
-  "values.title": "Ar Luachanna Lárnacha"
+  "values.title": "Ar Luachanna Lárnacha",
+  "contact.validation.nameMin": "Caithfidh an t-ainm a bheith 2 charachtar ar a laghad.",
+  "contact.validation.email": "Cuir isteach seoladh ríomhphoist bailí le do thoil.",
+  "contact.validation.messageMin": "Caithfidh an teachtaireacht a bheith 10 gcarachtar ar a laghad."
 }

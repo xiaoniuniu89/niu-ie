@@ -117,5 +117,8 @@
   "values.pricing.desc": "Fără taxe ascunse sau costuri complexe. Facturăm simplu în faze clare de proiect, astfel încât să rămâi complet în controlul bugetului tău.",
   "values.pricing.title": "Prețuri Transparenete",
   "values.subtitle": "Oferind servicii locale o casă digitală puternică.",
-  "values.title": "Valorile Noastre Fundamentale"
+  "values.title": "Valorile Noastre Fundamentale",
+  "contact.validation.nameMin": "Numele trebuie să aibă cel puțin 2 caractere.",
+  "contact.validation.email": "Vă rugăm să introduceți o adresă de email validă.",
+  "contact.validation.messageMin": "Mesajul trebuie să aibă cel puțin 10 caractere."
 }

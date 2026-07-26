@@ -34,7 +34,10 @@ async function createGitHubIssueIfConfigured(payload: SampleRequestData): Promis
   const token = process.env.GITHUB_TOKEN;
   const repo = process.env.GITHUB_REPO || "xiaoniuniu89/nii-client-leads";
 
-  if (!token) return null;
+  if (!token) {
+    console.warn("GITHUB_TOKEN environment variable is missing.");
+    return null;
+  }
 
   try {
     const issueTitle = `[Lead] ${payload.name} — ${payload.company || payload.industry}`;
@@ -52,15 +55,16 @@ async function createGitHubIssueIfConfigured(payload: SampleRequestData): Promis
       body: JSON.stringify({
         title: issueTitle,
         body: issueBody,
-        labels: ["sample-request"],
       }),
     });
 
     if (res.ok) {
       const data = await res.json();
+      console.log("GitHub Issue created successfully:", data.html_url);
       return data.html_url;
     } else {
-      console.warn("GitHub issue creation response status:", res.status);
+      const errText = await res.text();
+      console.error("GitHub issue creation failed status:", res.status, errText);
     }
   } catch (err) {
     console.error("Error creating GitHub Issue:", err);
@@ -150,25 +154,31 @@ export async function sendSampleRequestEmail(data: SampleRequestData & { website
     // Create GitHub Issue containing pure raw JSON payload metadata
     const githubIssueUrl = await createGitHubIssueIfConfigured(payload);
 
-    const emailSubject = `🚀 Website Sample Request: ${payload.name} (${payload.company || "Personal/Independent"})`;
+    const emailSubject = `🚀 Website Sample Request Lead: ${payload.name} (${payload.company || "Personal/Independent"})`;
 
     const htmlBody = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333; line-height: 1.6;">
         <h2 style="color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px;">
-          🚀 New Website Sample Request
+          🚀 New Website Sample Request Lead
         </h2>
+
+        <p style="font-size: 14px;">A new website sample request was submitted by <strong>${payload.name}</strong> (&lt;<a href="mailto:${payload.email}">${payload.email}</a>&gt;).</p>
 
         ${
           githubIssueUrl
-            ? `<div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 14px; border-radius: 8px; margin-bottom: 20px;">
-                 <p style="margin: 0; font-size: 14px; font-weight: bold; color: #166534;">
-                   GitHub Issue Created: <a href="${githubIssueUrl}" target="_blank" style="color: #2563eb; text-decoration: underline;">${githubIssueUrl}</a>
+            ? `<div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 16px; border-radius: 8px; margin: 20px 0;">
+                 <p style="margin: 0 0 8px 0; font-size: 14px; font-weight: bold; color: #166534;">
+                   GitHub Lead Issue Created:
                  </p>
+                 <a href="${githubIssueUrl}" target="_blank" style="display: inline-block; background: #2563eb; color: #ffffff; padding: 10px 18px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 13px;">
+                   Open GitHub Issue #${githubIssueUrl.split("/").pop()}
+                 </a>
+                 <p style="margin: 8px 0 0 0; font-size: 12px; color: #475569;">${githubIssueUrl}</p>
                </div>`
-            : ""
+            : `<div style="background: #fef2f2; border: 1px solid #fecaca; padding: 14px; border-radius: 8px; margin: 20px 0; color: #991b1b; font-size: 13px;">
+                 Notice: GITHUB_TOKEN or GITHUB_REPO environment variable was not detected on Vercel.
+               </div>`
         }
-
-        <p style="font-size: 14px;">A new website sample request was submitted by <strong>${payload.name}</strong> (&lt;${payload.email}&gt;).</p>
 
         <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b; text-align: center;">
           Sent automatically from www.niu.ie/contact
@@ -181,7 +191,7 @@ export async function sendSampleRequestEmail(data: SampleRequestData & { website
       to: process.env.GMAIL_USER,
       replyTo: payload.email,
       subject: emailSubject,
-      text: `New Website Sample Request from ${payload.name}. GitHub Issue: ${githubIssueUrl || "Not configured"}`,
+      text: `New Website Sample Request Lead from ${payload.name}.\nGitHub Issue URL: ${githubIssueUrl || "GitHub integration not configured"}`,
       html: htmlBody,
     });
 

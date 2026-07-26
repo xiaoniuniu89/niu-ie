@@ -33,7 +33,8 @@ export const sampleRequestSchema = z.object({
     name: z.string(),
     type: z.string(),
     size: z.number(),
-    content: z.string(),
+    content: z.string().optional(),
+    url: z.string().optional(),
   })).max(3, { message: "Maximum 3 file attachments allowed." }).optional(),
   additionalNotes: z.string().optional(),
 });

@@ -4,8 +4,6 @@ import nodemailer from "nodemailer";
 import { contactFormSchema, sampleRequestSchema } from "@/lib/contact-schemas";
 import type { ContactFormData, SampleRequestData } from "@/lib/contact-schemas";
 
-export type { ContactFormData, SampleRequestData };
-
 function sanitizeUrlString(input?: string): string {
   if (!input) return "";
   return input

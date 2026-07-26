@@ -11,7 +11,7 @@ export function CostComparison() {
           <thead>
             <tr className="border-b border-border bg-muted/20">
               <th className="p-6 font-serif text-lg text-foreground">Feature / Cost</th>
-              <th className="p-6 font-serif text-lg text-secondary">Squarespace / Wix</th>
+              <th className="p-6 font-serif text-lg text-secondary-text">Squarespace / Wix</th>
               <th className="p-6 font-serif text-lg text-primary">Custom Site (Own Your Code)</th>
             </tr>
           </thead>

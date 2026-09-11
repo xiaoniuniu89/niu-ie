@@ -1,19 +1,11 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-const isProtectedPortalRoute = createRouteMatcher([
-  "/portal/dashboard(.*)",
-  "/portal/onboarding(.*)",
-  "/portal/guides(.*)",
-]);
+const isPortalRoute = createRouteMatcher(["/portal(.*)"]);
 
 export default clerkMiddleware(async (auth, req) => {
-  if (isProtectedPortalRoute(req)) {
-    const { userId } = await auth();
-    if (!userId) {
-      const signInUrl = new URL("/portal", req.url);
-      return NextResponse.redirect(signInUrl);
-    }
+  if (isPortalRoute(req)) {
+    await auth.protect();
   }
 });
 

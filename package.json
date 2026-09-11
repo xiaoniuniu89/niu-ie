@@ -10,6 +10,8 @@
     "translate": "npx tsx scripts/translate.ts"
   },
   "dependencies": {
+    "@clerk/nextjs": "^7.9.2",
+    "@clerk/ui": "^1.32.3",
     "@hookform/resolvers": "^5.2.2",
     "@keystatic/core": "^0.5.48",
     "@keystatic/next": "^5.0.4",

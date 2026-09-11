@@ -40,7 +40,6 @@ export function Footer({ showCTA = true }: FooterProps) {
             <li><Link href="/#services" className="hover:text-accent transition-colors">{intl.formatMessage({ id: "nav.services" })}</Link></li>
             <li><Link href="/#faq" className="hover:text-accent transition-colors">{intl.formatMessage({ id: "nav.faq" })}</Link></li>
             <li><Link href="/portfolio" className="hover:text-accent transition-colors">{intl.formatMessage({ id: "nav.portfolio" })}</Link></li>
-            <li><Link href="/digital-grants" className="hover:text-accent transition-colors">{intl.formatMessage({ id: "nav.grants" })}</Link></li>
             <li><Link href="/contact?mode=sample" className="hover:text-accent transition-colors">Website Sample Wizard</Link></li>
             <li><Link href="/contact?mode=inquiry" className="hover:text-accent transition-colors">{intl.formatMessage({ id: "nav.contact" })}</Link></li>
           </ul>

@@ -33,9 +33,9 @@ export const metadata = {
 };
 
 export default async function ClientDashboardPage() {
-  const { userId } = await auth();
-  if (!userId) {
-    redirect("/portal/sign-in");
+  const { isAuthenticated, redirectToSignIn } = await auth();
+  if (!isAuthenticated) {
+    return redirectToSignIn();
   }
 
   const user = await currentUser();

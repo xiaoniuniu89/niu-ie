@@ -1,13 +1,18 @@
-import { currentUser } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { getClientProject } from "@/config/clients";
 
 export const metadata = {
-  title: "Client Portal | Niu Web",
-  description: "Invitation-only client portal.",
+  title: "Customer Portal | Niu Web",
+  description: "Invitation-only customer portal.",
 };
 
 export default async function PortalPage() {
+  const { isAuthenticated, redirectToSignIn } = await auth();
+  if (!isAuthenticated) {
+    return redirectToSignIn();
+  }
+
   const user = await currentUser();
 
   // Once signed in, check if requirements have been completed

@@ -12,9 +12,9 @@ export const metadata = {
 };
 
 export default async function OnboardingPage() {
-  const { userId } = await auth();
-  if (!userId) {
-    redirect("/portal/sign-in");
+  const { isAuthenticated, redirectToSignIn } = await auth();
+  if (!isAuthenticated) {
+    return redirectToSignIn();
   }
 
   return (

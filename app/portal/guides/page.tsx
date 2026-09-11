@@ -144,9 +144,9 @@ export default function GuidesHubPage() {
         {/* Support Callout */}
         <div className="p-6 rounded-xl border border-primary/20 bg-primary/5 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="space-y-1 text-center sm:text-left">
-            <h3 className="font-serif font-bold text-base text-foreground">Need Daniel to handle this for you?</h3>
+            <h3 className="font-serif font-bold text-base text-foreground">Need us to handle this for you?</h3>
             <p className="text-xs text-muted-foreground">
-              If you’d rather not touch DNS records or account configs, Daniel can handle it directly via temporary delegate access.
+              If you’d rather not touch DNS records or account configs, our team can handle it directly via temporary delegate access.
             </p>
           </div>
           <Button asChild size="sm" className="bg-primary text-primary-foreground font-condensed text-xs shrink-0">

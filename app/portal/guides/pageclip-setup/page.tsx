@@ -119,10 +119,10 @@ export default function PageclipGuidePage() {
         <section className="space-y-3 pt-4">
           <h2 className="text-xl font-serif font-bold text-foreground flex items-center gap-2">
             <span className="w-7 h-7 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-mono">4</span>
-            Send Your Form Key to Daniel
+            Send Your Form Key to Niu Web
           </h2>
           <p className="text-xs text-muted-foreground leading-relaxed">
-            Paste your Pageclip URL or key into a message to Daniel (or in the Client Console support form). Daniel will wire it into your website contact form. Every time a visitor submits an inquiry:
+            Paste your Pageclip URL or key into a message to our team (or in the customer portal support form). We will wire it into your website contact form. Every time a visitor submits an inquiry:
           </p>
           <ul className="text-xs text-muted-foreground space-y-1.5 list-disc pl-5">
             <li>The submission is encrypted and saved in your Pageclip dashboard.</li>

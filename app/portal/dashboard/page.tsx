@@ -90,7 +90,7 @@ export default async function ClientDashboardPage() {
                 </Badge>
               </div>
               <p className="text-xs text-muted-foreground font-condensed">
-                Client Console ID: <span className="font-mono">{project.id}</span> • Managed by Daniel Callaghan (Niu Web)
+                Customer ID: <span className="font-mono">{project.id}</span> • Managed by Niu Web
               </p>
             </div>
           </div>
@@ -418,8 +418,8 @@ export default async function ClientDashboardPage() {
                   </div>
                 ))}
               </div>
-              <p className="text-[11px] text-muted-foreground pt-1 border-t border-border/40">
-                Want to add more requirements? Send Daniel a direct request or retake the intake form anytime.
+              <p className="text-[11px] text-muted-foreground pt-1 border-border/40 border-t">
+                Want to add more requirements? Submit a request or retake the intake form anytime.
               </p>
             </CardContent>
           </Card>

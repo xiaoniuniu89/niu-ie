@@ -26,10 +26,10 @@ export default async function PortalPage() {
               className="h-10 w-auto mx-auto"
             />
             <h1 className="font-serif text-2xl font-bold text-foreground">
-              Client Mission Control
+              Customer Portal
             </h1>
             <p className="text-xs text-muted-foreground">
-              Invitation-only client portal. Sign in with the email invited by Daniel.
+              Invitation-only customer portal. Sign in with your registered email.
             </p>
           </div>
 

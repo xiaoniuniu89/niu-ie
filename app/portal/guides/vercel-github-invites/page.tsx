@@ -33,7 +33,7 @@ export default function VercelGithubInvitesGuidePage() {
             How to Accept Your GitHub & Vercel Project Invites
           </h1>
           <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
-            At Niu Web, we believe you should own 100% of your website code, assets, and hosting accounts. When your website build is ready for handover, Daniel will invite you as the owner of your GitHub code repository and Vercel cloud hosting project.
+            At Niu Web, we believe you should own 100% of your website code, assets, and hosting accounts. When your website build is ready for handover, our team will invite you as the owner of your GitHub code repository and Vercel cloud hosting project.
           </p>
         </div>
 
@@ -48,7 +48,7 @@ export default function VercelGithubInvitesGuidePage() {
           <p className="text-xs text-muted-foreground leading-relaxed">
             1. If you do not have a free GitHub account, register one at <a href="https://github.com/signup" target="_blank" rel="noopener noreferrer" className="text-primary underline">github.com/signup</a>.
             <br />
-            2. Check your email for an invitation from <strong>Daniel Callaghan (xiaoniuniu89)</strong> with the subject <em>"xiaoniuniu89 invited you to collaborate..."</em>.
+            2. Check your email for an invitation from <strong>Niu Web (xiaoniuniu89)</strong> with the subject <em>"xiaoniuniu89 invited you to collaborate..."</em>.
             <br />
             3. Click <strong>"View Invitation"</strong> and then <strong>"Accept Invitation"</strong>.
           </p>
@@ -57,7 +57,7 @@ export default function VercelGithubInvitesGuidePage() {
             title="GitHub Repository Collaboration Invite"
             caption="Click 'Accept Invitation' to gain full administrator access to your website's private source code."
             elements={[
-              { label: "Inviter", value: "Daniel Callaghan (@xiaoniuniu89)" },
+              { label: "Inviter", value: "Niu Web (@xiaoniuniu89)" },
               { label: "Access Level", value: "Admin / Collaborator" },
             ]}
           />
@@ -74,7 +74,7 @@ export default function VercelGithubInvitesGuidePage() {
           <p className="text-xs text-muted-foreground leading-relaxed">
             1. Sign in to <a href="https://vercel.com" target="_blank" rel="noopener noreferrer" className="text-primary underline">vercel.com</a> using your GitHub account or work email.
             <br />
-            2. When Daniel transfers the production project or invites your team, you will receive an email invite to join the project team or accept ownership transfer.
+            2. When our team transfers the production project or invites your team, you will receive an email invite to join the project team or accept ownership transfer.
             <br />
             3. Once accepted, you can view analytics, live logs, deployment history, and manage domain settings directly.
           </p>

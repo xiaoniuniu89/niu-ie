@@ -33,7 +33,7 @@ export default async function OnboardingPage() {
             <div className="leading-tight">
               <span className="font-serif font-bold text-lg text-foreground block">Niu Web</span>
               <span className="font-condensed text-xs text-muted-foreground uppercase tracking-wider block">
-                Client Mission Control
+                Customer Portal
               </span>
             </div>
           </Link>

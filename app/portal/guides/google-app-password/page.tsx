@@ -113,10 +113,10 @@ export default function GoogleAppPasswordGuidePage() {
         <section className="space-y-3 pt-4">
           <h2 className="text-xl font-serif font-bold text-foreground flex items-center gap-2">
             <span className="w-7 h-7 rounded-full bg-primary/10 text-primary flex items-center justify-center text-xs font-mono">4</span>
-            Safely Provide the App Password to Daniel
+            Safely Provide the App Password to Niu Web
           </h2>
           <p className="text-xs text-muted-foreground leading-relaxed">
-            Send the 16-digit code along with your Gmail / Google Workspace email address to Daniel via encrypted message or phone. Daniel will configure it in your website server environment variables (`GMAIL_USER` and `GMAIL_APP_PASSWORD`).
+            Send the 16-digit code along with your Gmail / Google Workspace email address to our team via encrypted message or phone. We will configure it in your website server environment variables (`GMAIL_USER` and `GMAIL_APP_PASSWORD`).
           </p>
           <div className="p-3 bg-muted/40 rounded border border-border text-xs text-muted-foreground space-y-1">
             <p><strong>Note:</strong> You can revoke this password at any time with one click in your Google Security dashboard.</p>

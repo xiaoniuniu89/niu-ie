@@ -183,7 +183,7 @@ export function OnboardingWizard() {
               Product Requirements Captured!
             </h2>
             <p className="text-muted-foreground text-sm max-w-md mx-auto">
-              Your comprehensive project brief has been formatted and emailed directly to Daniel. We now have everything required to build your V1 launch.
+              Your comprehensive project brief has been formatted and submitted directly to our team. We now have everything required to build your V1 launch.
             </p>
           </div>
 
@@ -483,7 +483,7 @@ export function OnboardingWizard() {
                   {[
                     { id: "fully_written", title: "Complete & Ready", desc: "All paragraphs, bios, and copy are already written." },
                     { id: "bullet_points", title: "Rough Outlines / Bullet Points", desc: "We have the facts and points, but need help polishing into web copy." },
-                    { id: "needs_drafting", title: "Need Full Drafting", desc: "We need Daniel to draft the site copy based on our discovery notes." },
+                    { id: "needs_drafting", title: "Need Full Drafting", desc: "We need Niu Web to draft the site copy based on our discovery notes." },
                     { id: "migrating_from_old_site", title: "Migrate from Old Website", desc: "Copy text and media directly over from our current website." },
                   ].map((item) => (
                     <button
@@ -840,7 +840,7 @@ export function OnboardingWizard() {
                   </h3>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Version 1 is focused on getting your core website live, fast, and converting. But don't hold back here! Dump every feature, automation, and long-term dream you envision for your business. We will capture all of it so Daniel can groom it into future prioritized roadmaps.
+                  Version 1 is focused on getting your core website live, fast, and converting. But don't hold back here! Dump every feature, automation, and long-term dream you envision for your business. We will capture all of it so our team can groom it into future prioritized roadmaps.
                 </p>
               </div>
 

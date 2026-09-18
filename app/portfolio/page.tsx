@@ -10,26 +10,34 @@ import Image from "next/image";
 import Script from "next/script";
 import { useIntl } from "react-intl";
 
-const imgBellaRose = "/bellarosebright.webp";
 const imgCCPiano = "/ccpiano.webp";
+const imgCJStrength = "/cjsstrengthandfitness.webp";
+const imgBellaRose = "/bellarosebright.webp";
 
 export default function Portfolio() {
   const intl = useIntl();
 
   const portfolioItems = [
     {
-      category: intl.formatMessage({ id: "portfolio.bella.cat" }),
-      title: intl.formatMessage({ id: "portfolio.bella.title" }),
-      description: intl.formatMessage({ id: "portfolio.bella.desc" }),
-      image: imgBellaRose,
-      link: "https://www.bellarosebright.com/",
-    },
-    {
       category: intl.formatMessage({ id: "portfolio.cc.cat" }),
       title: intl.formatMessage({ id: "portfolio.cc.title" }),
       description: intl.formatMessage({ id: "portfolio.cc.desc" }),
       image: imgCCPiano,
       link: "https://www.ccpiano.ie",
+    },
+    {
+      category: intl.formatMessage({ id: "portfolio.cj.cat" }),
+      title: intl.formatMessage({ id: "portfolio.cj.title" }),
+      description: intl.formatMessage({ id: "portfolio.cj.desc" }),
+      image: imgCJStrength,
+      link: "https://www.cjsstrengthfitness.com/",
+    },
+    {
+      category: intl.formatMessage({ id: "portfolio.bella.cat" }),
+      title: intl.formatMessage({ id: "portfolio.bella.title" }),
+      description: intl.formatMessage({ id: "portfolio.bella.desc" }),
+      image: imgBellaRose,
+      link: "https://www.bellarosebright.com/",
     },
   ];
 

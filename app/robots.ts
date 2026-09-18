@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/private/', '/keystatic', '/api/keystatic'],
+      disallow: ['/private/', '/keystatic', '/api/keystatic', '/portal/'],
     },
     sitemap: 'https://www.niu.ie/sitemap.xml',
   }

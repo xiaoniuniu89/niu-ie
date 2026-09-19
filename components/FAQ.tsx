@@ -35,10 +35,10 @@ export function FAQ() {
     <section id="faq" className="py-20 bg-background border-b border-border/60">
       <div className="container mx-auto px-4 md:px-8 max-w-3xl">
         <div className="text-center mb-14 space-y-3">
-          <div className="text-xs font-condensed font-semibold uppercase tracking-wider text-muted-foreground">
+          <div className="text-xs font-condensed font-semibold uppercase tracking-wider text-secondary-text">
             Got Questions?
           </div>
-          <h2 className="font-serif text-3xl sm:text-4xl text-foreground tracking-tight">
+          <h2 className="font-serif text-3xl sm:text-5xl text-primary tracking-tight">
             {intl.formatMessage({ id: "faq.title" })}
           </h2>
           <p className="font-sans text-base text-foreground/80 max-w-xl mx-auto">
@@ -46,24 +46,22 @@ export function FAQ() {
           </p>
         </div>
         
-        <div className="bg-card border border-border rounded-lg px-6 sm:px-8 divide-y divide-border shadow-xs">
-          <Accordion type="single" collapsible className="w-full">
-            {faqData.map((item, index) => (
-              <AccordionItem 
-                key={index} 
-                value={`item-${index}`}
-                className="border-b-0 py-1"
-              >
-                <AccordionTrigger className="py-5 text-left font-sans font-semibold text-base sm:text-lg text-foreground hover:text-primary transition-colors">
-                  {item.question}
-                </AccordionTrigger>
-                <AccordionContent className="pb-6 font-sans text-sm sm:text-base text-foreground/80 leading-relaxed">
-                  {item.answer}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </div>
+        <Accordion type="single" collapsible className="space-y-3">
+          {faqData.map((item, index) => (
+            <AccordionItem 
+              key={index} 
+              value={`item-${index}`}
+              className="border border-border/60 rounded-xl overflow-hidden shadow-xs bg-card"
+            >
+              <AccordionTrigger className="bg-primary/[0.04] text-foreground hover:bg-primary/10 data-[state=open]:bg-primary data-[state=open]:text-primary-foreground px-6 py-4.5 hover:no-underline font-sans font-semibold text-base sm:text-lg transition-all text-left">
+                {item.question}
+              </AccordionTrigger>
+              <AccordionContent className="px-6 py-5 font-sans text-sm sm:text-base text-foreground/85 leading-relaxed">
+                {item.answer}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
       </div>
     </section>
   );

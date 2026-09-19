@@ -55,10 +55,10 @@ export default function ProcessPage() {
       <main className="flex-1 overflow-hidden">
         {/* Intro Section */}
         <section className="container mx-auto px-4 md:px-8 py-14 md:py-20 max-w-5xl">
-          <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-muted text-muted-foreground text-xs font-condensed font-semibold tracking-wider uppercase border border-border mb-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-secondary/10 text-secondary-text text-xs font-condensed font-semibold tracking-wider uppercase border border-secondary/25 mb-4">
             Our Transparent Approach
           </div>
-          <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-foreground mb-5 tracking-tight">
+          <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-primary mb-5 tracking-tight">
             {intl.formatMessage({ id: "process.title" })}
           </h1>
           <p className="font-sans text-lg sm:text-xl text-foreground/80 max-w-3xl leading-relaxed">
@@ -67,19 +67,22 @@ export default function ProcessPage() {
         </section>
 
         {/* The 3 Steps */}
-        <section className="py-8 border-y border-border/60 bg-muted/20">
-          <div className="container mx-auto px-4 md:px-8 grid md:grid-cols-3 gap-6">
+        <section className="relative py-12 border-y border-border/60 bg-muted/20 overflow-hidden">
+          {/* Connecting Gradient Line */}
+          <div className="absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-accent/30 via-primary/30 to-secondary/30 w-full hidden md:block pointer-events-none" />
+
+          <div className="container mx-auto px-4 md:px-8 grid md:grid-cols-3 gap-6 relative z-10">
             {/* Step 1: The Vision */}
-            <div className="bg-card border border-border rounded-lg shadow-xs p-6 sm:p-8 flex flex-col">
+            <div className="bg-card border border-border hover:border-accent/40 rounded-xl shadow-xs p-6 sm:p-8 flex flex-col transition-all duration-200">
               <div className="flex items-center justify-between mb-6">
-                <div className="w-10 h-10 rounded-md bg-muted text-primary flex items-center justify-center border border-border">
-                  <Sparkles className="w-5 h-5 text-secondary" />
+                <div className="w-12 h-12 rounded-xl bg-accent/10 border border-accent/20 text-accent flex items-center justify-center">
+                  <Sparkles className="w-6 h-6" />
                 </div>
-                <span className="font-condensed font-bold text-xs text-muted-foreground uppercase tracking-wider">
+                <span className="font-condensed font-bold text-xs text-accent uppercase tracking-wider">
                   Step 01
                 </span>
               </div>
-              <h3 className="font-sans font-bold text-xl text-foreground mb-3">
+              <h3 className="font-sans font-bold text-xl text-primary mb-3">
                 {intl.formatMessage({ id: "process.step1.title" })}
               </h3>
               <p className="font-sans text-sm sm:text-base text-foreground/80 leading-relaxed">
@@ -88,16 +91,16 @@ export default function ProcessPage() {
             </div>
 
             {/* Step 2: The Launch */}
-            <div className="bg-card border border-border rounded-lg shadow-xs p-6 sm:p-8 flex flex-col">
+            <div className="bg-card border border-border hover:border-primary/40 rounded-xl shadow-xs p-6 sm:p-8 flex flex-col transition-all duration-200">
               <div className="flex items-center justify-between mb-6">
-                <div className="w-10 h-10 rounded-md bg-muted text-primary flex items-center justify-center border border-border">
-                  <Zap className="w-5 h-5 text-primary" />
+                <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 text-primary flex items-center justify-center">
+                  <Zap className="w-6 h-6" />
                 </div>
-                <span className="font-condensed font-bold text-xs text-muted-foreground uppercase tracking-wider">
+                <span className="font-condensed font-bold text-xs text-primary uppercase tracking-wider">
                   Step 02
                 </span>
               </div>
-              <h3 className="font-sans font-bold text-xl text-foreground mb-3">
+              <h3 className="font-sans font-bold text-xl text-primary mb-3">
                 {intl.formatMessage({ id: "process.step2.title" })}
               </h3>
               <p className="font-sans text-sm sm:text-base text-foreground/80 leading-relaxed">
@@ -106,16 +109,16 @@ export default function ProcessPage() {
             </div>
 
             {/* Step 3: The Growth */}
-            <div className="bg-card border border-border rounded-lg shadow-xs p-6 sm:p-8 flex flex-col">
+            <div className="bg-card border border-border hover:border-secondary/40 rounded-xl shadow-xs p-6 sm:p-8 flex flex-col transition-all duration-200">
               <div className="flex items-center justify-between mb-6">
-                <div className="w-10 h-10 rounded-md bg-muted text-primary flex items-center justify-center border border-border">
-                  <Hammer className="w-5 h-5 text-foreground/80" />
+                <div className="w-12 h-12 rounded-xl bg-secondary/15 border border-secondary/25 text-secondary-text flex items-center justify-center">
+                  <Hammer className="w-6 h-6" />
                 </div>
-                <span className="font-condensed font-bold text-xs text-muted-foreground uppercase tracking-wider">
+                <span className="font-condensed font-bold text-xs text-secondary-text uppercase tracking-wider">
                   Step 03
                 </span>
               </div>
-              <h3 className="font-sans font-bold text-xl text-foreground mb-3">
+              <h3 className="font-sans font-bold text-xl text-primary mb-3">
                 {intl.formatMessage({ id: "process.step3.title" })}
               </h3>
               <p className="font-sans text-sm sm:text-base text-foreground/80 leading-relaxed">
@@ -128,13 +131,13 @@ export default function ProcessPage() {
         {/* See It In Action */}
         <section className="py-20 bg-background">
           <div className="container mx-auto px-4 md:px-8 mb-16 text-center max-w-2xl">
-            <div className="text-xs font-condensed font-semibold uppercase tracking-wider text-muted-foreground mb-2">
+            <div className="text-xs font-condensed font-semibold uppercase tracking-wider text-secondary-text mb-2">
               Real Scenarios
             </div>
-            <h2 className="font-serif text-3xl sm:text-4xl text-foreground mb-3 tracking-tight">
+            <h2 className="font-serif text-3xl sm:text-5xl text-primary mb-3 tracking-tight">
               {intl.formatMessage({ id: "process.actionTitle" })}
             </h2>
-            <p className="font-sans text-base text-foreground/80">
+            <p className="font-sans text-base sm:text-lg text-foreground/80">
               {intl.formatMessage({ id: "process.actionSub" })}
             </p>
           </div>

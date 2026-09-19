@@ -146,10 +146,10 @@ export default function DigitalGrantsPage() {
       {/* Voucher Options Grid */}
       <section className="mb-18">
         <div className="max-w-2xl mb-8 space-y-2">
-          <div className="text-xs font-condensed font-semibold uppercase tracking-wider text-muted-foreground">
+          <div className="text-xs font-condensed font-semibold uppercase tracking-wider text-secondary-text">
             Support Programs
           </div>
-          <h2 className="font-serif text-2xl sm:text-3xl text-foreground tracking-tight">
+          <h2 className="font-serif text-2xl sm:text-4xl text-primary tracking-tight">
             {intl.formatMessage({ id: "grantsPage.programsTitle" })}
           </h2>
           <p className="font-sans text-base text-foreground/80">
@@ -159,10 +159,10 @@ export default function DigitalGrantsPage() {
 
         <div className="grid gap-6 lg:grid-cols-3">
           {grantOptions.map((grant) => (
-            <Card key={grant.title} className="rounded-lg border border-border bg-card flex flex-col justify-between shadow-xs hover:border-primary/40 transition-colors duration-200">
+            <Card key={grant.title} className="rounded-xl border border-border bg-card flex flex-col justify-between shadow-xs hover:border-primary/50 transition-all duration-200">
               <CardHeader className="p-6 sm:p-7 pb-4">
                 <div className="flex justify-between items-start mb-4">
-                  <span className="px-2 py-0.5 rounded text-xs font-condensed font-semibold uppercase tracking-wide bg-muted text-foreground/80 border border-border">
+                  <span className={`px-2.5 py-1 rounded-full text-xs font-condensed font-semibold uppercase tracking-wide ${grant.badgeColor}`}>
                     {grant.badge}
                   </span>
                   <span className="font-serif text-lg font-bold text-primary">
@@ -172,7 +172,7 @@ export default function DigitalGrantsPage() {
                 <CardTitle className="font-serif text-2xl text-foreground mb-1">
                   {grant.title}
                 </CardTitle>
-                <p className="font-sans text-xs font-medium text-muted-foreground">
+                <p className="font-sans text-xs font-semibold text-secondary-text">
                   {grant.subtitle}
                 </p>
               </CardHeader>
@@ -202,10 +202,10 @@ export default function DigitalGrantsPage() {
       {/* Step-by-Step Timeline */}
       <section className="mb-18 py-12 border-y border-border/60">
         <div className="max-w-2xl mb-10 space-y-2">
-          <div className="text-xs font-condensed font-semibold uppercase tracking-wider text-muted-foreground">
+          <div className="text-xs font-condensed font-semibold uppercase tracking-wider text-secondary-text">
             Application Workflow
           </div>
-          <h2 className="font-serif text-2xl sm:text-3xl text-foreground tracking-tight">
+          <h2 className="font-serif text-2xl sm:text-4xl text-primary tracking-tight">
             {intl.formatMessage({ id: "grantsPage.timelineTitle" })}
           </h2>
           <p className="font-sans text-base text-foreground/80">

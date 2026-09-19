@@ -65,10 +65,10 @@ export default function Portfolio() {
       <main className="flex-1">
         <div className="container mx-auto px-4 md:px-8 py-16 md:py-20">
           <div className="max-w-3xl mb-14">
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-muted text-muted-foreground text-xs font-condensed font-semibold tracking-wider uppercase border border-border mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-secondary/10 text-secondary-text text-xs font-condensed font-semibold tracking-wider uppercase border border-secondary/25 mb-4">
               Selected Client Work
             </div>
-            <h1 className="font-serif text-4xl sm:text-5xl text-foreground mb-4 tracking-tight">{intl.formatMessage({ id: "portfolio.title" })}</h1>
+            <h1 className="font-serif text-4xl sm:text-6xl text-primary mb-4 tracking-tight">{intl.formatMessage({ id: "portfolio.title" })}</h1>
             <p className="font-sans text-lg sm:text-xl text-foreground/80 max-w-3xl leading-relaxed">
               {intl.formatMessage({ id: "portfolio.intro" })}
             </p>
@@ -76,7 +76,7 @@ export default function Portfolio() {
 
           <div className="grid md:grid-cols-2 gap-8 mb-20">
             {portfolioItems.map((item, index) => (
-              <Card key={index} className="group overflow-hidden border border-border rounded-lg bg-card shadow-xs hover:border-primary/40 transition-colors duration-200">
+              <Card key={index} className="group overflow-hidden border border-border rounded-xl bg-card shadow-xs hover:border-primary/50 transition-all duration-200">
                 <div className="relative aspect-[16/10] w-full bg-muted border-b border-border overflow-hidden">
                   <Image 
                     src={item.image} 
@@ -90,7 +90,7 @@ export default function Portfolio() {
                   <div className="text-secondary-text font-condensed font-semibold text-xs tracking-wider uppercase">
                     {item.category}
                   </div>
-                  <CardTitle className="font-sans font-bold text-xl sm:text-2xl text-foreground">
+                  <CardTitle className="font-sans font-bold text-xl sm:text-2xl text-foreground group-hover:text-primary transition-colors">
                     {item.title}
                   </CardTitle>
                   <CardDescription className="font-sans text-sm sm:text-base text-foreground/80 leading-relaxed min-h-[4rem]">
@@ -98,7 +98,7 @@ export default function Portfolio() {
                   </CardDescription>
                 </CardHeader>
                 <CardFooter className="px-6 pb-6 pt-0">
-                  <Button asChild variant="outline" size="sm" className="font-condensed font-semibold text-foreground hover:text-primary">
+                  <Button asChild variant="outline" size="sm" className="font-condensed font-semibold text-primary border-primary/30 hover:bg-primary/10">
                     <Link
                       href={item.link}
                       target={item.link.startsWith("http") ? "_blank" : undefined}

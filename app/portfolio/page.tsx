@@ -120,15 +120,15 @@ export default function Portfolio() {
             </div>
           </div>
 
-          <div className="bg-card border border-border rounded-lg p-8 sm:p-12 text-center max-w-3xl mx-auto mb-12 shadow-xs space-y-5">
-            <h2 className="font-serif text-3xl sm:text-4xl text-foreground tracking-tight">
+          <div className="bg-accent/10 border border-accent/20 rounded-2xl p-10 sm:p-14 text-center max-w-4xl mx-auto mb-12 space-y-6">
+            <h2 className="font-serif text-3xl sm:text-4xl text-primary tracking-tight">
               {intl.formatMessage({ id: "portfolio.cta.title" })}
             </h2>
-            <p className="font-sans text-base sm:text-lg text-foreground/80 max-w-lg mx-auto leading-relaxed">
+            <p className="font-sans text-base sm:text-lg text-foreground/85 max-w-lg mx-auto leading-relaxed">
               {intl.formatMessage({ id: "portfolio.cta.sub" })}
             </p>
             <div className="pt-2">
-              <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-condensed font-semibold px-8 h-12 shadow-xs">
+              <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-condensed font-bold px-8 h-12 shadow-md">
                 <Link href="/contact?mode=sample">Request Free Website Sample</Link>
               </Button>
             </div>

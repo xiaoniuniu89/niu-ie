@@ -6,7 +6,7 @@ import Script from "next/script";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { Sparkles, Zap, Hammer, Target, Rocket } from "lucide-react";
+import { Sparkles, Zap, Hammer, Target, Rocket, ArrowRight } from "lucide-react";
 import { useIntl } from "react-intl";
 
 const imgImageFloristArrangingFlowers = "/process/florist.webp";
@@ -252,16 +252,19 @@ export default function ProcessPage() {
 
         {/* CTA Section */}
         <section className="container mx-auto px-4 md:px-8 pb-20">
-          <div className="bg-card border border-border rounded-lg p-8 sm:p-12 text-center max-w-3xl mx-auto shadow-xs space-y-5">
-             <h2 className="font-serif text-3xl sm:text-4xl text-foreground tracking-tight">
+          <div className="bg-secondary/10 border border-secondary/20 rounded-2xl p-10 sm:p-14 text-center max-w-4xl mx-auto space-y-6">
+             <h2 className="font-serif text-3xl sm:text-4xl text-primary tracking-tight">
                {intl.formatMessage({ id: "process.cta.title" })}
              </h2>
-             <p className="font-sans text-base sm:text-lg text-foreground/80 max-w-xl mx-auto leading-relaxed">
+             <p className="font-sans text-base sm:text-lg text-foreground/85 max-w-2xl mx-auto leading-relaxed">
                {intl.formatMessage({ id: "process.cta.sub" })}
              </p>
              <div className="pt-2">
-               <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 font-condensed font-semibold text-base px-8 h-12 shadow-xs">
-                 <Link href="/contact?mode=sample">{intl.formatMessage({ id: "process.cta.btn" })}</Link>
+               <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 font-condensed font-bold text-base px-8 h-12 shadow-md">
+                 <Link href="/contact?mode=sample">
+                   {intl.formatMessage({ id: "process.cta.btn" })}
+                   <ArrowRight className="ml-2 h-4 w-4" />
+                 </Link>
                </Button>
              </div>
           </div>

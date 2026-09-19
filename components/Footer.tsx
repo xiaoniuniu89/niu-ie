@@ -15,18 +15,18 @@ export function Footer({ showCTA = true }: FooterProps) {
     <footer className="bg-muted/40 border-t border-border/80 text-foreground pt-16 pb-12">
       <div className="container mx-auto px-4 md:px-8">
         {showCTA && (
-          <div className="bg-card border border-border rounded-lg p-8 sm:p-12 text-center mb-16 shadow-xs max-w-3xl mx-auto space-y-5">
-            <h2 className="font-serif text-3xl sm:text-4xl text-foreground tracking-tight">
+          <div className="bg-accent text-accent-foreground rounded-2xl p-10 md:p-16 text-center mb-16 space-y-6 shadow-sm">
+            <h2 className="font-serif text-3xl md:text-4xl text-white">
               Ready to upgrade your web presence?
             </h2>
-            <p className="font-sans text-base sm:text-lg text-foreground/80 max-w-lg mx-auto leading-relaxed">
+            <p className="font-sans text-base sm:text-lg text-white/85 max-w-lg mx-auto leading-relaxed">
               Let&apos;s build something remarkable together. Contact us today for a free consultation.
             </p>
-            <div className="flex flex-wrap justify-center gap-3 pt-2">
-              <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-7 h-11 font-condensed font-semibold shadow-xs">
+            <div className="flex flex-wrap justify-center gap-4 pt-4">
+              <Button asChild className="bg-secondary text-secondary-foreground hover:bg-secondary/90 rounded-md px-8 h-12 font-condensed font-bold text-base shadow-xs">
                 <Link href="/contact?mode=sample">Request Free Website Sample</Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="rounded-md px-6 h-11 font-condensed font-semibold">
+              <Button asChild variant="outline" className="bg-transparent border-white/40 text-white hover:bg-white/10 rounded-md px-6 h-12 font-condensed font-medium text-base">
                 <Link href="/contact?mode=inquiry">General Inquiry</Link>
               </Button>
             </div>

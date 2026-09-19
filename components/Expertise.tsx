@@ -13,62 +13,56 @@ export function Expertise() {
       description: intl.formatMessage({ id: "expertise.design.sub" }),
       content: intl.formatMessage({ id: "expertise.design.desc" }),
       icon: Globe,
-      bg: "bg-white",
-      iconBg: "bg-accent/10",
-      iconColor: "text-accent",
     },
     {
       title: intl.formatMessage({ id: "expertise.retainers.title" }),
       description: intl.formatMessage({ id: "expertise.retainers.sub" }),
       content: intl.formatMessage({ id: "expertise.retainers.desc" }),
       icon: PiggyBank,
-      bg: "bg-primary/5 border-primary/20",
-      iconBg: "bg-secondary-text/10",
-      iconColor: "text-secondary-text",
     },
     {
       title: intl.formatMessage({ id: "expertise.seo.title" }),
       description: intl.formatMessage({ id: "expertise.seo.sub" }),
       content: intl.formatMessage({ id: "expertise.seo.desc" }),
       icon: TrendingUp,
-      bg: "bg-white",
-      iconBg: "bg-primary/10",
-      iconColor: "text-primary",
     },
   ];
 
   return (
-    <section id="services" className="py-24 bg-foreground/5">
+    <section id="services" className="py-20 bg-muted/30 border-b border-border/60">
       <div className="container mx-auto px-4 md:px-8">
-        <div className="text-center mb-16 space-y-4">
-          <h2 className="font-serif text-4xl text-primary">{intl.formatMessage({ id: "expertise.title" })}</h2>
-          <p className="font-condensed font-light text-foreground max-w-2xl mx-auto">
+        <div className="max-w-3xl mb-16 space-y-3">
+          <div className="text-xs font-condensed font-semibold uppercase tracking-wider text-muted-foreground">
+            Core Web Services
+          </div>
+          <h2 className="font-serif text-3xl sm:text-4xl text-foreground tracking-tight">
+            {intl.formatMessage({ id: "expertise.title" })}
+          </h2>
+          <p className="font-sans text-base sm:text-lg text-foreground/85 leading-relaxed pt-1">
             {intl.formatMessage({ id: "expertise.subtitle" })}
           </p>
         </div>
         
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-6">
           {expertiseData.map((item, index) => (
             <Card 
               key={index} 
-              className={`rounded-2xl overflow-hidden shadow-sm border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-primary/30 ${item.bg}`}
+              className="bg-card border border-border rounded-lg p-6 sm:p-7 shadow-xs flex flex-col justify-between hover:border-primary/40 transition-colors duration-200"
             >
-              <CardHeader className="p-6">
-                <div className={`w-12 h-12 rounded-lg ${item.iconBg} flex items-center justify-center mb-6`}>
-                  <item.icon className={`w-6 h-6 ${item.iconColor}`} />
+              <div>
+                <div className="w-10 h-10 rounded-md bg-muted text-primary flex items-center justify-center border border-border mb-5">
+                  <item.icon className="w-5 h-5" />
                 </div>
-                <CardTitle className="font-sans font-semibold text-2xl text-foreground mb-2">
+                <h3 className="font-sans font-bold text-xl text-foreground mb-1">
                   {item.title}
-                </CardTitle>
-                <CardDescription className="font-condensed font-light text-sm text-foreground leading-relaxed">
+                </h3>
+                <p className="font-sans text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-4">
                   {item.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="px-6 pb-12">
-                <p className="font-condensed font-light text-foreground/80 leading-relaxed">
+                </p>
+                <p className="font-sans text-sm text-foreground/80 leading-relaxed">
                   {item.content}
                 </p>
-              </CardContent>
+              </div>
             </Card>
           ))}
         </div>

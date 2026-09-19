@@ -31,35 +31,50 @@ export function Philosophy() {
   ];
 
   return (
-    <section id="about" className="py-24 bg-background overflow-hidden">
+    <section id="about" className="py-20 bg-background border-b border-border/60">
       <div className="container mx-auto px-4 md:px-8">
-        <div className="text-center mb-20 space-y-4">
-          <h2 className="font-serif text-4xl text-primary">{intl.formatMessage({ id: "values.title" })}</h2>
-          <h3 className="font-sans font-bold text-2xl text-secondary">
+        <div className="max-w-3xl mb-16 space-y-3">
+          <div className="text-xs font-condensed font-semibold uppercase tracking-wider text-muted-foreground">
+            Our Guiding Principles
+          </div>
+          <h2 className="font-serif text-3xl sm:text-4xl text-foreground tracking-tight">
+            {intl.formatMessage({ id: "values.title" })}
+          </h2>
+          <p className="font-sans text-lg text-foreground/85 leading-relaxed pt-1">
             {intl.formatMessage({ id: "values.subtitle" })}
-          </h3>
-          <div className="max-w-3xl mx-auto space-y-6 pt-4">
-            <p className="font-condensed font-light text-lg text-foreground/80 leading-relaxed">
+          </p>
+          <div className="space-y-4 pt-2">
+            <p className="font-sans text-base text-foreground/80 leading-relaxed">
               {intl.formatMessage({ id: "values.p1" })}
             </p>
-            <p className="font-condensed font-light text-lg text-foreground/80 leading-relaxed">
+            <p className="font-sans text-base text-foreground/80 leading-relaxed">
               {intl.formatMessage({ id: "values.p2" })}
             </p>
           </div>
         </div>
         
-        <div className="grid md:grid-cols-3 gap-12">
+        <div className="grid md:grid-cols-3 gap-6">
           {philosophyData.map((item, index) => (
-            <div key={index} className="flex flex-col items-center text-center gap-6">
-              <div className={`w-20 h-20 rounded-full ${item.iconBg} flex items-center justify-center`}>
-                <item.icon className={`w-10 h-10 ${item.iconColor}`} />
+            <div 
+              key={index} 
+              className="bg-card border border-border rounded-lg p-6 sm:p-8 flex flex-col justify-between shadow-xs"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-6">
+                  <div className="w-10 h-10 rounded-md bg-muted text-primary flex items-center justify-center border border-border">
+                    <item.icon className="w-5 h-5" />
+                  </div>
+                  <span className="font-condensed font-bold text-xs text-muted-foreground">
+                    0{index + 1}
+                  </span>
+                </div>
+                <h3 className="font-sans font-bold text-xl text-foreground mb-3">
+                  {item.title}
+                </h3>
+                <p className="font-sans text-sm text-foreground/80 leading-relaxed">
+                  {item.content}
+                </p>
               </div>
-              <h4 className="font-sans font-bold text-2xl text-foreground">
-                {item.title}
-              </h4>
-              <p className="font-condensed font-light text-foreground/80 leading-relaxed">
-                {item.content}
-              </p>
             </div>
           ))}
         </div>

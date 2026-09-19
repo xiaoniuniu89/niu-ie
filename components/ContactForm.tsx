@@ -72,20 +72,22 @@ export function ContactForm() {
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto bg-card p-6 md:p-10 rounded-2xl border shadow-sm">
+    <div className="w-full max-w-2xl mx-auto bg-card p-6 sm:p-8 rounded-lg border border-border shadow-xs">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
           <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" />
           <FormField
             control={form.control}
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="font-sans font-semibold text-foreground">{intl.formatMessage({ id: "contact.nameLabel" })}</FormLabel>
+                <FormLabel className="font-sans font-semibold text-sm text-foreground">
+                  {intl.formatMessage({ id: "contact.nameLabel" })} *
+                </FormLabel>
                 <FormControl>
-                  <Input placeholder={intl.formatMessage({ id: "contact.namePlaceholder" })} autoComplete="name" {...field} className="font-condensed" />
+                  <Input placeholder={intl.formatMessage({ id: "contact.namePlaceholder" })} autoComplete="name" {...field} />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="font-sans text-xs" />
               </FormItem>
             )}
           />
@@ -94,11 +96,13 @@ export function ContactForm() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="font-sans font-semibold text-foreground">{intl.formatMessage({ id: "contact.emailLabel" })}</FormLabel>
+                <FormLabel className="font-sans font-semibold text-sm text-foreground">
+                  {intl.formatMessage({ id: "contact.emailLabel" })} *
+                </FormLabel>
                 <FormControl>
-                  <Input placeholder={intl.formatMessage({ id: "contact.emailPlaceholder" })} autoComplete="email" {...field} className="font-condensed" />
+                  <Input placeholder={intl.formatMessage({ id: "contact.emailPlaceholder" })} autoComplete="email" {...field} />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="font-sans text-xs" />
               </FormItem>
             )}
           />
@@ -107,45 +111,50 @@ export function ContactForm() {
             name="message"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="font-sans font-semibold text-foreground">{intl.formatMessage({ id: "contact.messageLabel" })}</FormLabel>
+                <FormLabel className="font-sans font-semibold text-sm text-foreground">
+                  {intl.formatMessage({ id: "contact.messageLabel" })} *
+                </FormLabel>
                 <FormControl>
                   <Textarea 
                     placeholder={intl.formatMessage({ id: "contact.messagePlaceholder" })} 
-                    className="min-h-[120px] font-condensed" 
+                    className="min-h-[130px]" 
                     {...field} 
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="font-sans text-xs" />
               </FormItem>
             )}
           />
           
           {submitStatus && (
             <div
-              className={`p-4 rounded-xl text-sm font-condensed flex items-center justify-between gap-3 ${
+              className={`p-4 rounded-md text-sm font-sans flex items-center justify-between gap-3 border ${
                 submitStatus.success
-                  ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300"
-                  : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300"
+                  ? "bg-green-50 text-green-800 border-green-200 dark:bg-green-950/30 dark:text-green-300 dark:border-green-800"
+                  : "bg-red-50 text-red-800 border-red-200 dark:bg-red-950/30 dark:text-red-300 dark:border-red-800"
               }`}
             >
               <span className="leading-relaxed">{submitStatus.message}</span>
               <button
                 type="button"
                 onClick={() => setSubmitStatus(null)}
-                className="text-xs font-bold underline text-current hover:opacity-80 shrink-0"
+                className="text-xs font-semibold underline text-current hover:opacity-80 shrink-0"
               >
                 Dismiss
               </button>
             </div>
           )}
 
-          <Button
-            type="submit"
-            className="w-full md:w-auto md:px-8 font-condensed font-medium"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? intl.formatMessage({ id: "contact.sending" }) : intl.formatMessage({ id: "contact.sendBtn" })}
-          </Button>
+          <div className="pt-2">
+            <Button
+              type="submit"
+              size="lg"
+              className="w-full sm:w-auto font-condensed font-semibold px-8 h-11 bg-primary text-primary-foreground hover:bg-primary/90 rounded-md shadow-xs"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? intl.formatMessage({ id: "contact.sending" }) : intl.formatMessage({ id: "contact.sendBtn" })}
+            </Button>
+          </div>
         </form>
       </Form>
     </div>

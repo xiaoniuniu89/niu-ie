@@ -23,11 +23,14 @@ export default function Contact() {
         {JSON.stringify(contactSchema)}
       </Script>
       <Header />
-      <main className="flex-1 container mx-auto px-4 md:px-8 py-16 flex flex-col items-center">
-        <h1 className="font-serif text-4xl sm:text-5xl text-primary mb-4 text-center">
+      <main className="flex-1 container mx-auto px-4 md:px-8 py-14 md:py-20 flex flex-col items-center">
+        <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-muted text-muted-foreground text-xs font-condensed font-semibold tracking-wider uppercase border border-border mb-3">
+          Get In Touch
+        </div>
+        <h1 className="font-serif text-4xl sm:text-5xl text-foreground mb-3 text-center tracking-tight">
           {intl.formatMessage({ id: "contact.title" })}
         </h1>
-        <p className="font-condensed font-light text-muted-foreground text-lg sm:text-xl max-w-lg mb-8 text-center">
+        <p className="font-sans text-base sm:text-lg text-foreground/80 max-w-lg mb-10 text-center leading-relaxed">
           {intl.formatMessage({ id: "contact.sub" })}
         </p>
 

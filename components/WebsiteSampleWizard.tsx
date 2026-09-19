@@ -322,7 +322,7 @@ export function WebsiteSampleWizard() {
   }
 
   return (
-    <div id="wizard-top" className="w-full max-w-4xl mx-auto bg-card p-6 md:p-10 rounded-2xl border shadow-sm">
+    <div id="wizard-top" className="w-full max-w-4xl mx-auto bg-card p-6 sm:p-8 md:p-10 rounded-lg border border-border shadow-xs">
       {/* Wizard Progress Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between text-xs font-condensed font-semibold uppercase tracking-wider text-muted-foreground mb-3">
@@ -340,11 +340,11 @@ export function WebsiteSampleWizard() {
         </div>
 
         {/* Step Indicator Bar */}
-        <div className="w-full h-2 bg-muted rounded-full overflow-hidden flex gap-1">
+        <div className="w-full h-1.5 bg-muted/60 rounded-sm overflow-hidden flex gap-1.5">
           {[1, 2, 3].map((step) => (
             <div
               key={step}
-              className={`h-full flex-1 transition-all duration-300 ${
+              className={`h-full flex-1 rounded-sm transition-colors duration-200 ${
                 step <= currentStep ? "bg-primary" : "bg-muted"
               }`}
             />
@@ -358,13 +358,13 @@ export function WebsiteSampleWizard() {
 
           {/* STEP 1: Contact & Target Page Scope */}
           {currentStep === 1 && (
-            <div className="space-y-8 animate-in fade-in-50 duration-300">
+            <div className="space-y-7 animate-in fade-in-50 duration-200">
               <div>
-                <h3 className="text-2xl font-serif text-primary flex items-center gap-2">
-                  <Layers className="w-6 h-6 text-secondary" />
+                <h3 className="text-xl sm:text-2xl font-serif text-foreground flex items-center gap-2 tracking-tight">
+                  <Layers className="w-5 h-5 text-secondary" />
                   <FormattedMessage id="wizard.step1.title" />
                 </h3>
-                <p className="text-sm text-muted-foreground font-condensed mt-1">
+                <p className="text-sm text-foreground/80 font-sans mt-1">
                   <FormattedMessage id="wizard.step1.sub" />
                 </p>
               </div>
@@ -375,13 +375,13 @@ export function WebsiteSampleWizard() {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-sans font-semibold">
+                      <FormLabel className="font-sans font-semibold text-sm text-foreground">
                         <FormattedMessage id="contact.nameLabel" /> *
                       </FormLabel>
                       <FormControl>
-                        <Input placeholder={intl.formatMessage({ id: "contact.namePlaceholder" })} {...field} className="font-condensed" />
+                        <Input placeholder={intl.formatMessage({ id: "contact.namePlaceholder" })} {...field} />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="font-sans text-xs" />
                     </FormItem>
                   )}
                 />
@@ -391,13 +391,13 @@ export function WebsiteSampleWizard() {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-sans font-semibold">
+                      <FormLabel className="font-sans font-semibold text-sm text-foreground">
                         <FormattedMessage id="contact.emailLabel" /> *
                       </FormLabel>
                       <FormControl>
-                        <Input placeholder={intl.formatMessage({ id: "contact.emailPlaceholder" })} {...field} className="font-condensed" />
+                        <Input placeholder={intl.formatMessage({ id: "contact.emailPlaceholder" })} {...field} />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="font-sans text-xs" />
                     </FormItem>
                   )}
                 />
@@ -409,13 +409,13 @@ export function WebsiteSampleWizard() {
                   name="phone"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-sans font-semibold">
+                      <FormLabel className="font-sans font-semibold text-sm text-foreground">
                         <FormattedMessage id="wizard.phoneLabel" />
                       </FormLabel>
                       <FormControl>
-                        <Input placeholder={intl.formatMessage({ id: "wizard.phonePlaceholder" })} {...field} className="font-condensed" />
+                        <Input placeholder={intl.formatMessage({ id: "wizard.phonePlaceholder" })} {...field} />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="font-sans text-xs" />
                     </FormItem>
                   )}
                 />
@@ -425,13 +425,13 @@ export function WebsiteSampleWizard() {
                   name="company"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="font-sans font-semibold">
+                      <FormLabel className="font-sans font-semibold text-sm text-foreground">
                         <FormattedMessage id="wizard.companyLabel" />
                       </FormLabel>
                       <FormControl>
-                        <Input placeholder={intl.formatMessage({ id: "wizard.companyPlaceholder" })} {...field} className="font-condensed" />
+                        <Input placeholder={intl.formatMessage({ id: "wizard.companyPlaceholder" })} {...field} />
                       </FormControl>
-                      <FormMessage />
+                      <FormMessage className="font-sans text-xs" />
                     </FormItem>
                   )}
                 />
@@ -439,40 +439,40 @@ export function WebsiteSampleWizard() {
 
               {/* Site Structure Selector (Single-Page vs Multi-Page) */}
               <div>
-                <FormLabel className="font-sans font-semibold block mb-2">
+                <FormLabel className="font-sans font-semibold text-sm text-foreground block mb-2">
                   <FormattedMessage id="wizard.siteStructureLabel" /> *
                 </FormLabel>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div
                     onClick={() => form.setValue("siteStructure", "multi-page")}
-                    className={`p-4 rounded-xl border cursor-pointer transition-all ${
+                    className={`p-4 rounded-lg border cursor-pointer transition-colors shadow-xs ${
                       watchSiteStructure === "multi-page"
-                        ? "border-primary bg-primary/10 ring-1 ring-primary"
-                        : "border-border hover:border-primary/40 bg-background"
+                        ? "border-primary bg-primary/5 ring-1 ring-primary"
+                        : "border-border hover:border-primary/40 bg-card"
                     }`}
                   >
-                    <div className="flex items-center gap-2 font-bold text-sm text-foreground mb-1">
+                    <div className="flex items-center gap-2 font-sans font-bold text-sm text-foreground mb-1">
                       <Files className="w-4 h-4 text-primary" />
                       <FormattedMessage id="wizard.multiPageTitle" />
                     </div>
-                    <p className="text-xs text-muted-foreground font-condensed">
+                    <p className="text-xs text-foreground/75 font-sans leading-relaxed">
                       <FormattedMessage id="wizard.multiPageSub" />
                     </p>
                   </div>
 
                   <div
                     onClick={() => form.setValue("siteStructure", "single-page")}
-                    className={`p-4 rounded-xl border cursor-pointer transition-all ${
+                    className={`p-4 rounded-lg border cursor-pointer transition-colors shadow-xs ${
                       watchSiteStructure === "single-page"
-                        ? "border-primary bg-primary/10 ring-1 ring-primary"
-                        : "border-border hover:border-primary/40 bg-background"
+                        ? "border-primary bg-primary/5 ring-1 ring-primary"
+                        : "border-border hover:border-primary/40 bg-card"
                     }`}
                   >
-                    <div className="flex items-center gap-2 font-bold text-sm text-foreground mb-1">
+                    <div className="flex items-center gap-2 font-sans font-bold text-sm text-foreground mb-1">
                       <FileCode className="w-4 h-4 text-secondary" />
                       <FormattedMessage id="wizard.singlePageTitle" />
                     </div>
-                    <p className="text-xs text-muted-foreground font-condensed">
+                    <p className="text-xs text-foreground/75 font-sans leading-relaxed">
                       <FormattedMessage id="wizard.singlePageSub" />
                     </p>
                   </div>
@@ -482,11 +482,11 @@ export function WebsiteSampleWizard() {
               {/* Target Pages Checkboxes (Capped at Max 3) */}
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <FormLabel className="font-sans font-semibold">
+                  <FormLabel className="font-sans font-semibold text-sm text-foreground">
                     <FormattedMessage id="wizard.pagesLabel" /> *
                   </FormLabel>
                   <span className="text-xs font-condensed text-muted-foreground">
-                    Selected: <strong className="text-primary">{watchPages.length}</strong> / 3 (Max 3)
+                    Selected: <strong className="text-primary font-bold">{watchPages.length}</strong> / 3 (Max 3)
                   </span>
                 </div>
 
@@ -501,27 +501,27 @@ export function WebsiteSampleWizard() {
                         onClick={() => {
                           if (!isMaxReached) togglePageSelection(pageName);
                         }}
-                        className={`flex items-center gap-3 p-3.5 rounded-xl border transition-all ${
-                          isMaxReached ? "opacity-50 cursor-not-allowed bg-background" : "cursor-pointer"
+                        className={`flex items-center gap-3 p-3 rounded-md border transition-colors ${
+                          isMaxReached ? "opacity-50 cursor-not-allowed bg-muted/20" : "cursor-pointer"
                         } ${
                           isChecked
-                            ? "border-primary bg-primary/10 text-primary font-semibold"
-                            : "border-border hover:border-primary/40 bg-background"
+                            ? "border-primary bg-primary/5 text-primary font-semibold"
+                            : "border-border hover:border-primary/40 bg-card"
                         }`}
                       >
                         <Checkbox checked={isChecked} disabled={isMaxReached} onCheckedChange={() => togglePageSelection(pageName)} />
-                        <span className="text-sm font-condensed font-medium text-foreground">{pageName}</span>
+                        <span className="text-sm font-sans font-medium text-foreground">{pageName}</span>
                       </div>
                     );
                   })}
                 </div>
 
-                <p className="text-xs text-muted-foreground font-condensed mt-2">
+                <p className="text-xs text-muted-foreground font-sans mt-2">
                   <FormattedMessage id="wizard.maxPagesNotice" />
                 </p>
 
                 {form.formState.errors.pages && (
-                  <p className="text-xs text-red-500 mt-2">{form.formState.errors.pages.message}</p>
+                  <p className="text-xs text-red-500 font-sans mt-2">{form.formState.errors.pages.message}</p>
                 )}
               </div>
             </div>
@@ -529,13 +529,13 @@ export function WebsiteSampleWizard() {
 
           {/* STEP 2: Design Preference & Concept Style Showcase */}
           {currentStep === 2 && (
-            <div className="space-y-8 animate-in fade-in-50 duration-300">
+            <div className="space-y-7 animate-in fade-in-50 duration-200">
               <div>
-                <h3 className="text-2xl font-serif text-primary flex items-center gap-2">
-                  <Sparkles className="w-6 h-6 text-secondary" />
+                <h3 className="text-xl sm:text-2xl font-serif text-foreground flex items-center gap-2 tracking-tight">
+                  <Sparkles className="w-5 h-5 text-secondary" />
                   <FormattedMessage id="wizard.step2.title" />
                 </h3>
-                <p className="text-sm text-muted-foreground font-condensed mt-1">
+                <p className="text-sm text-foreground/80 font-sans mt-1">
                   <FormattedMessage id="wizard.step2.sub" />
                 </p>
               </div>
@@ -544,34 +544,34 @@ export function WebsiteSampleWizard() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div
                   onClick={() => form.setValue("hasDesign", "no")}
-                  className={`p-5 rounded-xl border cursor-pointer transition-all ${
+                  className={`p-5 rounded-lg border cursor-pointer transition-colors shadow-xs ${
                     watchHasDesign === "no"
-                      ? "border-primary bg-primary/10 ring-1 ring-primary"
-                      : "border-border hover:border-primary/40 bg-background"
+                      ? "border-primary bg-primary/5 ring-1 ring-primary"
+                      : "border-border hover:border-primary/40 bg-card"
                   }`}
                 >
-                  <div className="flex items-center gap-2 font-bold text-sm text-foreground mb-1">
+                  <div className="flex items-center gap-2 font-sans font-bold text-sm text-foreground mb-1">
                     <Sparkles className="w-4 h-4 text-primary" />
                     <span><FormattedMessage id="wizard.hasDesignNo" /></span>
                   </div>
-                  <p className="text-xs text-muted-foreground font-condensed">
+                  <p className="text-xs text-foreground/75 font-sans leading-relaxed">
                     Select 1 to 3 visual design concepts below to guide your website preview layout.
                   </p>
                 </div>
 
                 <div
                   onClick={() => form.setValue("hasDesign", "yes")}
-                  className={`p-5 rounded-xl border cursor-pointer transition-all ${
+                  className={`p-5 rounded-lg border cursor-pointer transition-colors shadow-xs ${
                     watchHasDesign === "yes"
-                      ? "border-primary bg-primary/10 ring-1 ring-primary"
-                      : "border-border hover:border-primary/40 bg-background"
+                      ? "border-primary bg-primary/5 ring-1 ring-primary"
+                      : "border-border hover:border-primary/40 bg-card"
                   }`}
                 >
-                  <div className="flex items-center gap-2 font-bold text-sm text-foreground mb-1">
+                  <div className="flex items-center gap-2 font-sans font-bold text-sm text-foreground mb-1">
                     <LinkIcon className="w-4 h-4 text-secondary" />
                     <span>Provide Custom Design Link</span>
                   </div>
-                  <p className="text-xs text-muted-foreground font-condensed">
+                  <p className="text-xs text-foreground/75 font-sans leading-relaxed">
                     You have a Figma file, existing website, or reference link.
                   </p>
                 </div>
@@ -579,23 +579,22 @@ export function WebsiteSampleWizard() {
 
               {/* Option A: Custom Link Provided */}
               {watchHasDesign === "yes" ? (
-                <div className="space-y-4 p-5 bg-muted/30 rounded-xl border border-dashed border-border">
+                <div className="space-y-4 p-5 bg-card rounded-lg border border-border shadow-xs">
                   <FormField
                     control={form.control}
                     name="designLink"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-sans font-semibold">
+                        <FormLabel className="font-sans font-semibold text-sm text-foreground">
                           <FormattedMessage id="wizard.designLinkLabel" /> *
                         </FormLabel>
                         <FormControl>
                           <Input
                             placeholder={intl.formatMessage({ id: "wizard.designLinkPlaceholder" })}
                             {...field}
-                            className="font-condensed"
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="font-sans text-xs" />
                       </FormItem>
                     )}
                   />
@@ -605,17 +604,17 @@ export function WebsiteSampleWizard() {
                     name="referenceLinks"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="font-sans font-semibold">
+                        <FormLabel className="font-sans font-semibold text-sm text-foreground">
                           <FormattedMessage id="wizard.referenceLinksLabel" />
                         </FormLabel>
                         <FormControl>
                           <Textarea
                             placeholder={intl.formatMessage({ id: "wizard.referenceLinksPlaceholder" })}
-                            className="min-h-[80px] font-condensed text-sm"
+                            className="min-h-[80px]"
                             {...field}
                           />
                         </FormControl>
-                        <FormMessage />
+                        <FormMessage className="font-sans text-xs" />
                       </FormItem>
                     )}
                   />
@@ -624,11 +623,11 @@ export function WebsiteSampleWizard() {
                 /* Option B: Concept Styles Showcase Grid with Screenshot Previews & Lightbox Zoom Button */
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <FormLabel className="font-sans font-semibold text-sm">
+                    <FormLabel className="font-sans font-semibold text-sm text-foreground">
                       <FormattedMessage id="wizard.kbSelectTitle" />
                     </FormLabel>
                     <span className="text-xs font-condensed text-muted-foreground">
-                      Selected: <strong className="text-primary">{watchSelectedKbDesigns.length}</strong> / 3 (Max 3)
+                      Selected: <strong className="text-primary font-bold">{watchSelectedKbDesigns.length}</strong> / 3 (Max 3)
                     </span>
                   </div>
 
@@ -638,15 +637,15 @@ export function WebsiteSampleWizard() {
                       return (
                         <Card
                           key={option.id}
-                          className={`group transition-all border rounded-xl overflow-hidden ${
+                          className={`group transition-colors border rounded-lg overflow-hidden ${
                             isSelected
-                              ? "border-primary ring-2 ring-primary/20 shadow-md bg-primary/[0.02]"
-                              : "border-border hover:border-primary/40 bg-background"
+                              ? "border-primary ring-1 ring-primary shadow-xs bg-primary/[0.02]"
+                              : "border-border hover:border-primary/40 bg-card"
                           }`}
                         >
                           {/* Visual Screenshot Banner — click to preview */}
                           <div
-                            className="relative w-full h-48 sm:h-52 overflow-hidden bg-muted cursor-pointer"
+                            className="relative w-full h-48 sm:h-52 overflow-hidden bg-muted cursor-pointer border-b border-border"
                             onClick={() => setPreviewIndex(idx)}
                           >
                             <Image
@@ -654,28 +653,28 @@ export function WebsiteSampleWizard() {
                               alt={option.name}
                               fill
                               sizes="(max-width: 640px) 100vw, 50vw"
-                              className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                              className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.02] motion-reduce:transform-none"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
                             {/* Category Badge */}
-                            <Badge className="absolute bottom-3 left-3 bg-background/90 text-foreground backdrop-blur-sm text-[11px] font-semibold border shadow-sm">
+                            <Badge className="absolute bottom-3 left-3 bg-card/90 text-foreground backdrop-blur-sm text-[11px] font-condensed font-semibold border border-border shadow-xs rounded">
                               {option.category}
                             </Badge>
 
                             {/* Selected indicator */}
                             {isSelected && (
-                              <div className="absolute top-3 right-3 w-7 h-7 rounded-full bg-primary border border-primary text-primary-foreground shadow-md flex items-center justify-center">
-                                <Check className="w-4 h-4" />
+                              <div className="absolute top-3 right-3 w-6 h-6 rounded-md bg-primary text-primary-foreground shadow-xs flex items-center justify-center">
+                                <Check className="w-3.5 h-3.5" />
                               </div>
                             )}
 
                             {/* Hover preview prompt */}
-                            <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/25 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
                               <Button
                                 type="button"
                                 size="sm"
-                                className="bg-background text-foreground hover:bg-background/90 font-condensed font-bold gap-1.5 shadow-lg border rounded-full text-xs"
+                                className="bg-card text-foreground hover:bg-card/90 font-condensed font-semibold gap-1.5 shadow-xs border border-border rounded-md text-xs"
                               >
                                 <Maximize2 className="w-3.5 h-3.5 text-primary" />
                                 Preview Full Screenshot
@@ -684,23 +683,23 @@ export function WebsiteSampleWizard() {
                           </div>
 
                           <CardContent className="p-5 space-y-3">
-                            <h4 className="font-bold text-base text-foreground leading-snug">{option.name}</h4>
+                            <h4 className="font-sans font-bold text-base text-foreground leading-snug">{option.name}</h4>
 
-                            <p className="text-xs text-muted-foreground font-condensed leading-relaxed">
+                            <p className="text-xs text-foreground/80 font-sans leading-relaxed">
                               {option.description}
                             </p>
 
                             {/* Feature Pills */}
                             <div className="flex flex-wrap gap-1">
                               {option.keyFeatures.slice(0, 3).map((feat, fIdx) => (
-                                <Badge key={fIdx} variant="outline" className="text-[10px] bg-muted/30 font-condensed font-normal">
+                                <span key={fIdx} className="text-[11px] font-condensed font-medium px-2 py-0.5 rounded bg-muted text-foreground/80 border border-border">
                                   {feat}
-                                </Badge>
+                                </span>
                               ))}
                             </div>
 
                             {/* Color Tokens Preview */}
-                            <div className="flex items-center justify-between pt-2 border-t text-[11px] font-condensed">
+                            <div className="flex items-center justify-between pt-2 border-t border-border text-[11px] font-condensed">
                               <span className="text-muted-foreground">{option.colorPalette.name}</span>
                               <div className="flex items-center gap-1.5">
                                 <div
@@ -731,7 +730,7 @@ export function WebsiteSampleWizard() {
                                   e.stopPropagation();
                                   setPreviewIndex(idx);
                                 }}
-                                className="flex-1 font-condensed font-semibold"
+                                className="flex-1 font-condensed font-semibold text-xs rounded-md"
                               >
                                 <Maximize2 className="w-3.5 h-3.5 mr-1.5" />
                                 Preview
@@ -740,16 +739,16 @@ export function WebsiteSampleWizard() {
                                 type="button"
                                 size="sm"
                                 onClick={(e) => { e.stopPropagation(); toggleKbDesign(option.id); }}
-                                className={`flex-1 font-condensed font-bold ${
+                                className={`flex-1 font-condensed font-semibold text-xs rounded-md ${
                                   isSelected
-                                    ? "bg-secondary text-secondary-foreground hover:bg-secondary/90"
-                                    : "bg-primary text-primary-foreground hover:bg-primary/90"
+                                    ? "bg-secondary text-secondary-foreground hover:bg-secondary/90 shadow-xs"
+                                    : "bg-primary text-primary-foreground hover:bg-primary/90 shadow-xs"
                                 }`}
                               >
                                 {isSelected ? (
-                                  <><Check className="w-4 h-4 mr-1.5" /> Selected</>
+                                  <><Check className="w-3.5 h-3.5 mr-1.5" /> Selected</>
                                 ) : (
-                                  <><Sparkles className="w-4 h-4 mr-1.5" /> Select</>
+                                  <><Sparkles className="w-3.5 h-3.5 mr-1.5" /> Select</>
                                 )}
                               </Button>
                             </div>
@@ -765,13 +764,13 @@ export function WebsiteSampleWizard() {
 
           {/* STEP 3: Business Context & Assets */}
           {currentStep === 3 && (
-            <div className="space-y-8 animate-in fade-in-50 duration-300">
+            <div className="space-y-7 animate-in fade-in-50 duration-200">
               <div>
-                <h3 className="text-2xl font-serif text-primary flex items-center gap-2">
-                  <Building2 className="w-6 h-6 text-secondary" />
+                <h3 className="text-xl sm:text-2xl font-serif text-foreground flex items-center gap-2 tracking-tight">
+                  <Building2 className="w-5 h-5 text-secondary" />
                   <FormattedMessage id="wizard.step3.title" />
                 </h3>
-                <p className="text-sm text-muted-foreground font-condensed mt-1">
+                <p className="text-sm text-foreground/80 font-sans mt-1">
                   <FormattedMessage id="wizard.step3.sub" />
                 </p>
               </div>
@@ -782,13 +781,13 @@ export function WebsiteSampleWizard() {
                 name="industry"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-sans font-semibold block">
+                    <FormLabel className="font-sans font-semibold text-sm text-foreground block">
                       <FormattedMessage id="wizard.industryLabel" /> *
                     </FormLabel>
                     <FormControl>
                       <select
                         {...field}
-                        className="w-full h-11 rounded-md border border-input bg-background px-3 py-2 text-sm font-condensed focus:outline-none focus:ring-2 focus:ring-primary"
+                        className="w-full h-10 rounded-md border border-input bg-card px-3.5 py-2 text-sm font-sans focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary text-foreground shadow-xs"
                       >
                         {INDUSTRIES.map((ind) => (
                           <option key={ind} value={ind}>
@@ -797,7 +796,7 @@ export function WebsiteSampleWizard() {
                         ))}
                       </select>
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="font-sans text-xs" />
                   </FormItem>
                 )}
               />
@@ -808,13 +807,13 @@ export function WebsiteSampleWizard() {
                 name="primaryGoal"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-sans font-semibold block">
+                    <FormLabel className="font-sans font-semibold text-sm text-foreground block">
                       <FormattedMessage id="wizard.primaryGoalLabel" /> *
                     </FormLabel>
                     <FormControl>
                       <select
                         {...field}
-                        className="w-full h-11 rounded-md border border-input bg-background px-3 py-2 text-sm font-condensed focus:outline-none focus:ring-2 focus:ring-primary"
+                        className="w-full h-10 rounded-md border border-input bg-card px-3.5 py-2 text-sm font-sans focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary text-foreground shadow-xs"
                       >
                         {PRIMARY_GOALS.map((goal) => (
                           <option key={goal} value={goal}>
@@ -823,24 +822,24 @@ export function WebsiteSampleWizard() {
                         ))}
                       </select>
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="font-sans text-xs" />
                   </FormItem>
                 )}
               />
 
               {/* Native In-Form File Drag & Drop Attachment Box */}
-              <div className="p-5 bg-muted/40 border border-dashed border-primary/40 rounded-2xl space-y-3">
+              <div className="p-5 bg-muted/20 border border-dashed border-border rounded-lg space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Paperclip className="w-5 h-5 text-primary" />
+                    <Paperclip className="w-4 h-4 text-primary" />
                     <div>
-                      <h4 className="font-bold text-sm text-foreground">Attach Pamphlets, Flyers or Branding Files</h4>
-                      <p className="text-xs text-muted-foreground font-condensed">PDFs, PNG, JPG, WEBP • Max 3 files (Up to 10MB each)</p>
+                      <h4 className="font-sans font-bold text-sm text-foreground">Attach Pamphlets, Flyers or Branding Files</h4>
+                      <p className="text-xs text-muted-foreground font-sans">PDFs, PNG, JPG, WEBP • Max 3 files (Up to 10MB each)</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="pt-2">
+                <div className="pt-1">
                   {/* Hidden file input */}
                   <input
                     ref={fileInputRef}
@@ -855,19 +854,19 @@ export function WebsiteSampleWizard() {
                   {/* Custom file picker button */}
                   <label
                     htmlFor="file-upload-input"
-                    className={`flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-xl cursor-pointer transition-all ${
+                    className={`flex flex-col items-center justify-center p-5 border-2 border-dashed rounded-lg cursor-pointer transition-colors ${
                       selectedFiles.length >= 3
-                        ? "border-muted bg-muted/20 cursor-not-allowed opacity-60"
-                        : "border-primary/30 hover:border-primary/60 hover:bg-primary/5 bg-background"
+                        ? "border-border bg-muted/20 cursor-not-allowed opacity-60"
+                        : "border-border hover:border-primary/50 hover:bg-muted/30 bg-card"
                     }`}
                   >
-                    <Upload className="w-8 h-8 text-primary/60 mb-2" />
-                    <span className="text-sm font-condensed font-bold text-foreground">
+                    <Upload className="w-6 h-6 text-primary/70 mb-2" />
+                    <span className="text-sm font-sans font-semibold text-foreground">
                       {selectedFiles.length >= 3
                         ? "Maximum 3 files selected"
                         : "Choose Files to Upload"}
                     </span>
-                    <span className="text-xs text-muted-foreground font-condensed mt-1">
+                    <span className="text-xs text-muted-foreground font-sans mt-0.5">
                       PDF, PNG, JPG, WEBP • Max 3 files (Up to 10MB each)
                     </span>
                   </label>
@@ -876,7 +875,7 @@ export function WebsiteSampleWizard() {
                 {/* Selected File List (local, not yet uploaded) */}
                 {selectedFiles.length > 0 && (
                   <div className="space-y-2 pt-2">
-                    <span className="text-xs font-bold text-foreground">
+                    <span className="text-xs font-sans font-bold text-foreground">
                       Selected Files ({selectedFiles.length}/3)
                       <span className="font-normal text-muted-foreground ml-1">— attached directly to email on submit</span>
                     </span>
@@ -884,12 +883,12 @@ export function WebsiteSampleWizard() {
                       {selectedFiles.map((file, fileIdx) => (
                         <div
                           key={fileIdx}
-                          className="flex items-center gap-2 p-2 rounded-lg bg-card border text-xs font-condensed text-foreground shadow-xs"
+                          className="flex items-center gap-2 p-2 rounded-md bg-card border border-border text-xs font-sans text-foreground shadow-xs"
                         >
                           {file.type === "application/pdf" ? (
-                            <FileText className="w-4 h-4 text-red-500 shrink-0" />
+                            <FileText className="w-3.5 h-3.5 text-destructive shrink-0" />
                           ) : (
-                            <ImageIcon className="w-4 h-4 text-blue-500 shrink-0" />
+                            <ImageIcon className="w-3.5 h-3.5 text-primary shrink-0" />
                           )}
                           <span className="truncate max-w-[160px] font-medium">{file.name}</span>
                           <span className="text-[10px] text-muted-foreground">
@@ -898,7 +897,7 @@ export function WebsiteSampleWizard() {
                           <button
                             type="button"
                             onClick={() => removeSelectedFile(fileIdx)}
-                            className="p-1 hover:bg-muted rounded-full text-muted-foreground hover:text-foreground"
+                            className="p-0.5 hover:bg-muted rounded text-muted-foreground hover:text-foreground"
                           >
                             <X className="w-3.5 h-3.5" />
                           </button>
@@ -907,8 +906,7 @@ export function WebsiteSampleWizard() {
                     </div>
                   </div>
                 )}
-
-                </div>
+              </div>
 
               {/* Personal Resources & Branding Asset Links */}
               <FormField
@@ -916,20 +914,20 @@ export function WebsiteSampleWizard() {
                 name="businessAssetLinks"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-sans font-semibold">
+                    <FormLabel className="font-sans font-semibold text-sm text-foreground">
                       <FormattedMessage id="wizard.assetLinksLabel" />
                     </FormLabel>
-                    <p className="text-xs text-muted-foreground font-condensed -mt-1">
+                    <p className="text-xs text-muted-foreground font-sans -mt-1">
                       <FormattedMessage id="wizard.assetLinksSub" />
                     </p>
                     <FormControl>
                       <Textarea
                         placeholder={intl.formatMessage({ id: "wizard.assetLinksPlaceholder" })}
-                        className="min-h-[90px] font-condensed text-sm"
+                        className="min-h-[85px]"
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="font-sans text-xs" />
                   </FormItem>
                 )}
               />
@@ -940,17 +938,17 @@ export function WebsiteSampleWizard() {
                 name="additionalNotes"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-sans font-semibold">
+                    <FormLabel className="font-sans font-semibold text-sm text-foreground">
                       <FormattedMessage id="wizard.notesLabel" />
                     </FormLabel>
                     <FormControl>
                       <Textarea
                         placeholder={intl.formatMessage({ id: "wizard.notesPlaceholder" })}
-                        className="min-h-[100px] font-condensed text-sm"
+                        className="min-h-[90px]"
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="font-sans text-xs" />
                   </FormItem>
                 )}
               />
@@ -959,21 +957,21 @@ export function WebsiteSampleWizard() {
 
           {/* Submit Error Alert */}
           {submitError && (
-            <div className="p-4 rounded-lg bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 text-sm font-condensed text-red-700 dark:text-red-400 flex items-center gap-2">
+            <div className="p-4 rounded-md bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 text-sm font-sans text-red-700 dark:text-red-400 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-red-500 shrink-0" />
               {submitError}
             </div>
           )}
 
           {/* Navigation Control Buttons */}
-          <div className="flex items-center justify-between pt-6 border-t mt-6">
+          <div className="flex items-center justify-between pt-6 border-t border-border mt-6">
             {currentStep > 1 ? (
               <Button
                 type="button"
                 variant="outline"
                 onClick={handlePrevStep}
                 disabled={isSubmitting}
-                className="font-condensed font-semibold"
+                className="font-condensed font-semibold rounded-md h-10 px-5"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 <FormattedMessage id="wizard.backBtn" />
@@ -986,7 +984,7 @@ export function WebsiteSampleWizard() {
               <Button
                 type="button"
                 onClick={handleNextStep}
-                className="font-condensed font-semibold bg-primary text-primary-foreground hover:bg-primary/90"
+                className="font-condensed font-semibold bg-primary text-primary-foreground hover:bg-primary/90 rounded-md h-10 px-6 shadow-xs"
               >
                 <FormattedMessage id="wizard.nextBtn" />
                 <ArrowRight className="w-4 h-4 ml-2" />
@@ -995,7 +993,7 @@ export function WebsiteSampleWizard() {
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="font-condensed font-bold bg-secondary text-secondary-foreground hover:bg-secondary/90 px-8"
+                className="font-condensed font-semibold bg-primary text-primary-foreground hover:bg-primary/90 rounded-md h-11 px-8 shadow-xs"
               >
                 {isSubmitting ? (
                   <FormattedMessage id="wizard.submitting" />
@@ -1014,18 +1012,18 @@ export function WebsiteSampleWizard() {
       {/* FULL SCREENSHOT LIGHTBOX CAROUSEL DIALOG */}
       {activePreviewOption && previewIndex !== null && (
         <Dialog open={previewIndex !== null} onOpenChange={() => setPreviewIndex(null)}>
-          <DialogContent className="max-w-5xl w-[95vw] h-[90vh] p-0 overflow-hidden flex flex-col bg-background border rounded-2xl shadow-2xl">
+          <DialogContent className="max-w-5xl w-[95vw] h-[90vh] p-0 overflow-hidden flex flex-col bg-background border border-border rounded-lg shadow-2xl">
             {/* Modal Navigation Header */}
-            <div className="p-4 sm:p-5 border-b bg-card flex flex-wrap items-center justify-between gap-3 shrink-0">
+            <div className="p-4 sm:p-5 border-b border-border bg-card flex flex-wrap items-center justify-between gap-3 shrink-0">
               <div className="flex items-center gap-3">
-                <Badge className="bg-secondary text-secondary-foreground text-xs">
+                <Badge className="bg-muted text-foreground/90 border border-border text-xs rounded font-condensed font-semibold">
                   {activePreviewOption.category}
                 </Badge>
                 <div>
-                  <DialogTitle className="text-base sm:text-xl font-bold font-serif text-primary">
+                  <DialogTitle className="text-base sm:text-xl font-bold font-serif text-foreground">
                     {activePreviewOption.name}
                   </DialogTitle>
-                  <DialogDescription className="text-xs text-muted-foreground font-condensed">
+                  <DialogDescription className="text-xs text-muted-foreground font-sans">
                     Concept Style {previewIndex + 1} of {KB_DESIGN_OPTIONS.length} • {activePreviewOption.vibeTag}
                   </DialogDescription>
                 </div>
@@ -1034,13 +1032,13 @@ export function WebsiteSampleWizard() {
               {/* Action & Carousel Controls */}
               <div className="flex items-center gap-2 pr-8">
                 {/* Carousel Prev/Next Buttons */}
-                <div className="flex items-center border rounded-lg overflow-hidden bg-background">
+                <div className="flex items-center border border-border rounded-md overflow-hidden bg-background">
                   <Button
                     type="button"
                     variant="ghost"
                     size="sm"
                     onClick={() => navigatePreview("prev")}
-                    className="h-9 px-2.5 text-muted-foreground hover:text-foreground"
+                    className="h-9 px-2.5 text-muted-foreground hover:text-foreground font-condensed font-semibold"
                     title="Previous Concept"
                   >
                     <ChevronLeft className="w-4 h-4 mr-1" /> Prev
@@ -1051,7 +1049,7 @@ export function WebsiteSampleWizard() {
                     variant="ghost"
                     size="sm"
                     onClick={() => navigatePreview("next")}
-                    className="h-9 px-2.5 text-muted-foreground hover:text-foreground"
+                    className="h-9 px-2.5 text-muted-foreground hover:text-foreground font-condensed font-semibold"
                     title="Next Concept"
                   >
                     Next <ChevronRight className="w-4 h-4 ml-1" />
@@ -1066,19 +1064,19 @@ export function WebsiteSampleWizard() {
                       type="button"
                       size="sm"
                       onClick={() => toggleKbDesign(activePreviewOption.id)}
-                      className={`font-condensed font-bold gap-1.5 text-xs transition-all ${
+                      className={`font-condensed font-semibold gap-1.5 text-xs rounded-md transition-colors ${
                         isSelected
-                          ? "bg-secondary text-secondary-foreground hover:bg-secondary/90 shadow-md"
-                          : "bg-primary text-primary-foreground hover:bg-primary/90"
+                          ? "bg-secondary text-secondary-foreground hover:bg-secondary/90 shadow-xs"
+                          : "bg-primary text-primary-foreground hover:bg-primary/90 shadow-xs"
                       }`}
                     >
                       {isSelected ? (
                         <>
-                          <Check className="w-4 h-4" /> Selected Style
+                          <Check className="w-3.5 h-3.5" /> Selected Style
                         </>
                       ) : (
                         <>
-                          <Sparkles className="w-4 h-4" /> Select This Style
+                          <Sparkles className="w-3.5 h-3.5" /> Select This Style
                         </>
                       )}
                     </Button>
@@ -1090,19 +1088,19 @@ export function WebsiteSampleWizard() {
             {/* Modal Body: Split Layout (Left: Full Scrollable Screenshot, Right: Specs) */}
             <div className="grid grid-cols-1 lg:grid-cols-3 flex-1 overflow-hidden">
               {/* Left Side: Virtual Desktop Browser Frame with Full Vertical Scroll */}
-              <div className="lg:col-span-2 bg-muted/40 p-4 sm:p-6 overflow-y-auto flex flex-col items-center">
-                <div className="w-full max-w-3xl border rounded-xl bg-background shadow-lg overflow-hidden flex flex-col">
+              <div className="lg:col-span-2 bg-muted/20 p-4 sm:p-6 overflow-y-auto flex flex-col items-center">
+                <div className="w-full max-w-3xl border border-border rounded-lg bg-background shadow-xs overflow-hidden flex flex-col">
                   {/* Virtual Browser Top Window Bar */}
-                  <div className="bg-muted px-4 py-2.5 border-b flex items-center justify-between shrink-0">
+                  <div className="bg-muted/60 px-4 py-2.5 border-b border-border flex items-center justify-between shrink-0">
                     <div className="flex items-center gap-1.5">
-                      <div className="w-3 h-3 rounded-full bg-red-400" />
-                      <div className="w-3 h-3 rounded-full bg-yellow-400" />
-                      <div className="w-3 h-3 rounded-full bg-green-400" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-border" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-border" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-border" />
                     </div>
-                    <span className="text-[11px] font-condensed font-mono text-muted-foreground truncate max-w-xs">
+                    <span className="text-[11px] font-mono text-muted-foreground truncate max-w-xs">
                       https://niu.ie/concepts/{activePreviewOption.id}
                     </span>
-                    <div className="w-10" />
+                    <div className="w-8" />
                   </div>
 
                   {/* High Resolution Full Desktop Page Screenshot (Scrollable) */}
@@ -1117,20 +1115,20 @@ export function WebsiteSampleWizard() {
               </div>
 
               {/* Right Side: Concept Blueprint Specs & Color Tokens Sidebar */}
-              <div className="p-6 overflow-y-auto border-t lg:border-t-0 lg:border-l space-y-6 bg-card">
+              <div className="p-6 overflow-y-auto border-t lg:border-t-0 lg:border-l border-border space-y-6 bg-card">
                 <div>
-                  <h4 className="font-bold text-xs uppercase text-muted-foreground tracking-wider mb-2">Design Concept Vibe</h4>
-                  <p className="text-sm text-foreground font-condensed leading-relaxed">
+                  <h4 className="font-sans font-bold text-xs uppercase text-muted-foreground tracking-wider mb-2">Design Concept Vibe</h4>
+                  <p className="text-sm text-foreground/85 font-sans leading-relaxed">
                     {activePreviewOption.description}
                   </p>
                 </div>
 
                 {/* Key Layout Features */}
                 <div>
-                  <h4 className="font-bold text-xs uppercase text-muted-foreground tracking-wider mb-2">Key Layout Triggers</h4>
+                  <h4 className="font-sans font-bold text-xs uppercase text-muted-foreground tracking-wider mb-2">Key Layout Triggers</h4>
                   <div className="space-y-1.5">
                     {activePreviewOption.keyFeatures.map((feat, i) => (
-                      <div key={i} className="flex items-center gap-2 text-xs font-condensed text-foreground">
+                      <div key={i} className="flex items-center gap-2 text-xs font-sans text-foreground/85">
                         <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />
                         <span>{feat}</span>
                       </div>
@@ -1139,48 +1137,48 @@ export function WebsiteSampleWizard() {
                 </div>
 
                 {/* Color Palette Specification */}
-                <div className="p-4 rounded-xl bg-muted/40 border space-y-3">
-                  <h4 className="font-bold text-xs uppercase text-muted-foreground tracking-wider">
+                <div className="p-4 rounded-lg bg-muted/30 border border-border space-y-3">
+                  <h4 className="font-sans font-bold text-xs uppercase text-muted-foreground tracking-wider">
                     Theme Palette: {activePreviewOption.colorPalette.name}
                   </h4>
-                  <div className="grid grid-cols-1 gap-2 text-xs font-condensed">
+                  <div className="grid grid-cols-1 gap-2 text-xs font-sans">
                     <div className="flex items-center gap-2">
                       <div
-                        className="w-4 h-4 rounded-full border shadow-xs"
+                        className="w-3.5 h-3.5 rounded-full border border-black/10 shadow-xs"
                         style={{ backgroundColor: activePreviewOption.colorPalette.primaryHex }}
                       />
-                      <span>Primary: <code className="text-[10px]">{activePreviewOption.colorPalette.primaryHex}</code></span>
+                      <span>Primary: <code className="text-[10px] font-mono">{activePreviewOption.colorPalette.primaryHex}</code></span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div
-                        className="w-4 h-4 rounded-full border shadow-xs"
+                        className="w-3.5 h-3.5 rounded-full border border-black/10 shadow-xs"
                         style={{ backgroundColor: activePreviewOption.colorPalette.secondaryHex }}
                       />
-                      <span>Secondary: <code className="text-[10px]">{activePreviewOption.colorPalette.secondaryHex}</code></span>
+                      <span>Secondary: <code className="text-[10px] font-mono">{activePreviewOption.colorPalette.secondaryHex}</code></span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div
-                        className="w-4 h-4 rounded-full border shadow-xs"
+                        className="w-3.5 h-3.5 rounded-full border border-black/10 shadow-xs"
                         style={{ backgroundColor: activePreviewOption.colorPalette.backgroundHex }}
                       />
-                      <span>Background: <code className="text-[10px]">{activePreviewOption.colorPalette.backgroundHex}</code></span>
+                      <span>Background: <code className="text-[10px] font-mono">{activePreviewOption.colorPalette.backgroundHex}</code></span>
                     </div>
                     <div className="flex items-center gap-2">
                       <div
-                        className="w-4 h-4 rounded-full border shadow-xs"
+                        className="w-3.5 h-3.5 rounded-full border border-black/10 shadow-xs"
                         style={{ backgroundColor: activePreviewOption.colorPalette.mutedHex }}
                       />
-                      <span>Muted: <code className="text-[10px]">{activePreviewOption.colorPalette.mutedHex}</code></span>
+                      <span>Muted: <code className="text-[10px] font-mono">{activePreviewOption.colorPalette.mutedHex}</code></span>
                     </div>
                   </div>
                 </div>
 
                 {/* Sample Sites in KB */}
                 <div>
-                  <h4 className="font-bold text-xs uppercase text-muted-foreground tracking-wider mb-2">Sample Ingested References</h4>
+                  <h4 className="font-sans font-bold text-xs uppercase text-muted-foreground tracking-wider mb-2">Sample Ingested References</h4>
                   <div className="flex flex-wrap gap-1.5">
                     {activePreviewOption.sampleSites.map((site, sIdx) => (
-                      <Badge key={sIdx} variant="outline" className="text-xs font-condensed bg-background">
+                      <Badge key={sIdx} variant="outline" className="text-xs font-condensed bg-muted/40 rounded">
                         {site}
                       </Badge>
                     ))}

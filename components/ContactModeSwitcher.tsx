@@ -28,14 +28,14 @@ function ContactModeSwitcherContent() {
   return (
     <div className="w-full max-w-5xl mx-auto space-y-8">
       {/* Segmented Mode Switcher Bar */}
-      <div className="flex flex-col sm:flex-row p-1.5 bg-muted rounded-2xl border shadow-inner gap-1.5 max-w-2xl mx-auto">
+      <div className="flex flex-col sm:flex-row p-1 bg-muted/60 rounded-lg border border-border gap-1 max-w-xl mx-auto shadow-xs">
         <button
           type="button"
           onClick={() => setActiveMode("inquiry")}
-          className={`flex-1 flex items-center justify-center gap-2 py-3 px-5 rounded-xl font-condensed font-bold text-sm sm:text-base transition-all duration-200 ${
+          className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-md font-condensed font-semibold text-sm transition-all duration-150 ${
             activeMode === "inquiry"
-              ? "bg-card text-primary shadow-sm ring-1 ring-border"
-              : "text-muted-foreground hover:text-foreground hover:bg-card/50"
+              ? "bg-card text-foreground shadow-xs ring-1 ring-border font-bold"
+              : "text-muted-foreground hover:text-foreground hover:bg-card/40"
           }`}
         >
           <MessageSquare className={`w-4 h-4 ${activeMode === "inquiry" ? "text-primary" : ""}`} />
@@ -43,22 +43,22 @@ function ContactModeSwitcherContent() {
         </button>
 
         <button
-            type="button"
-            onClick={() => setActiveMode("sample")}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 px-5 rounded-xl font-condensed font-bold text-sm sm:text-base transition-all duration-200 ${
-              activeMode === "sample"
-                ? "bg-card text-primary shadow-sm ring-1 ring-border"
-                : "text-muted-foreground hover:text-foreground hover:bg-card/50"
-            }`}
-          >
-            <Sparkles className={`w-4 h-4 ${activeMode === "sample" ? "text-secondary" : ""}`} />
-            <span><FormattedMessage id="contact.tab.sample" /></span>
-          </button>
+          type="button"
+          onClick={() => setActiveMode("sample")}
+          className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-md font-condensed font-semibold text-sm transition-all duration-150 ${
+            activeMode === "sample"
+              ? "bg-card text-foreground shadow-xs ring-1 ring-border font-bold"
+              : "text-muted-foreground hover:text-foreground hover:bg-card/40"
+          }`}
+        >
+          <Sparkles className={`w-4 h-4 ${activeMode === "sample" ? "text-secondary" : ""}`} />
+          <span><FormattedMessage id="contact.tab.sample" /></span>
+        </button>
       </div>
 
       {/* Dynamic Subhead Banner */}
       <div className="text-center max-w-2xl mx-auto">
-        <p className="text-muted-foreground font-condensed text-base sm:text-lg leading-relaxed">
+        <p className="text-foreground/80 font-sans text-base sm:text-lg leading-relaxed">
           {activeMode === "sample" ? (
             <FormattedMessage id="contact.tab.sampleSub" />
           ) : (
@@ -68,7 +68,7 @@ function ContactModeSwitcherContent() {
       </div>
 
       {/* Render Selected View */}
-      <div className="transition-all duration-300">
+      <div className="transition-opacity duration-200">
         {activeMode === "sample" ? <WebsiteSampleWizard /> : <ContactForm />}
       </div>
     </div>

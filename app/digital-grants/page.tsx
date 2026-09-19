@@ -110,33 +110,33 @@ export default function DigitalGrantsPage() {
       />
 
       {/* Hero Section */}
-      <section className="max-w-3xl mb-16">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary border border-primary/20 text-xs font-condensed font-semibold mb-4">
-          <BadgeCheck className="h-4 w-4" />
+      <section className="max-w-3xl mb-14">
+        <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-muted text-muted-foreground text-xs font-condensed font-semibold tracking-wider uppercase border border-border mb-4">
+          <BadgeCheck className="h-3.5 w-3.5 text-primary" />
           {intl.formatMessage({ id: "grantsPage.badge" })}
         </div>
-        <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-foreground mb-6 leading-tight">
+        <h1 className="font-serif text-4xl sm:text-5xl lg:text-6xl text-foreground mb-5 leading-tight tracking-tight">
           {intl.formatMessage({ id: "grantsPage.title" })}
         </h1>
-        <p className="font-condensed font-light text-lg md:text-xl text-foreground/80 leading-relaxed">
+        <p className="font-sans text-lg sm:text-xl text-foreground/80 leading-relaxed">
           {intl.formatMessage({ id: "grantsPage.intro" })}
         </p>
       </section>
 
       {/* Warning Callout */}
-      <section className="mb-16">
-        <div className="p-6 md:p-8 rounded-[25px] border border-secondary bg-secondary/5 text-foreground flex flex-col md:flex-row gap-6 items-start">
-          <div className="p-3 rounded-full bg-secondary/10 text-secondary shrink-0">
-            <ShieldAlert className="h-8 w-8" />
+      <section className="mb-14">
+        <div className="p-6 sm:p-7 rounded-lg border border-secondary/30 bg-secondary/5 text-foreground flex flex-col sm:flex-row gap-5 items-start shadow-xs">
+          <div className="p-2.5 rounded-md bg-secondary/10 text-secondary-text shrink-0">
+            <ShieldAlert className="h-6 w-6" />
           </div>
-          <div>
-            <h3 className="font-serif text-xl text-foreground mb-2 font-semibold">
+          <div className="space-y-2">
+            <h3 className="font-sans text-lg font-bold text-foreground">
               {intl.formatMessage({ id: "grantsPage.warningTitle" })}
             </h3>
-            <p className="font-condensed font-light text-sm md:text-base text-foreground/80 leading-relaxed mb-3">
+            <p className="font-sans text-sm sm:text-base text-foreground/80 leading-relaxed">
               {intl.formatMessage({ id: "grantsPage.warningText1" })}
             </p>
-            <p className="font-condensed font-light text-sm md:text-base text-foreground/80 leading-relaxed">
+            <p className="font-sans text-sm sm:text-base text-foreground/80 leading-relaxed">
               {intl.formatMessage({ id: "grantsPage.warningText2" })}
             </p>
           </div>
@@ -144,48 +144,53 @@ export default function DigitalGrantsPage() {
       </section>
 
       {/* Voucher Options Grid */}
-      <section className="mb-20">
-        <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-3">
-          {intl.formatMessage({ id: "grantsPage.programsTitle" })}
-        </h2>
-        <p className="font-condensed font-light text-foreground/75 mb-10 max-w-2xl">
-          {intl.formatMessage({ id: "grantsPage.programsSub" })}
-        </p>
+      <section className="mb-18">
+        <div className="max-w-2xl mb-8 space-y-2">
+          <div className="text-xs font-condensed font-semibold uppercase tracking-wider text-muted-foreground">
+            Support Programs
+          </div>
+          <h2 className="font-serif text-2xl sm:text-3xl text-foreground tracking-tight">
+            {intl.formatMessage({ id: "grantsPage.programsTitle" })}
+          </h2>
+          <p className="font-sans text-base text-foreground/80">
+            {intl.formatMessage({ id: "grantsPage.programsSub" })}
+          </p>
+        </div>
 
-        <div className="grid gap-8 lg:grid-cols-3">
+        <div className="grid gap-6 lg:grid-cols-3">
           {grantOptions.map((grant) => (
-            <Card key={grant.title} className="rounded-2xl border border-border bg-card flex flex-col justify-between hover:-translate-y-1 transition-all duration-300">
-              <CardHeader className="p-8 pb-4">
+            <Card key={grant.title} className="rounded-lg border border-border bg-card flex flex-col justify-between shadow-xs hover:border-primary/40 transition-colors duration-200">
+              <CardHeader className="p-6 sm:p-7 pb-4">
                 <div className="flex justify-between items-start mb-4">
-                  <span className={`px-3 py-1 rounded-full text-xs font-condensed font-semibold ${grant.badgeColor}`}>
+                  <span className="px-2 py-0.5 rounded text-xs font-condensed font-semibold uppercase tracking-wide bg-muted text-foreground/80 border border-border">
                     {grant.badge}
                   </span>
-                  <span className="font-serif text-lg font-bold text-accent">
+                  <span className="font-serif text-lg font-bold text-primary">
                     {grant.amount}
                   </span>
                 </div>
                 <CardTitle className="font-serif text-2xl text-foreground mb-1">
                   {grant.title}
                 </CardTitle>
-                <p className="font-condensed text-sm text-foreground/60">
+                <p className="font-sans text-xs font-medium text-muted-foreground">
                   {grant.subtitle}
                 </p>
               </CardHeader>
-              <CardContent className="p-8 pt-0 flex-1 flex flex-col justify-between">
+              <CardContent className="p-6 sm:p-7 pt-0 flex-1 flex flex-col justify-between">
                 <div className="mb-6">
-                  <p className="font-condensed font-light text-sm text-foreground/80 leading-relaxed mb-6">
+                  <p className="font-sans text-sm text-foreground/80 leading-relaxed mb-5">
                     {grant.description}
                   </p>
-                  <ul className="space-y-2.5">
+                  <ul className="space-y-2">
                     {grant.points.map((point, index) => (
-                      <li key={index} className="flex gap-2.5 items-start text-xs font-condensed font-light text-foreground/70">
-                        <ChevronRight className="h-4 w-4 text-foreground/40 shrink-0 mt-0.5" />
+                      <li key={index} className="flex gap-2.5 items-start text-xs font-sans text-foreground/75 leading-relaxed">
+                        <ChevronRight className="h-3.5 w-3.5 text-primary shrink-0 mt-0.5" />
                         <span>{point}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
-                <div className="pt-4 border-t border-border/50 text-xs font-condensed font-semibold text-primary/80">
+                <div className="pt-4 border-t border-border text-xs font-condensed font-semibold text-primary uppercase tracking-wide">
                   {grant.cta}
                 </div>
               </CardContent>
@@ -195,25 +200,30 @@ export default function DigitalGrantsPage() {
       </section>
 
       {/* Step-by-Step Timeline */}
-      <section className="mb-20 py-12 border-y border-border/60">
-        <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-3">
-          {intl.formatMessage({ id: "grantsPage.timelineTitle" })}
-        </h2>
-        <p className="font-condensed font-light text-foreground/75 mb-12 max-w-2xl">
-          {intl.formatMessage({ id: "grantsPage.timelineSub" })}
-        </p>
+      <section className="mb-18 py-12 border-y border-border/60">
+        <div className="max-w-2xl mb-10 space-y-2">
+          <div className="text-xs font-condensed font-semibold uppercase tracking-wider text-muted-foreground">
+            Application Workflow
+          </div>
+          <h2 className="font-serif text-2xl sm:text-3xl text-foreground tracking-tight">
+            {intl.formatMessage({ id: "grantsPage.timelineTitle" })}
+          </h2>
+          <p className="font-sans text-base text-foreground/80">
+            {intl.formatMessage({ id: "grantsPage.timelineSub" })}
+          </p>
+        </div>
 
-        <div className="relative pl-6 border-l-2 border-border/60 ml-4 space-y-12 max-w-3xl">
+        <div className="relative pl-6 border-l-2 border-border ml-3 space-y-10 max-w-3xl">
           {timelineSteps.map((step) => (
             <div key={step.step} className="relative flex items-start gap-4">
-              <div className="bg-background border-2 border-primary rounded-full w-6 h-6 flex items-center justify-center shrink-0 mt-0.5 font-condensed text-xs font-bold text-primary">
+              <div className="bg-card border border-border rounded w-7 h-7 flex items-center justify-center shrink-0 mt-0.5 font-condensed text-xs font-bold text-primary shadow-xs">
                 {step.step}
               </div>
-              <div>
-                <h3 className="font-serif text-lg md:text-xl text-foreground mb-2 font-semibold">
+              <div className="space-y-1">
+                <h3 className="font-sans text-lg text-foreground font-bold">
                   {step.title}
                 </h3>
-                <p className="font-condensed font-light text-sm md:text-base text-foreground/70 leading-relaxed">
+                <p className="font-sans text-sm sm:text-base text-foreground/80 leading-relaxed">
                   {step.description}
                 </p>
               </div>
@@ -223,19 +233,19 @@ export default function DigitalGrantsPage() {
       </section>
 
       {/* Local Westmeath Travel Support & Maps callout */}
-      <section className="mb-16">
-        <div className="p-6 md:p-8 rounded-2xl border border-border bg-card flex flex-col md:flex-row gap-8 items-center">
-          <div className="p-4 rounded-2xl bg-secondary/10 text-secondary shrink-0">
-            <MapPin className="h-10 w-10" />
+      <section className="mb-14">
+        <div className="p-6 sm:p-7 rounded-lg border border-border bg-card flex flex-col md:flex-row gap-6 items-center shadow-xs">
+          <div className="w-12 h-12 rounded-md bg-muted text-primary flex items-center justify-center border border-border shrink-0">
+            <MapPin className="h-6 w-6" />
           </div>
-          <div className="flex-1">
-            <h3 className="font-serif text-xl text-foreground mb-2">
+          <div className="flex-1 space-y-2">
+            <h3 className="font-sans text-lg font-bold text-foreground">
               {intl.formatMessage({ id: "grantsPage.westmeathTitle" })}
             </h3>
-            <p className="font-condensed font-light text-sm md:text-base text-foreground/80 leading-relaxed mb-4">
+            <p className="font-sans text-sm sm:text-base text-foreground/80 leading-relaxed">
               {intl.formatMessage({ id: "grantsPage.westmeathDesc" })}
             </p>
-            <div className="flex flex-wrap gap-4 text-xs font-condensed">
+            <div className="flex flex-wrap gap-4 text-xs font-condensed pt-1">
               <a
                 href="https://www.localenterprise.ie/westmeath"
                 target="_blank"
@@ -245,16 +255,16 @@ export default function DigitalGrantsPage() {
               >
                 Official LEO Westmeath Website
               </a>
-              <span className="text-foreground/30">|</span>
-              <span className="text-foreground/70">
+              <span className="text-border" aria-hidden="true">|</span>
+              <span className="text-foreground/75">
                 Starting Eircode: <strong>N91PF96</strong>
               </span>
-              <span className="text-foreground/30">|</span>
+              <span className="text-border" aria-hidden="true">|</span>
               <a 
                 href="https://www.google.com/maps/dir/?api=1&origin=N91PF96&destination=N91FH4N" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="text-accent hover:underline font-semibold"
+                className="text-primary hover:underline font-semibold"
               >
                 Google Maps Car Directions (Mullingar Journey)
               </a>
@@ -264,19 +274,19 @@ export default function DigitalGrantsPage() {
       </section>
 
       {/* Charity Work Support Note */}
-      <section className="mb-20">
-        <div className="p-8 rounded-2xl border border-accent/20 bg-accent/5 flex flex-col md:flex-row gap-6 items-start">
-          <div className="p-3 rounded-full bg-accent/10 text-accent shrink-0">
-            <Heart className="h-8 w-8" />
+      <section className="mb-18">
+        <div className="p-6 sm:p-7 rounded-lg border border-border bg-card flex flex-col md:flex-row gap-6 items-start shadow-xs">
+          <div className="w-12 h-12 rounded-md bg-muted text-primary flex items-center justify-center border border-border shrink-0">
+            <Heart className="h-6 w-6" />
           </div>
-          <div>
-            <h3 className="font-serif text-xl text-foreground mb-2 font-semibold">
+          <div className="space-y-2">
+            <h3 className="font-sans text-lg font-bold text-foreground">
               {intl.formatMessage({ id: "grantsPage.charityTitle" })}
             </h3>
-            <p className="font-condensed font-light text-sm md:text-base text-foreground/80 leading-relaxed mb-4">
+            <p className="font-sans text-sm sm:text-base text-foreground/80 leading-relaxed">
               {intl.formatMessage({ id: "grantsPage.charityDesc1" })}
             </p>
-            <p className="font-condensed font-light text-sm md:text-base text-foreground/80 leading-relaxed">
+            <p className="font-sans text-sm sm:text-base text-foreground/80 leading-relaxed">
               {intl.formatMessage({ id: "grantsPage.charityDesc2" })}
             </p>
           </div>
@@ -284,17 +294,18 @@ export default function DigitalGrantsPage() {
       </section>
 
       {/* Final Call to Action */}
-      <section className="text-center py-8">
-        <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-4">
+      <section className="text-center py-12 max-w-2xl mx-auto space-y-4">
+        <h2 className="font-serif text-3xl sm:text-4xl text-foreground tracking-tight">
           {intl.formatMessage({ id: "grantsPage.ctaTitle" })}
         </h2>
-        <p className="font-condensed font-light text-lg text-foreground/70 mb-8 max-w-xl mx-auto">
+        <p className="font-sans text-base sm:text-lg text-foreground/80 leading-relaxed">
           {intl.formatMessage({ id: "grantsPage.ctaSub" })}
         </p>
-        <div className="flex justify-center gap-4">
+        <div className="pt-2 flex justify-center">
           <Button
             asChild
-            className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-8 h-12 font-condensed font-medium text-base shadow-lg shadow-primary/20"
+            size="lg"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-8 h-12 font-condensed font-semibold text-base shadow-xs"
           >
             <Link href="/contact?mode=sample">
               Request Sample & Grant Advice

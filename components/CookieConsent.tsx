@@ -33,21 +33,21 @@ export const CookieConsent: React.FC = () => {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 p-4 md:p-6" role="dialog" aria-label="Cookie consent">
-      <div className="mx-auto max-w-3xl rounded-2xl bg-foreground/5 backdrop-blur-md border border-border/30 p-6 shadow-lg">
-        <p className="text-sm text-foreground/80 mb-4">
+      <div className="mx-auto max-w-2xl rounded-lg bg-card border border-border p-5 shadow-lg">
+        <p className="text-sm font-sans text-foreground/85 mb-4 leading-relaxed">
           This site uses cookies to improve your experience and for analytics.
           By clicking &quot;Accept&quot;, you consent to the use of cookies.
         </p>
         <div className="flex gap-3">
           <button
             onClick={accept}
-            className="rounded-md bg-primary px-5 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+            className="rounded-md bg-primary px-5 py-2 text-sm font-condensed font-semibold text-primary-foreground hover:bg-primary/90 transition-colors shadow-xs"
           >
             Accept
           </button>
           <button
             onClick={decline}
-            className="rounded-md border border-border/50 px-5 py-2 text-sm font-medium text-foreground/70 hover:text-foreground transition-colors"
+            className="rounded-md border border-border bg-card px-5 py-2 text-sm font-condensed font-semibold text-foreground/80 hover:text-foreground hover:bg-muted/60 transition-colors"
           >
             Decline
           </button>

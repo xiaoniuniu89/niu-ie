@@ -51,7 +51,7 @@ export const LanguageSelector: React.FC = () => {
     <div className="relative inline-block" ref={dropdownRef}>
       <button
         onClick={toggleDropdown}
-        className="flex items-center gap-1.5 bg-foreground/5 hover:bg-foreground/10 px-2.5 py-1.5 rounded-full text-foreground transition-colors focus:outline-none text-xs font-condensed font-medium"
+        className="flex items-center gap-1.5 bg-card border border-border hover:bg-muted/60 px-2.5 py-1.5 rounded-md text-foreground transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 text-xs font-condensed font-semibold"
         aria-expanded={isOpen}
         aria-haspopup="true"
         aria-label="Select language"
@@ -61,13 +61,13 @@ export const LanguageSelector: React.FC = () => {
       </button>
 
       {isOpen && (
-        <div className="absolute top-full right-0 mt-2 min-w-[150px] bg-background border border-foreground/10 rounded-xl shadow-xl z-50 overflow-hidden py-1">
+        <div className="absolute top-full right-0 mt-2 min-w-[150px] bg-card border border-border rounded-md shadow-lg z-50 overflow-hidden py-1">
           <ul className="list-none p-0 m-0">
             {languages.map((lang) => (
               <li key={lang.code}>
                 <button
                   className={`flex items-center gap-2.5 w-full px-4 py-2 text-left cursor-pointer transition-colors text-xs font-condensed ${
-                    locale === lang.code ? "bg-primary/10 font-bold text-primary" : "text-foreground hover:bg-foreground/5"
+                    locale === lang.code ? "bg-primary/10 font-bold text-primary" : "text-foreground hover:bg-muted/60"
                   }`}
                   onClick={() => changeLanguage(lang.code)}
                 >

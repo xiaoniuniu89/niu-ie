@@ -63,46 +63,49 @@ export default function Portfolio() {
       <Header />
 
       <main className="flex-1">
-        <div className="container mx-auto px-4 md:px-8 py-20">
-          <div className="mb-16">
-            <h1 className="font-serif text-5xl text-primary mb-6">{intl.formatMessage({ id: "portfolio.title" })}</h1>
-            <p className="font-condensed font-light text-xl text-foreground/80 max-w-3xl leading-relaxed">
+        <div className="container mx-auto px-4 md:px-8 py-16 md:py-20">
+          <div className="max-w-3xl mb-14">
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-muted text-muted-foreground text-xs font-condensed font-semibold tracking-wider uppercase border border-border mb-4">
+              Selected Client Work
+            </div>
+            <h1 className="font-serif text-4xl sm:text-5xl text-foreground mb-4 tracking-tight">{intl.formatMessage({ id: "portfolio.title" })}</h1>
+            <p className="font-sans text-lg sm:text-xl text-foreground/80 max-w-3xl leading-relaxed">
               {intl.formatMessage({ id: "portfolio.intro" })}
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 mb-24">
+          <div className="grid md:grid-cols-2 gap-8 mb-20">
             {portfolioItems.map((item, index) => (
-              <Card key={index} className="group overflow-hidden border-border/50 shadow-sm hover:shadow-lg transition-all duration-300">
-                <div className="relative aspect-[16/10] w-full bg-muted overflow-hidden">
+              <Card key={index} className="group overflow-hidden border border-border rounded-lg bg-card shadow-xs hover:border-primary/40 transition-colors duration-200">
+                <div className="relative aspect-[16/10] w-full bg-muted border-b border-border overflow-hidden">
                   <Image 
                     src={item.image} 
                     alt={item.title}
                     fill
-                    className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+                    className="object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.02] motion-reduce:transform-none"
                     sizes="(max-width: 768px) 100vw, 50vw"
                   />
                 </div>
-                <CardHeader className="space-y-4">
-                  <div className="text-secondary-text font-condensed font-medium text-sm tracking-wider uppercase">
+                <CardHeader className="p-6 space-y-3">
+                  <div className="text-secondary-text font-condensed font-semibold text-xs tracking-wider uppercase">
                     {item.category}
                   </div>
-                  <CardTitle className="font-sans font-bold text-2xl text-foreground">
+                  <CardTitle className="font-sans font-bold text-xl sm:text-2xl text-foreground">
                     {item.title}
                   </CardTitle>
-                  <CardDescription className="font-condensed font-light text-base text-foreground/80 leading-relaxed min-h-[4.5rem]">
+                  <CardDescription className="font-sans text-sm sm:text-base text-foreground/80 leading-relaxed min-h-[4rem]">
                     {item.description}
                   </CardDescription>
                 </CardHeader>
-                <CardFooter>
-                  <Button asChild variant="ghost" className="text-primary hover:text-primary/80 hover:bg-primary/5 p-0 font-condensed font-medium">
+                <CardFooter className="px-6 pb-6 pt-0">
+                  <Button asChild variant="outline" size="sm" className="font-condensed font-semibold text-foreground hover:text-primary">
                     <Link
                       href={item.link}
                       target={item.link.startsWith("http") ? "_blank" : undefined}
                       rel={item.link.startsWith("http") ? "noopener noreferrer" : undefined}
                       className="flex items-center gap-2"
                     >
-                      {intl.formatMessage({ id: "portfolio.visit" })} <ArrowRight className="h-4 w-4" />
+                      {intl.formatMessage({ id: "portfolio.visit" })} <ArrowRight className="h-3.5 w-3.5" />
                     </Link>
                   </Button>
                 </CardFooter>
@@ -111,22 +114,24 @@ export default function Portfolio() {
           </div>
 
           <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full border border-dashed border-foreground/20 text-foreground/50 font-condensed text-sm">
-              <span className="w-2 h-2 rounded-full bg-accent/60 animate-pulse" />
-              More coming soon
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded border border-border bg-card text-muted-foreground font-condensed text-xs font-semibold tracking-wider uppercase">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary" aria-hidden="true" />
+              More client projects in active development
             </div>
           </div>
 
-          <div className="bg-accent/10 rounded-3xl p-12 text-center max-w-4xl mx-auto mb-12">
-            <h2 className="font-serif text-3xl md:text-4xl text-primary mb-6">
+          <div className="bg-card border border-border rounded-lg p-8 sm:p-12 text-center max-w-3xl mx-auto mb-12 shadow-xs space-y-5">
+            <h2 className="font-serif text-3xl sm:text-4xl text-foreground tracking-tight">
               {intl.formatMessage({ id: "portfolio.cta.title" })}
             </h2>
-            <p className="font-condensed font-light text-lg text-foreground/80 mb-8 max-w-lg mx-auto">
+            <p className="font-sans text-base sm:text-lg text-foreground/80 max-w-lg mx-auto leading-relaxed">
               {intl.formatMessage({ id: "portfolio.cta.sub" })}
             </p>
-            <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-condensed font-bold px-8">
-              <Link href="/contact?mode=sample">Request Free Website Sample</Link>
-            </Button>
+            <div className="pt-2">
+              <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-condensed font-semibold px-8 h-12 shadow-xs">
+                <Link href="/contact?mode=sample">Request Free Website Sample</Link>
+              </Button>
+            </div>
           </div>
         </div>
       </main>

@@ -129,7 +129,7 @@ export default function Portfolio() {
             </p>
             <div className="pt-2">
               <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md font-condensed font-bold px-8 h-12 shadow-md">
-                <Link href="/contact?mode=sample">Request Free Website Sample</Link>
+                <Link href="/contact?mode=sample">{intl.formatMessage({ id: "footer.ctaBtn" })}</Link>
               </Button>
             </div>
           </div>

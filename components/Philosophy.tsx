@@ -35,7 +35,7 @@ export function Philosophy() {
       <div className="container mx-auto px-4 md:px-8">
         <div className="max-w-3xl mb-16 space-y-3">
           <div className="text-xs font-condensed font-semibold uppercase tracking-wider text-secondary-text">
-            Our Guiding Principles
+            {intl.formatMessage({ id: "values.eyebrow" })}
           </div>
           <h2 className="font-serif text-3xl sm:text-5xl text-primary tracking-tight">
             {intl.formatMessage({ id: "values.title" })}

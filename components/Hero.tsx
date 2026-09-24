@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Check, Sparkles } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useIntl } from "react-intl";
@@ -33,16 +33,25 @@ export function Hero() {
             <Button asChild size="lg" className="rounded-md px-8 h-12 bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:bg-primary/90 font-condensed font-bold text-base">
               <Link href="/contact?mode=sample">
                 <Sparkles className="mr-2 h-4 w-4 text-secondary" />
-                Request Free Website Sample
+                {intl.formatMessage({ id: "hero.startProject" })}
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline" className="rounded-md px-8 h-12 font-condensed font-semibold text-base">
-              <Link href="/process">
-                {intl.formatMessage({ id: "hero.ourProcess" })}
+              <Link href="/#pricing">
+                {intl.formatMessage({ id: "hero.seePricing" })}
               </Link>
             </Button>
           </div>
+
+          <ul className="flex flex-col sm:flex-row sm:flex-wrap gap-x-6 gap-y-2 font-sans text-sm text-foreground/80">
+            {["hero.trust1", "hero.trust2", "hero.trust3"].map((id) => (
+              <li key={id} className="flex items-center gap-2">
+                <Check className="h-4 w-4 text-primary shrink-0" aria-hidden="true" />
+                {intl.formatMessage({ id })}
+              </li>
+            ))}
+          </ul>
         </div>
         
         <div className="relative w-full max-w-xl mx-auto lg:mx-0">

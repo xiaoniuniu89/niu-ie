@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { FormattedMessage } from "react-intl";
 import { ContactForm } from "@/components/ContactForm";
-import { WebsiteSampleWizard } from "@/components/WebsiteSampleWizard";
+import { ProjectBriefForm } from "@/components/ProjectBriefForm";
 import { MessageSquare, Sparkles } from "lucide-react";
 
 function ContactModeSwitcherContent() {
@@ -69,7 +69,7 @@ function ContactModeSwitcherContent() {
 
       {/* Render Selected View */}
       <div className="transition-opacity duration-200">
-        {activeMode === "sample" ? <WebsiteSampleWizard /> : <ContactForm />}
+        {activeMode === "sample" ? <ProjectBriefForm /> : <ContactForm />}
       </div>
     </div>
   );

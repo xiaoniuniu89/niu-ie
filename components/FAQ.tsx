@@ -29,6 +29,14 @@ export function FAQ() {
       question: intl.formatMessage({ id: "faq.q4" }),
       answer: intl.formatMessage({ id: "faq.a4" }),
     },
+    {
+      question: intl.formatMessage({ id: "faq.q5" }),
+      answer: intl.formatMessage({ id: "faq.a5" }),
+    },
+    {
+      question: intl.formatMessage({ id: "faq.q6" }),
+      answer: intl.formatMessage({ id: "faq.a6" }),
+    },
   ], [intl]);
 
   return (
@@ -56,7 +64,7 @@ export function FAQ() {
               <AccordionTrigger className="bg-primary/[0.04] text-foreground hover:bg-primary/10 data-[state=open]:bg-primary data-[state=open]:text-primary-foreground px-6 py-4.5 hover:no-underline font-sans font-semibold text-base sm:text-lg transition-all text-left">
                 {item.question}
               </AccordionTrigger>
-              <AccordionContent className="px-6 py-5 font-sans text-sm sm:text-base text-foreground/85 leading-relaxed">
+              <AccordionContent className="px-6 py-5 font-sans text-sm sm:text-base text-foreground/85 leading-relaxed whitespace-pre-line">
                 {item.answer}
               </AccordionContent>
             </AccordionItem>

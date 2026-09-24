@@ -63,7 +63,11 @@ export const LocaleClientWrapper = ({
     const fileName = fileMap[locale] || "en";
     import(`@/locales/${fileName}.json`)
       .then((mod) => {
-        setMessages(mod.default as Record<string, string>);
+        // Fall back to English for keys not yet translated
+        setMessages({
+          ...(enMessages as Record<string, string>),
+          ...(mod.default as Record<string, string>),
+        });
       })
       .catch((err) => {
         console.error(`Failed to load locale file for ${locale}:`, err);

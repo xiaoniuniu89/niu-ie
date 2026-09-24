@@ -44,10 +44,10 @@ export function Header() {
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-6" aria-label="Main Navigation">
           <Link 
-            href="/" 
+            href="/#pricing" 
             className="font-condensed font-semibold text-sm tracking-wide text-foreground/85 hover:text-primary transition-colors py-1 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded"
           >
-            {intl.formatMessage({ id: "nav.home" })}
+            {intl.formatMessage({ id: "nav.pricing" })}
           </Link>
           <Link 
             href="/#services" 
@@ -87,7 +87,7 @@ export function Header() {
           <Button asChild size="sm" className="font-condensed font-semibold tracking-wide bg-primary text-primary-foreground hover:bg-primary/90 rounded-md">
             <Link href="/contact?mode=sample">
               <Sparkles className="w-3.5 h-3.5 mr-1 text-secondary" />
-              Request Sample
+              {intl.formatMessage({ id: "header.cta" })}
             </Link>
           </Button>
         </nav>
@@ -106,10 +106,10 @@ export function Header() {
                 <SheetTitle className="font-serif text-xl text-primary mb-6">Navigation</SheetTitle>
                 <nav className="flex flex-col gap-4">
                   <Link 
-                    href="/" 
+                    href="/#pricing" 
                     className="font-condensed font-semibold text-lg text-foreground hover:text-primary transition-colors py-1.5 border-b border-border/50"
                   >
-                    {intl.formatMessage({ id: "nav.home" })}
+                    {intl.formatMessage({ id: "nav.pricing" })}
                   </Link>
                   <Link 
                     href="/#services" 
@@ -148,12 +148,12 @@ export function Header() {
                 <Button asChild className="w-full font-condensed font-semibold bg-primary text-primary-foreground hover:bg-primary/90 rounded-md">
                   <Link href="/contact?mode=sample">
                     <Sparkles className="w-4 h-4 mr-2 text-secondary" />
-                    Request Free Website Sample
+                    {intl.formatMessage({ id: "hero.startProject" })}
                   </Link>
                 </Button>
                 <Button asChild variant="outline" className="w-full font-condensed font-semibold rounded-md">
                   <Link href="/contact?mode=inquiry">
-                    General Inquiry
+                    {intl.formatMessage({ id: "footer.inquiryBtn" })}
                   </Link>
                 </Button>
               </div>

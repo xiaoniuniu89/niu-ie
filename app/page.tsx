@@ -3,6 +3,7 @@ import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { Expertise } from "@/components/Expertise";
 import { Philosophy } from "@/components/Philosophy";
+import { Pricing } from "@/components/Pricing";
 import { GrantsBanner } from "@/components/GrantsBanner";
 import { FAQ } from "@/components/FAQ";
 import { Footer } from "@/components/Footer";
@@ -26,7 +27,7 @@ export default function Home() {
       "latitude": 53.5345,
       "longitude": -7.3392
     }, 
-    "priceRange": "$$",
+    "priceRange": "€64.99+",
     "openingHoursSpecification": {
       "@type": "OpeningHoursSpecification",
       "dayOfWeek": [
@@ -50,6 +51,7 @@ export default function Home() {
       <Hero />
       <Philosophy />
       <Expertise />
+      <Pricing />
       <GrantsBanner />
       <FAQ />
       <Footer />

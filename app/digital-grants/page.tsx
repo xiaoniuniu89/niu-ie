@@ -16,7 +16,7 @@ export default function DigitalGrantsPage() {
     "@type": "WebPage",
     "name": "Irish Government Digital Grants & Web Funding Guide",
     "url": "https://www.niu.ie/digital-grants",
-    "description": "Learn about the LEO Grow Digital Voucher (€5,000), Trading Online Voucher (€2,500), and free Digital for Business consultancy for web projects.",
+    "description": "What website grants are available in Ireland in 2026: the LEO Grow Digital Voucher, Digital for Business consultancy, and the closed Trading Online Voucher.",
     "publisher": {
       "@type": "ProfessionalService",
       "name": "Niu Web",
@@ -28,75 +28,74 @@ export default function DigitalGrantsPage() {
     {
       title: "Digital for Business",
       subtitle: "Free Consultancy",
-      amount: "100% Funded",
-      badge: "Prerequisite",
+      amount: "Free",
+      badge: "Step 1",
       badgeColor: "bg-accent/10 text-accent border border-accent/20",
-      description: "Get 2 to 3 days of fully-funded consultancy with an independent digital expert. They will audit your business, map out a digital roadmap, and prepare your formal applications.",
+      description: "Up to three days with an independent digital consultant, paid for by your Local Enterprise Office. They review your business and write a report recommending digital tools.",
       points: [
-        "Fully funded (No cost to your business)",
-        "Prepares you for the Grow Digital Voucher",
-        "Covers digital strategy, tools, and processes",
-        "Includes a completed Digital Assessment Report"
+        "No cost to your business",
+        "Required before applying for the Grow Digital Voucher",
+        "Covers digital strategy, tools and processes",
+        "Ends with a written recommendations report"
       ],
-      cta: "Required First Step"
-    },
-    {
-      title: "Trading Online Voucher",
-      subtitle: "LEO TOV Grant",
-      amount: "Up to €2,500",
-      badge: "50% Co-Funded",
-      badgeColor: "bg-primary/10 text-primary border border-primary/20",
-      description: "The traditional Local Enterprise Office grant designed to help small businesses establish or expand their online trading capabilities through new websites or upgraded e-commerce.",
-      points: [
-        "Co-funds up to 50% of eligible costs",
-        "Ideal for e-commerce, bookings, & payments",
-        "Supports SEO, digital marketing, & training",
-        "Check local LEO for county availability"
-      ],
-      cta: "Best for E-Commerce"
+      cta: "Required first step"
     },
     {
       title: "Grow Digital Voucher",
-      subtitle: "Advanced Digital Support",
+      subtitle: "LEO Grant",
       amount: "Up to €5,000",
       badge: "50% Co-Funded",
       badgeColor: "bg-secondary/10 text-secondary border border-secondary/20",
-      description: "The new national voucher program replacing older schemes in many areas. Focuses on introducing advanced software tools, custom customer management (CRM), and cloud subscriptions.",
+      description: "Co-funds new software subscriptions and related training or setup, based on your Digital for Business report. It does not fund bespoke (custom-built) website development.",
       points: [
-        "Grants from €500 to €5,000",
-        "Co-funds 50% of eligible investment",
-        "Requires completing Digital for Business first",
-        "Covers business tools, APIs, & custom workflows"
+        "Grants from €500 to €5,000 at 50%",
+        "Up to 50 employees, trading 6+ months",
+        "Covers new software subscriptions (up to 1 year), training and configuration",
+        "Custom-built websites are not eligible"
       ],
-      cta: "Best for Software & Tools"
+      cta: "Best for software & tools"
+    },
+    {
+      title: "Trading Online Voucher",
+      subtitle: "Closed",
+      amount: "No longer available",
+      badge: "Closed Dec 2024",
+      badgeColor: "bg-muted text-muted-foreground border border-border",
+      description: "The old €2,500 website grant closed to new applications on 13 December 2024. Some websites and blogs still advertise it; it is not available.",
+      points: [
+        "No new applications accepted",
+        "Replaced by Digital for Business and the Grow Digital Voucher",
+        "Check localenterprise.ie for any new schemes"
+      ],
+      cta: "Closed"
     }
   ];
 
   const timelineSteps = [
     {
       step: "01",
-      title: "Complete LEO Digital Assessment",
-      description: "Apply for the free 'Digital for Business' scheme. A consultant works with you to audit your technology and issue an official assessment report, which is required for the larger €5,000 voucher."
+      title: "Contact your Local Enterprise Office",
+      description: "Ask what your LEO currently offers and whether your project could qualify. Schemes and budgets change, so check before planning around a grant."
     },
     {
       step: "02",
-      title: "Get a Custom Quote & Spec",
-      description: "We work together to design a project specification tailored to your business needs (e.g. Next.js performance website, Keystatic CMS integration, custom CRM links) and issue a formal quote."
+      title: "Complete Digital for Business",
+      description: "A funded consultant reviews your business and writes a report. The Grow Digital Voucher can only fund tools recommended in that report."
     },
     {
       step: "03",
-      title: "Submit Your Application",
-      description: "Log in to your local Local Enterprise Office (LEO) portal and submit your quote, project specification, and digital assessment report."
+      title: "Get quotes for eligible costs",
+      description: "Grow Digital covers software subscriptions, training and configuration, not custom website builds. We can tell you which parts of a project are likely to qualify."
     },
     {
       step: "04",
       title: "Wait for the Letter of Offer",
-      description: "Your local LEO reviews the application. Once approved, they issue an official Letter of Offer. You must wait for this letter before any work starts."
+      description: "Your LEO reviews the application. Don't pay a deposit or start work until you have the Letter of Offer, or those costs can't be claimed."
     },
     {
       step: "05",
-      title: "Launch & Claim",
-      description: "We build and launch your project. You pay the invoice in full, then submit proof of payment and work completion to your LEO to receive your 50% cash grant refund."
+      title: "Pay, then claim",
+      description: "Pay the eligible costs in full, then submit proof of payment to your LEO to claim the 50% grant."
     }
   ];
 
@@ -308,7 +307,7 @@ export default function DigitalGrantsPage() {
             className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-md px-8 h-12 font-condensed font-semibold text-base shadow-xs"
           >
             <Link href="/contact?mode=sample">
-              Request Sample & Grant Advice
+              Start Your Website
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>

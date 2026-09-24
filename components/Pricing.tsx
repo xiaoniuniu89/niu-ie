@@ -6,8 +6,8 @@ import Link from "next/link";
 import { useIntl } from "react-intl";
 
 const steps = [
-  { id: "setup", label: "pricing.step1", features: 5, href: "/contact?mode=sample", primary: true },
-  { id: "hourly", label: "pricing.step2", features: 5, href: "/contact?mode=inquiry", primary: false },
+  { id: "setup", label: "pricing.step1", features: 3, href: "/contact?mode=sample", primary: true },
+  { id: "hourly", label: "pricing.step2", features: 4, href: "/contact?mode=inquiry", primary: false },
 ];
 
 export function Pricing() {
@@ -67,11 +67,6 @@ export function Pricing() {
             </li>
           ))}
         </ol>
-
-        <div className="max-w-3xl mx-auto mt-8 space-y-3 text-center font-sans text-sm sm:text-base text-foreground/80 leading-relaxed">
-          <p>{t("pricing.example")}</p>
-          <p>{t("pricing.note")}</p>
-        </div>
       </div>
     </section>
   );

@@ -3,7 +3,7 @@
 import { Check } from "lucide-react";
 import { useIntl } from "react-intl";
 
-const items = ["why.i1", "why.i2", "why.i3", "why.i4", "why.i5", "why.i6"];
+const items = ["why.i1", "why.i2", "why.i3", "why.i4"];
 
 export function WhyNiu() {
   const intl = useIntl();

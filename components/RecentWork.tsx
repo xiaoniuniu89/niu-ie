@@ -8,7 +8,6 @@ import { useIntl } from "react-intl";
 const sites = [
   { id: "cj", image: "/cjsstrengthandfitness.webp", url: "https://www.cjsstrengthfitness.com/" },
   { id: "cc", image: "/ccpiano.webp", url: "https://www.ccpiano.ie" },
-  { id: "bella", image: "/bellarosebright.webp", url: "https://www.bellarosebright.com/" },
 ];
 
 export function RecentWork() {
@@ -32,26 +31,22 @@ export function RecentWork() {
           </Link>
         </div>
 
-        <ul className="grid gap-10 lg:grid-cols-2 lg:grid-rows-2 lg:gap-x-10 lg:gap-y-8">
-          {sites.map((site, index) => (
-            <li key={site.id} className={index === 0 ? "lg:row-span-2 lg:flex" : undefined}>
+        <ul className="grid gap-10 md:grid-cols-2 md:gap-8 lg:gap-10">
+          {sites.map((site) => (
+            <li key={site.id}>
               <a
                 href={site.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group flex flex-col w-full rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-secondary"
               >
-                <div
-                  className={`relative w-full overflow-hidden rounded-lg bg-background/5 ring-1 ring-background/10 ${
-                    index === 0 ? "aspect-[16/10] lg:aspect-auto lg:flex-1 lg:min-h-[20rem]" : "aspect-[16/9]"
-                  }`}
-                >
+                <div className="relative w-full aspect-[16/10] overflow-hidden rounded-lg bg-black ring-1 ring-background/10">
                   <Image
                     src={site.image}
                     alt={t(`portfolio.${site.id}.title`)}
                     fill
                     sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="object-cover object-top"
+                    className="object-contain"
                   />
                 </div>
                 <div className="flex items-start justify-between gap-4 pt-4">

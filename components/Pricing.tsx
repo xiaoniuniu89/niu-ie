@@ -17,7 +17,7 @@ export function Pricing() {
   return (
     <section id="pricing" className="py-20 sm:py-24 bg-background border-b border-border/60">
       <div className="container mx-auto px-4 md:px-8">
-        <div className="max-w-2xl mb-12">
+        <div className="max-w-2xl mx-auto mb-12 text-center">
           <h2 className="font-serif text-3xl sm:text-5xl text-primary tracking-tight text-balance">
             {t("pricing.title")}
           </h2>
@@ -26,7 +26,7 @@ export function Pricing() {
           </p>
         </div>
 
-        <ol className="grid md:grid-cols-2 max-w-5xl rounded-xl border border-border bg-card overflow-hidden">
+        <ol className="grid md:grid-cols-2 max-w-5xl mx-auto rounded-xl border border-border bg-card overflow-hidden">
           {steps.map((step, index) => (
             <li
               key={step.id}
@@ -68,7 +68,7 @@ export function Pricing() {
           ))}
         </ol>
 
-        <div className="max-w-3xl mt-8 space-y-3 font-sans text-sm sm:text-base text-foreground/80 leading-relaxed">
+        <div className="max-w-3xl mx-auto mt-8 space-y-3 text-center font-sans text-sm sm:text-base text-foreground/80 leading-relaxed">
           <p>{t("pricing.example")}</p>
           <p>{t("pricing.note")}</p>
         </div>

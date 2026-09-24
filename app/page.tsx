@@ -1,8 +1,9 @@
 import Script from "next/script";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
-import { Expertise } from "@/components/Expertise";
-import { Philosophy } from "@/components/Philosophy";
+import { RecentWork } from "@/components/RecentWork";
+import { WhyNiu } from "@/components/WhyNiu";
+import { Founder } from "@/components/Founder";
 import { Pricing } from "@/components/Pricing";
 import { GrantsBanner } from "@/components/GrantsBanner";
 import { FAQ } from "@/components/FAQ";
@@ -49,11 +50,12 @@ export default function Home() {
       </Script>
       <Header />
       <Hero />
-      <Philosophy />
-      <Expertise />
+      <RecentWork />
+      <WhyNiu />
       <Pricing />
-      <GrantsBanner />
+      <Founder />
       <FAQ />
+      <GrantsBanner />
       <Footer />
     </main>
   );

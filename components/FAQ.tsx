@@ -43,9 +43,6 @@ export function FAQ() {
     <section id="faq" className="py-20 bg-background border-b border-border/60">
       <div className="container mx-auto px-4 md:px-8 max-w-3xl">
         <div className="text-center mb-14 space-y-3">
-          <div className="text-xs font-condensed font-semibold uppercase tracking-wider text-secondary-text">
-            Got Questions?
-          </div>
           <h2 className="font-serif text-3xl sm:text-5xl text-primary tracking-tight">
             {intl.formatMessage({ id: "faq.title" })}
           </h2>

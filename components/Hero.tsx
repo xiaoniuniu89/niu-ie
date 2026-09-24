@@ -19,7 +19,7 @@ export function Hero() {
           <div className="flex flex-col">
             <h1 className="font-serif text-5xl md:text-7xl leading-tight text-primary">
               {intl.formatMessage({ id: "hero.title1" })}{" "}
-              <span className="text-secondary block">
+              <span className="text-secondary-text block">
                 {intl.formatMessage({ id: "hero.title2" })}
               </span>
             </h1>
@@ -54,7 +54,7 @@ export function Hero() {
           </ul>
         </div>
         
-        <div className="relative w-full max-w-xl mx-auto lg:mx-0">
+        <div className="relative w-full max-w-xl mx-auto lg:mx-0 hidden lg:block">
           <div className="absolute -inset-10 bg-secondary/10 blur-3xl rounded-full opacity-50" />
           <div className="absolute top-[-10%] right-[-5%] w-[80%] opacity-[0.03] -rotate-12 pointer-events-none">
             <Image 
@@ -68,7 +68,7 @@ export function Hero() {
           <div className="relative">
             <Image 
               src={imgImageNiuAgencyBull} 
-              alt={intl.formatMessage({ id: "hero.bullAlt", defaultMessage: "Niu Agency Bull Illustration" })} 
+              alt={intl.formatMessage({ id: "hero.bullAlt", defaultMessage: "Niu Web bull logo" })} 
               width={600}
               height={357}
               priority

@@ -34,11 +34,10 @@ export function Footer({ showCTA = true }: FooterProps) {
         )}
         
         <div className="border-t border-border pt-10">
-          <h4 className="font-condensed font-semibold uppercase tracking-wider text-xs text-muted-foreground mb-4 text-center md:text-left">
+          <p className="font-condensed font-semibold uppercase tracking-wider text-xs text-muted-foreground mb-4 text-center md:text-left">
             {intl.formatMessage({ id: "footer.sitemap" })}
-          </h4>
+          </p>
           <ul className="flex flex-wrap gap-x-8 gap-y-2.5 font-condensed font-medium text-sm text-muted-foreground justify-center md:justify-start">
-            <li><Link href="/#about" className="hover:text-primary transition-colors">{intl.formatMessage({ id: "nav.values" })}</Link></li>
             <li><Link href="/#pricing" className="hover:text-primary transition-colors">{intl.formatMessage({ id: "nav.pricing" })}</Link></li>
             <li><Link href="/#services" className="hover:text-primary transition-colors">{intl.formatMessage({ id: "nav.services" })}</Link></li>
             <li><Link href="/process" className="hover:text-primary transition-colors">{intl.formatMessage({ id: "nav.process" })}</Link></li>

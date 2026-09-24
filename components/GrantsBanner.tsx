@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from "@/components/ui/button";
-import { ArrowRight, BadgeCheck } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useIntl } from "react-intl";
 
@@ -11,10 +11,6 @@ export function GrantsBanner() {
   return (
     <section className="bg-primary/[0.05] py-16 sm:py-20 border-y border-primary/15">
       <div className="container mx-auto px-4 md:px-8 max-w-3xl text-center space-y-6">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary border border-primary/20 text-xs font-condensed font-semibold tracking-wider uppercase">
-          <BadgeCheck className="h-4 w-4 text-primary" />
-          {intl.formatMessage({ id: "grants.bannerBadge" })}
-        </div>
         <h2 className="font-serif text-3xl sm:text-5xl text-primary tracking-tight">
           {intl.formatMessage({ id: "grants.bannerTitle" })}
         </h2>

@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { requireUser } from "@/lib/portal/auth";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { RequestDialog } from "@/components/portal/RequestForms";
 
 const STATUS_LABEL: Record<string, string> = {
   planning: "Planning",
@@ -61,6 +63,19 @@ export default async function OverviewPage() {
                     <ProjectLink label="Code on GitHub" href={project.repo ? `https://github.com/${project.repo}` : null} />
                   </ul>
                 </CardContent>
+                <CardFooter className="flex flex-wrap items-center gap-3">
+                  {project.repo && (
+                    <RequestDialog
+                      projectId={project.id}
+                      clientId={client.id}
+                      liveUrl={project.live_url}
+                      trigger={<Button size="sm">Report an issue</Button>}
+                    />
+                  )}
+                  <Button asChild size="sm" variant="outline">
+                    <Link href={`/portal/projects/${project.id}`}>View requests</Link>
+                  </Button>
+                </CardFooter>
               </Card>
             ))}
           </div>

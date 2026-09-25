@@ -13,6 +13,23 @@ export const REQUEST_STATUS_LABEL: Record<RequestStatus, string> = {
   cancelled: "Cancelled",
 };
 
+export type PortalRequest = {
+  id: string;
+  type: string;
+  title: string;
+  page_url: string | null;
+  current: string;
+  expected: string;
+  created_at: string;
+  status: RequestStatus | null;
+  request_files: { id: string; filename: string; mime: string }[];
+};
+
+export type RequestsResponse = { requests: PortalRequest[]; statusError: boolean };
+
+// SWR key for a project's request list. Mutate it after creating, editing or cancelling.
+export const requestsKey = (projectId: string) => `/portal/api/projects/${projectId}/requests`;
+
 export const MAX_FILES = 5;
 export const MAX_FILE_BYTES = 10 * 1024 * 1024;
 export const FILE_ACCEPT = "image/png,image/jpeg,image/webp,image/gif,application/pdf";

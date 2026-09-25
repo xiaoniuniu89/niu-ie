@@ -48,10 +48,16 @@ export default async function OverviewPage() {
               <p className="text-muted-foreground">No projects linked yet.</p>
             )}
             {client.projects.map((project) => (
-              <Card key={project.id}>
+              // The title link stretches over the whole card; links and buttons inside sit above it.
+              <Card
+                key={project.id}
+                className="relative cursor-pointer transition-colors hover:border-primary/60 focus-within:border-primary/60"
+              >
                 <CardHeader>
                   <CardTitle className="flex items-center justify-between gap-2">
-                    {project.name}
+                    <Link href={`/portal/projects/${project.id}`} className="after:absolute after:inset-0 after:rounded-lg focus:outline-none">
+                      {project.name}
+                    </Link>
                     <Badge variant="secondary">{STATUS_LABEL[project.status] ?? project.status}</Badge>
                   </CardTitle>
                   <CardDescription>Your website and where it lives.</CardDescription>
@@ -68,11 +74,10 @@ export default async function OverviewPage() {
                     <RequestDialog
                       projectId={project.id}
                       clientId={client.id}
-                      liveUrl={project.live_url}
-                      trigger={<Button size="sm">Report an issue</Button>}
+                      trigger={<Button size="sm" className="relative z-10">Report an issue</Button>}
                     />
                   )}
-                  <Button asChild size="sm" variant="outline">
+                  <Button asChild size="sm" variant="outline" className="relative z-10">
                     <Link href={`/portal/projects/${project.id}`}>View requests</Link>
                   </Button>
                 </CardFooter>
@@ -90,7 +95,7 @@ function ProjectLink({ label, href }: { label: string; href: string | null }) {
     <li className="flex justify-between gap-4">
       <span className="text-muted-foreground">{label}</span>
       {href ? (
-        <a href={href} target="_blank" rel="noopener noreferrer" className="truncate text-primary underline-offset-4 hover:underline">
+        <a href={href} target="_blank" rel="noopener noreferrer" className="relative z-10 truncate text-primary underline-offset-4 hover:underline">
           {href.replace(/^https?:\/\//, "")}
         </a>
       ) : (

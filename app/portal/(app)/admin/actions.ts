@@ -182,24 +182,6 @@ export async function removeMemberAction(_: ActionState, formData: FormData): Pr
   return { ok: true, message: "Removed." };
 }
 
-const passwordSchema = z
-  .object({
-    password: z.string().min(10, "Use at least 10 characters."),
-    confirm: z.string(),
-  })
-  .refine((v) => v.password === v.confirm, "Passwords don't match.");
-
-export async function setPasswordAction(_: ActionState, formData: FormData): Promise<ActionState> {
-  const { supabase } = await requireAdmin();
-  const parsed = passwordSchema.safeParse(Object.fromEntries(formData));
-  if (!parsed.success) return { ok: false, message: parsed.error.issues[0].message };
-
-  const { error } = await supabase.auth.updateUser({ password: parsed.data.password });
-  if (error) return { ok: false, message: error.message };
-
-  return { ok: true, message: "Password saved. You can now sign in with it." };
-}
-
 async function sendInviteEmail(to: string, businessName: string, loginUrl: string) {
   const transporter = nodemailer.createTransport({
     service: "gmail",

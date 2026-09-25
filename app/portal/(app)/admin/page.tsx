@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { requireAdmin } from "@/lib/portal/auth";
-import { NewClientForm, PasswordForm } from "@/components/portal/AdminForms";
+import { NewClientForm } from "@/components/portal/AdminForms";
 
 export default async function AdminPage() {
   const { supabase } = await requireAdmin();
@@ -47,14 +47,6 @@ export default async function AdminPage() {
       <section className="max-w-sm rounded-lg border border-border bg-card p-4">
         <h2 className="mb-3 font-semibold">New client</h2>
         <NewClientForm />
-      </section>
-
-      <section className="max-w-sm rounded-lg border border-border bg-card p-4">
-        <h2 className="font-semibold">Your password</h2>
-        <p className="mb-3 mt-1 text-sm text-muted-foreground">
-          Lets you sign in with a password instead of waiting for an email.
-        </p>
-        <PasswordForm />
       </section>
     </div>
   );

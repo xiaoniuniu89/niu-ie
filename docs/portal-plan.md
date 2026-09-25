@@ -38,7 +38,7 @@ Working notes:
 
 - Public signups disabled in Supabase. Admin creates the user (secret key) and sends an invite email from Gmail pointing to `/portal/login`.
 - Login email carries a **6-digit code plus link**. Outlook/Hotmail link scanners can consume one-time links; the code is the fallback.
-- Clients: no passwords. Admins can set one on `/portal/admin` and use "Sign in with a password" on the login page, so admin logins don't use up the email limit.
+- Clients: no passwords. Admin passwords are set in the Supabase dashboard; admins sign in at `/niu-admin` (unlinked, noindex, rejects non-admins), so admin logins don't use up the email limit.
 - Custom SMTP (e.g. Resend) — Supabase default email is rate-limited and only reaches team members. Not set up yet.
 
 ## Data model

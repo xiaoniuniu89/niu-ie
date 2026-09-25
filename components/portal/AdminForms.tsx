@@ -7,7 +7,6 @@ import {
   deleteProjectAction,
   inviteMemberAction,
   removeMemberAction,
-  setPasswordAction,
   updateClientAction,
   updateProjectAction,
   type ActionState,
@@ -126,15 +125,6 @@ export function DeleteProjectButton({ clientId, projectId, name }: { clientId: s
     >
       <input type="hidden" name="clientId" value={clientId} />
       <input type="hidden" name="projectId" value={projectId} />
-    </ActionForm>
-  );
-}
-
-export function PasswordForm() {
-  return (
-    <ActionForm action={setPasswordAction} submit="Save password" resetOnSuccess>
-      <Field name="password" label="New password" type="password" autoComplete="new-password" required minLength={10} />
-      <Field name="confirm" label="Repeat password" type="password" autoComplete="new-password" required />
     </ActionForm>
   );
 }

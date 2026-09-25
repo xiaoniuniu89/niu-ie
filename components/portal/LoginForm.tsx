@@ -11,8 +11,7 @@ export function LoginForm() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
-  const [password, setPassword] = useState("");
-  const [step, setStep] = useState<"email" | "code" | "password">("email");
+  const [step, setStep] = useState<"email" | "code">("email");
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -50,62 +49,6 @@ export function LoginForm() {
     }
     router.push("/portal");
     router.refresh();
-  }
-
-  async function signInWithPassword(e: React.FormEvent) {
-    e.preventDefault();
-    setPending(true);
-    setError(null);
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    setPending(false);
-    if (error) {
-      setError(error.status === 429 ? "Too many attempts. Wait a minute and try again." : "Wrong email or password.");
-      return;
-    }
-    router.push("/portal");
-    router.refresh();
-  }
-
-  function switchStep(next: "email" | "password") {
-    setError(null);
-    setStep(next);
-  }
-
-  if (step === "password") {
-    return (
-      <form onSubmit={signInWithPassword} className="mt-6 space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            autoComplete="email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
-          <Input
-            id="password"
-            type="password"
-            autoComplete="current-password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        {error && <p className="text-sm text-destructive">{error}</p>}
-        <Button type="submit" className="w-full" disabled={pending}>
-          {pending ? "Signing in…" : "Sign in"}
-        </Button>
-        <button type="button" onClick={() => switchStep("email")} className="text-sm text-muted-foreground underline">
-          Email me a sign-in link instead
-        </button>
-      </form>
-    );
   }
 
   if (step === "code") {
@@ -154,9 +97,6 @@ export function LoginForm() {
       <Button type="submit" className="w-full" disabled={pending}>
         {pending ? "Sending…" : "Email me a sign-in link"}
       </Button>
-      <button type="button" onClick={() => switchStep("password")} className="text-sm text-muted-foreground underline">
-        Sign in with a password
-      </button>
     </form>
   );
 }

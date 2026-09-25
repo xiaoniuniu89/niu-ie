@@ -24,7 +24,7 @@ Blocked until Resend is set up (deferred):
 
 Working notes:
 - Supabase CLI detects agents and forces JSON output. Always pass `--agent no`. Run SQL with `npx supabase db query --linked --agent no "<sql>"`.
-- Next phase: 2, notifications. Email can use Gmail temporarily and switch to Resend later.
+- Next: requests (issue reporting), phase R1. Notifications are on hold until we decide what we want.
 
 ## Stack
 
@@ -86,12 +86,32 @@ RLS: users see only rows for their client. Admin sees all. UploadThing route che
 - Out of scope: video hosting on the client's own site.
 
 ### 5. Requests → GitHub issues
-- Guided form, one question per screen: which page, what happens now, what should happen, screenshot/asset (optional).
-- AI tidy step rewrites into structured issue: title, current behaviour, expected behaviour, acceptance criteria, file hints. Client previews in plain English, then submits.
-- AI classifies `simple` (copy, image swap, colour, add item) vs `complex`.
-- Creates GitHub issue, labels, assigns to Daniel, emails Daniel.
-- GitHub webhook syncs status back (open / in progress / preview ready / done); emails client on change.
-- Asset links in issues are signed URLs, never public.
+
+Clients struggle to describe what they want. Built in phases, each producing the same thing: a well-structured GitHub issue on the client's project repo.
+
+**R1 — Simple form (next)**
+- "Report an issue" button on the overview, per project. Modal form: type (`change` | `bug` | `question`), title, page URL, what happens now, what should happen, optional screenshots.
+- Any signed-in member can submit for their own client's projects.
+- Server action writes a `requests` row, then creates the issue on `projects.repo` with a fixed template (Description, Current behaviour, Expected behaviour, Page, Attachments), label `portal`, assigned to Daniel.
+- GitHub auth: fine-grained token (`GITHUB_TOKEN`, server only) with Issues read/write on client repos. GitHub App later (see build order).
+- Screenshots: private Supabase Storage bucket. The issue links to `/portal/files/[id]`, which checks the session and redirects to a fresh signed URL, so links never expire and files are never public. Images show inline in the portal, as links in GitHub.
+- Requests list per project: status read from the GitHub issue on page load (open, `in-progress` label, closed = done). No webhook yet.
+- Client can edit a request (updates the issue body) or cancel it (closes the issue) until it is in progress.
+
+**R2 — AI chat**
+- Client describes the problem in a chat. AI asks follow-up questions until the request is clear, then drafts the issue: description, current and expected behaviour, work to be done, acceptance criteria.
+- Client previews in plain English, then submits. Replaces the R1 form; R1 stays as the fallback.
+
+**R3 — Click-to-report overlay**
+- Small script added to each client site, inactive unless opened from the portal with a signed, short-lived token (e.g. `?niu-feedback=`). Cross-origin iframes can't read the page, so the script runs on the site itself.
+- Client clicks an element; script captures selector, text, page URL and a screenshot, and hands them to the R2 chat.
+- Safety: token verified server-side, script does nothing without it, no data sent without a signed-in portal session.
+
+**R4 — Client's own AI** (parked)
+- Open: which repo their agent works on, guardrails, relation to agent changes (section 6).
+
+**Later: billing and quotes**
+- Quote or estimate before work starts, and possibly charge for AI token use by a Niu-run agent. Undecided; not billing clients through the portal yet.
 
 ### 6. Agent changes
 - `simple` + `agent-ok` label triggers Claude Code Action: PR opened, Vercel preview built.
@@ -134,11 +154,13 @@ Later: per-client progress tick-off.
 
 0. ~~Remove old Clerk portal~~ (done)
 1. ~~Foundation: Supabase, invite + code login, schema + RLS, admin invite, overview~~ (done; code login waits on Resend)
-2. Notifications (in-app + email) — shared by everything after
+2. Requests R1: simple form → GitHub issue, attachments, status, edit/cancel
 3. Tasks + templates + domain choice + Stripe payment tasks
 4. Assets
-5. Requests → issues + AI tidy + status sync + emails
+5. Requests R2 (AI chat) and R3 (click-to-report overlay)
 6. Agent changes
 7. Guides
 8. Transfer flow
-9. (Maybe) BYO AI
+9. (Maybe) BYO AI (R4)
+
+Unscheduled: notifications (on hold), GitHub App to replace the token, billing and quotes.

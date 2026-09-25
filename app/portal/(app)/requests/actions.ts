@@ -1,15 +1,12 @@
 "use server";
 
 import { headers } from "next/headers";
-import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireUser } from "@/lib/portal/auth";
 import { cancelIssue, createIssue, getIssue, issueStatus, updateIssue } from "@/lib/portal/github";
 import { FILE_ACCEPT, MAX_FILE_BYTES, MAX_FILES, issueBody } from "@/lib/portal/requests";
 
 export type ActionState = { ok: boolean; message: string } | null;
-
-const projectPath = (id: string) => `/portal/projects/${id}`;
 
 const fieldsSchema = z.object({
   type: z.enum(["change", "bug", "question"]),
@@ -97,7 +94,6 @@ export async function createRequestAction(_: ActionState, formData: FormData): P
     return { ok: false, message: "Your request reached Daniel, but we couldn't save it here." };
   }
 
-  revalidatePath(projectPath(project.id));
   return { ok: true, message: "Request sent." };
 }
 
@@ -106,7 +102,7 @@ async function loadOpenRequest(requestId: string) {
   const ctx = await requireUser();
   const { data: request } = await ctx.supabase
     .from("requests")
-    .select("id, project_id, gh_issue_number, projects (repo), request_files (id, filename)")
+    .select("id, gh_issue_number, projects (repo), request_files (id, filename)")
     .eq("id", requestId)
     .maybeSingle();
   // No generated DB types, so the many-to-one join is typed as an array; it is one row.
@@ -148,7 +144,6 @@ export async function updateRequestAction(_: ActionState, formData: FormData): P
       .eq("id", requestId);
     if (error) throw error;
 
-    revalidatePath(projectPath(request.project_id));
     return { ok: true, message: "Saved." };
   } catch (e) {
     console.error(e);
@@ -164,7 +159,6 @@ export async function cancelRequestAction(_: ActionState, formData: FormData): P
     const loaded = await loadOpenRequest(parsed.data.requestId);
     if (!loaded.ok) return { ok: false, message: loaded.error };
     await cancelIssue(loaded.repo, loaded.issueNumber, loaded.user.email ?? "the client");
-    revalidatePath(projectPath(loaded.request.project_id));
     return { ok: true, message: "Cancelled." };
   } catch (e) {
     console.error(e);

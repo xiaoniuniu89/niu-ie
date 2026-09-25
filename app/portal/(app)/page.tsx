@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { RequestDialog } from "@/components/portal/RequestForms";
+import { ProjectCardLink } from "@/components/portal/ProjectCardLink";
 
 const STATUS_LABEL: Record<string, string> = {
   planning: "Planning",
@@ -55,9 +56,9 @@ export default async function OverviewPage() {
               >
                 <CardHeader>
                   <CardTitle className="flex items-center justify-between gap-2">
-                    <Link href={`/portal/projects/${project.id}`} className="after:absolute after:inset-0 after:rounded-lg focus:outline-none">
+                    <ProjectCardLink projectId={project.id} hasRepo={Boolean(project.repo)}>
                       {project.name}
-                    </Link>
+                    </ProjectCardLink>
                     <Badge variant="secondary">{STATUS_LABEL[project.status] ?? project.status}</Badge>
                   </CardTitle>
                   <CardDescription>Your website and where it lives.</CardDescription>

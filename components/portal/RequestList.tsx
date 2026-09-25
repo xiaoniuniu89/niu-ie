@@ -1,7 +1,7 @@
 "use client";
 
 import useSWR from "swr";
-import { REQUEST_STATUS_LABEL, REQUEST_TYPES, requestsKey, type RequestsResponse } from "@/lib/portal/requests";
+import { REQUEST_STATUS_LABEL, REQUEST_TYPES, fetchRequests, requestsKey } from "@/lib/portal/requests";
 import type { RequestStatus } from "@/lib/portal/github";
 import { CancelRequestButton, RequestDialog } from "@/components/portal/RequestForms";
 import { Badge } from "@/components/ui/badge";
@@ -15,14 +15,8 @@ const STATUS_VARIANT: Record<RequestStatus, "default" | "secondary" | "outline">
   cancelled: "outline",
 };
 
-async function fetcher(url: string): Promise<RequestsResponse> {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`${url} failed: ${res.status}`);
-  return res.json();
-}
-
 export function RequestList({ projectId, clientId }: { projectId: string; clientId: string }) {
-  const { data, error, isLoading } = useSWR(requestsKey(projectId), fetcher);
+  const { data, error, isLoading } = useSWR(requestsKey(projectId), fetchRequests);
 
   if (isLoading) return <p className="text-muted-foreground">Loading requests…</p>;
   if (error || !data) return <p className="text-sm text-destructive">Couldn&apos;t load your requests. Refresh to try again.</p>;

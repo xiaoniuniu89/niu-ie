@@ -30,6 +30,12 @@ export type RequestsResponse = { requests: PortalRequest[]; statusError: boolean
 // SWR key for a project's request list. Mutate it after creating, editing or cancelling.
 export const requestsKey = (projectId: string) => `/portal/api/projects/${projectId}/requests`;
 
+export async function fetchRequests(url: string): Promise<RequestsResponse> {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`${url} failed: ${res.status}`);
+  return res.json();
+}
+
 export const MAX_FILES = 5;
 export const MAX_FILE_BYTES = 10 * 1024 * 1024;
 export const FILE_ACCEPT = "image/png,image/jpeg,image/webp,image/gif,application/pdf";

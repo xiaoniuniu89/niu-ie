@@ -44,7 +44,11 @@ export function RequestChat({ projectId, kind }: { projectId: string; kind: Requ
   const [pill, setPill] = useState<Pill>(null);
   const bottom = useRef<HTMLDivElement>(null);
 
-  useEffect(() => bottom.current?.scrollIntoView({ block: "end" }), [messages, pending, error]);
+  // Braces matter: newer browsers return a Promise from scrollIntoView, and React would
+  // call an effect's return value as its cleanup.
+  useEffect(() => {
+    bottom.current?.scrollIntoView({ block: "end" });
+  }, [messages, pending, error, ended]);
 
   useEffect(() => {
     if (!pill) return;

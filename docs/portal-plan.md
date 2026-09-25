@@ -2,6 +2,30 @@
 
 Invite-only portal at `niu.ie/portal` for small business clients: see their project, hand over assets, and request changes without needing to know GitHub.
 
+## Status (2026-09-25)
+
+**Phase 1 is live on www.niu.ie** (commit `1745b01`, on `main`).
+
+Done:
+- Supabase project `rqojpnghptwdqogjvuke` (EU), CLI linked. Public signups off.
+- Migration `supabase/migrations/20260925000000_foundation.sql`: `admins`, `clients`, `members`, `projects` with RLS (`is_admin()`, `is_member()`).
+- `proxy.ts` (Next 16 middleware) runs on `/portal/*` only; signed-out users go to `/portal/login`.
+- Login: email, then link or code (`components/portal/LoginForm.tsx`). `app/portal/auth/confirm/route.ts` accepts both `?code=` (default template) and `?token_hash=` (custom template).
+- Overview (`app/portal/(app)/page.tsx`): live site, preview and GitHub links per project.
+- Admin (`app/portal/(app)/admin/`): create client, link project, invite person. Invite creates the Supabase user with the secret key and sends a Gmail email pointing to `/portal/login`.
+- "Client login" button in the site header (all 11 locales).
+- Vercel has the Supabase env vars. Supabase redirect URLs cover localhost, niu.ie and www.niu.ie.
+- `niuwebdev@gmail.com` is the admin.
+
+Blocked until Resend is set up (deferred):
+- Supabase still uses its default SMTP, which only emails Supabase team members. **Real clients can't receive login emails yet.**
+- Custom email templates (6-digit code plus link) need custom SMTP.
+- To do: verify `niu.ie` in Resend, set Supabase Auth SMTP (`smtp.resend.com`, port 465, user `resend`, password = API key, sender `portal@niu.ie`), apply templates, add `RESEND_API_KEY` to `.env.local` and Vercel.
+
+Working notes:
+- Supabase CLI detects agents and forces JSON output. Always pass `--agent no`. Run SQL with `npx supabase db query --linked --agent no "<sql>"`.
+- Next phase: 2, notifications. Email can use Gmail temporarily and switch to Resend later.
+
 ## Stack
 
 - **App:** this repo (niu-ie), under `/portal`. Portal code lives in `app/portal/`, `components/portal/`, `lib/portal/`.
@@ -15,7 +39,7 @@ Invite-only portal at `niu.ie/portal` for small business clients: see their proj
 - Public signups disabled in Supabase. Admin creates the user (secret key) and sends an invite email from Gmail pointing to `/portal/login`.
 - Login email carries a **6-digit code plus link**. Outlook/Hotmail link scanners can consume one-time links; the code is the fallback.
 - No passwords.
-- Custom SMTP (e.g. Resend) — Supabase default email is rate-limited.
+- Custom SMTP (e.g. Resend) — Supabase default email is rate-limited and only reaches team members. Not set up yet.
 
 ## Data model
 
@@ -109,7 +133,7 @@ Later: per-client progress tick-off.
 ## Build order
 
 0. ~~Remove old Clerk portal~~ (done)
-1. Foundation: Supabase, invite + code login, schema + RLS, admin invite, overview
+1. ~~Foundation: Supabase, invite + code login, schema + RLS, admin invite, overview~~ (done; code login waits on Resend)
 2. Notifications (in-app + email) — shared by everything after
 3. Tasks + templates + domain choice + Stripe payment tasks
 4. Assets

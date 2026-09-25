@@ -2,10 +2,10 @@ import "server-only";
 import { z } from "zod";
 import type { RequestKind } from "@/lib/portal/requests";
 
-// gpt-4.1-mini: cheap, follows instructions well, and isn't a reasoning model, so
+// gpt-6-luna: OpenAI's cheapest current model for focused tasks. Reasoning is off, so
 // replies come back fast without paying for hidden reasoning tokens.
 const API_KEY = process.env.OPENAI_API_KEY;
-const MODEL = process.env.OPENAI_MODEL ?? "gpt-4.1-mini";
+const MODEL = process.env.OPENAI_MODEL ?? "gpt-6-luna";
 
 // Caps that keep a chat cheap and stop it being used as a free chatbot.
 export const CHAT_MAX_MESSAGE = 1000;
@@ -97,7 +97,7 @@ export async function runRequestChat(
       messages: [{ role: "system", content: systemPrompt(kind, projectName, lastTurn) }, ...messages],
       response_format: { type: "json_object" },
       max_completion_tokens: MAX_REPLY_TOKENS,
-      temperature: 0.3,
+      reasoning_effort: "none",
     }),
     signal: AbortSignal.timeout(30_000),
     cache: "no-store",

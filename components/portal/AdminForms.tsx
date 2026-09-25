@@ -1,6 +1,7 @@
 "use client";
 
 import { startTransition, useActionState, useEffect, useId, useRef } from "react";
+import { useSWRConfig } from "swr";
 import {
   createClientAction,
   createProjectAction,
@@ -11,6 +12,7 @@ import {
   updateProjectAction,
   type ActionState,
 } from "@/app/portal/(app)/admin/actions";
+import { projectsKey } from "@/lib/portal/projects";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -41,7 +43,7 @@ const PROJECT_STATUS_OPTIONS = [
 
 export function NewClientForm() {
   return (
-    <ActionForm action={createClientAction} submit="Create and continue" pendingLabel="Creating…">
+    <ActionForm action={createClientAction} submit="Create and continue" pendingLabel="Creating…" invalidatesProjects>
       <Field name="businessName" label="Business name" required />
     </ActionForm>
   );
@@ -49,7 +51,7 @@ export function NewClientForm() {
 
 export function ClientDetailsForm({ id, name, status }: { id: string; name: string; status: string }) {
   return (
-    <ActionForm action={updateClientAction} submit="Save">
+    <ActionForm action={updateClientAction} submit="Save" invalidatesProjects>
       <input type="hidden" name="clientId" value={id} />
       <Field name="businessName" label="Business name" required defaultValue={name} />
       <Select name="status" label="Status" options={CLIENT_STATUS_OPTIONS} defaultValue={status} />
@@ -88,6 +90,7 @@ export function ProjectForm({ clientId, project }: { clientId: string; project?:
       action={project ? updateProjectAction : createProjectAction}
       submit={project ? "Save" : "Add project"}
       resetOnSuccess={!project}
+      invalidatesProjects
     >
       <input type="hidden" name="clientId" value={clientId} />
       {project && <input type="hidden" name="projectId" value={project.id} />}
@@ -122,6 +125,7 @@ export function DeleteProjectButton({ clientId, projectId, name }: { clientId: s
       variant="outline"
       confirmText={`Delete ${name}? The client will no longer see it.`}
       inline
+      invalidatesProjects
     >
       <input type="hidden" name="clientId" value={clientId} />
       <input type="hidden" name="projectId" value={projectId} />
@@ -137,6 +141,7 @@ function ActionForm({
   confirmText,
   resetOnSuccess,
   inline,
+  invalidatesProjects,
   children,
 }: {
   action: Action;
@@ -146,9 +151,17 @@ function ActionForm({
   confirmText?: string;
   resetOnSuccess?: boolean;
   inline?: boolean;
+  // Clears the cached client and project list the overview and project pages read.
+  invalidatesProjects?: boolean;
   children: React.ReactNode;
 }) {
-  const [state, formAction, pending] = useActionState(action, null);
+  const { mutate } = useSWRConfig();
+  const [state, formAction, pending] = useActionState<ActionState, FormData>((prev, formData) => {
+    // Cleared before the action runs because createClientAction redirects instead of returning.
+    // Nothing on the admin pages reads the key, so the next portal page load fetches it fresh.
+    if (invalidatesProjects) mutate(projectsKey, undefined, { revalidate: false });
+    return action(prev, formData);
+  }, null);
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {

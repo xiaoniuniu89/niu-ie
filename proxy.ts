@@ -23,8 +23,10 @@ export async function proxy(request: NextRequest) {
     }
   );
 
-  // Refreshes the session cookie. Must run before any redirect decision.
-  const { data: { user } } = await supabase.auth.getUser();
+  // Refreshes the session cookie. Must run before any redirect decision. getClaims checks the
+  // JWT locally against the project's signing keys, so it adds no Auth server round trip.
+  const { data } = await supabase.auth.getClaims();
+  const user = data?.claims;
 
   const isPublic = PUBLIC_PATHS.some((p) => request.nextUrl.pathname.startsWith(p));
   if (!user && !isPublic) {

@@ -1,7 +1,7 @@
 "use client";
 
 import useSWR from "swr";
-import { REQUEST_STATUS_LABEL, REQUEST_TYPES, fetchRequests, requestsKey } from "@/lib/portal/requests";
+import { REQUEST_STATUS_LABEL, REQUEST_TYPES, requestsKey, type RequestsResponse } from "@/lib/portal/requests";
 import type { RequestStatus } from "@/lib/portal/github";
 import { CancelRequestButton, RequestDialog } from "@/components/portal/RequestForms";
 import { Badge } from "@/components/ui/badge";
@@ -15,20 +15,28 @@ const STATUS_VARIANT: Record<RequestStatus, "default" | "secondary" | "outline">
   cancelled: "outline",
 };
 
-export function RequestList({ projectId, clientId }: { projectId: string; clientId: string }) {
-  const { data, error, isLoading } = useSWR(requestsKey(projectId), fetchRequests);
+type Props = {
+  projectId: string;
+  clientId: string;
+  // Request types this list shows. Both request tabs share one cached fetch.
+  types: readonly string[];
+  empty: string;
+};
+
+export function RequestList({ projectId, clientId, types, empty }: Props) {
+  const { data, error, isLoading } = useSWR<RequestsResponse>(requestsKey(projectId));
 
   if (isLoading) return <p className="text-muted-foreground">Loading requests…</p>;
   if (error || !data) return <p className="text-sm text-destructive">Couldn&apos;t load your requests. Refresh to try again.</p>;
 
+  const requests = data.requests.filter((r) => types.includes(r.type));
+
   return (
     <div className="space-y-4">
       {data.statusError && <p className="text-sm text-destructive">Couldn&apos;t check the latest status. Try again shortly.</p>}
-      {data.requests.length === 0 && (
-        <p className="text-muted-foreground">No requests yet. Use &ldquo;Report an issue&rdquo; to send the first one.</p>
-      )}
+      {requests.length === 0 && <p className="text-muted-foreground">{empty}</p>}
 
-      {data.requests.map((request) => {
+      {requests.map((request) => {
         const typeLabel = REQUEST_TYPES.find(([value]) => value === request.type)?.[1];
         return (
           <Card key={request.id}>

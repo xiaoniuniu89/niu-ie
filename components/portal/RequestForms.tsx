@@ -1,7 +1,7 @@
 "use client";
 
 import { startTransition, useActionState, useId, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useSWRConfig } from "swr";
 import { Paperclip } from "lucide-react";
 import {
@@ -11,7 +11,8 @@ import {
   type ActionState,
 } from "@/app/portal/(app)/requests/actions";
 import { createClient } from "@/lib/portal/supabase/client";
-import { FILE_ACCEPT, MAX_FILE_BYTES, MAX_FILES, REQUEST_TYPES, requestsKey } from "@/lib/portal/requests";
+import { FEATURE_TYPES, FILE_ACCEPT, MAX_FILE_BYTES, MAX_FILES, REQUEST_TYPES, requestsKey } from "@/lib/portal/requests";
+import { projectPath } from "@/lib/portal/projects";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -39,12 +40,15 @@ type Props = {
   projectId: string;
   clientId: string;
   request?: RequestValues;
+  // Preselected type for a new request: "change" for feature requests, "bug" for issues.
+  defaultType?: string;
   trigger: React.ReactNode;
 };
 
-export function RequestDialog({ projectId, clientId, request, trigger }: Props) {
+export function RequestDialog({ projectId, clientId, request, defaultType = "change", trigger }: Props) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
   const { mutate } = useSWRConfig();
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -53,7 +57,11 @@ export function RequestDialog({ projectId, clientId, request, trigger }: Props) 
     if (result?.ok) {
       setOpen(false);
       mutate(requestsKey(projectId));
-      if (!request) router.push(`/portal/projects/${projectId}`);
+      // From the overview, open the project on the tab that lists the new request.
+      if (!request && pathname !== projectPath(projectId)) {
+        const isFeature = (FEATURE_TYPES as readonly unknown[]).includes(formData.get("type"));
+        router.push(`${projectPath(projectId)}?tab=${isFeature ? "features" : "issues"}`);
+      }
     }
     return result;
   }, null);
@@ -100,7 +108,7 @@ export function RequestDialog({ projectId, clientId, request, trigger }: Props) 
       <DialogContent className="max-w-lg p-0" onInteractOutside={(e) => e.preventDefault()}>
         <div className="overflow-y-auto p-6">
           <DialogHeader>
-            <DialogTitle>{request ? "Edit request" : "Report an issue"}</DialogTitle>
+            <DialogTitle>{request ? "Edit request" : defaultType === "change" ? "Request a feature" : "Report an issue"}</DialogTitle>
             <DialogDescription>
               {request
                 ? "You can change this until Daniel starts on it."
@@ -114,7 +122,7 @@ export function RequestDialog({ projectId, clientId, request, trigger }: Props) 
             ) : (
               <input type="hidden" name="projectId" value={projectId} />
             )}
-            <TypeField defaultValue={request?.type ?? "change"} />
+            <TypeField defaultValue={request?.type ?? defaultType} />
             <Field label="Short title" name="title" required maxLength={120} defaultValue={request?.title} placeholder="e.g. Update opening hours" />
             <Field
               label="Which page? (optional)"

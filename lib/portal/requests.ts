@@ -6,6 +6,10 @@ export const REQUEST_TYPES = [
   ["question", "Ask a question"],
 ] as const;
 
+// Which request types each project tab lists.
+export const ISSUE_TYPES = ["bug", "question"] as const;
+export const FEATURE_TYPES = ["change"] as const;
+
 export const REQUEST_STATUS_LABEL: Record<RequestStatus, string> = {
   open: "Received",
   in_progress: "In progress",
@@ -29,12 +33,6 @@ export type RequestsResponse = { requests: PortalRequest[]; statusError: boolean
 
 // SWR key for a project's request list. Mutate it after creating, editing or cancelling.
 export const requestsKey = (projectId: string) => `/portal/api/projects/${projectId}/requests`;
-
-export async function fetchRequests(url: string): Promise<RequestsResponse> {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`${url} failed: ${res.status}`);
-  return res.json();
-}
 
 export const MAX_FILES = 5;
 export const MAX_FILE_BYTES = 10 * 1024 * 1024;

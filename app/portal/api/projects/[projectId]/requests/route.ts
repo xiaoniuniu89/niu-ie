@@ -1,13 +1,12 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { createClient } from "@/lib/portal/supabase/server";
+import { getSessionUser } from "@/lib/portal/auth";
 import { portalIssueStatuses, type RequestStatus } from "@/lib/portal/github";
 import type { RequestsResponse } from "@/lib/portal/requests";
 
-// Requests for one project with their GitHub status. Read by the SWR list on the project page.
+// Requests for one project with their GitHub status. Read by the SWR lists on the project tabs.
 export async function GET(_: NextRequest, { params }: { params: Promise<{ projectId: string }> }) {
   const { projectId } = await params;
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const { supabase, user } = await getSessionUser();
   if (!user) return NextResponse.json({ error: "Signed out" }, { status: 401 });
 
   // RLS: members see their own client's project and requests only.

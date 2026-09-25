@@ -3,6 +3,7 @@ import Link from "next/link";
 import { requireUser } from "@/lib/portal/auth";
 import { signOut } from "@/app/portal/actions";
 import { Button } from "@/components/ui/button";
+import { PortalSWRProvider } from "@/components/portal/PortalSWRProvider";
 
 export const metadata: Metadata = {
   title: "Client portal",
@@ -36,7 +37,9 @@ export default async function PortalLayout({ children }: { children: React.React
           </div>
         </div>
       </header>
-      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8">{children}</main>
+      <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8">
+        <PortalSWRProvider>{children}</PortalSWRProvider>
+      </main>
     </div>
   );
 }

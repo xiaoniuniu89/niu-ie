@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Portal guides are MDX files read from disk at request time.
+  outputFileTracingIncludes: {
+    "/portal/guides/**": ["./content/portal-guides/**"],
+  },
   experimental: {
     serverActions: {
       bodySizeLimit: "50mb",

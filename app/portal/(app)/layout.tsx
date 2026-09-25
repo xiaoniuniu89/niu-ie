@@ -21,6 +21,9 @@ export default async function PortalLayout({ children }: { children: React.React
             <Link href="/portal" className="font-serif text-lg font-semibold text-foreground">
               Niu portal
             </Link>
+            <Link href="/portal/guides" className="text-muted-foreground hover:text-foreground">
+              Guides
+            </Link>
             {isAdmin && (
               <Link href="/portal/admin" className="text-muted-foreground hover:text-foreground">
                 Admin

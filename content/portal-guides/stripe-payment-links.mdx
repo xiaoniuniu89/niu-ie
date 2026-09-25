@@ -1,0 +1,35 @@
+[Stripe](https://stripe.com/) lets you take card payments online. A **payment link** is a web address that opens a ready-made checkout page. Put it on a button on your site, in an email, or in a message, and people can pay you without you building a shop.
+
+## 1. Create a Stripe account
+
+1. Go to [dashboard.stripe.com/register](https://dashboard.stripe.com/register) and sign up with your business email.
+2. Stripe asks about your business: type, address, what you sell, and your bank account for payouts. Have these ready.
+3. Stripe may ask for ID to confirm who you are. This is normal.
+
+Until this is finished you can only use **test mode**, which works with pretend cards.
+
+## 2. Create a payment link
+
+1. In the Stripe dashboard, go to **Payment Links** (search for it in the top bar if you can't see it).
+2. Press **New** (or **+ Create payment link**).
+3. Add a product: name, price, and a photo if you like. For donations or custom amounts, choose **Customers choose what to pay**.
+4. Change any options you want, such as collecting a phone number or allowing a quantity.
+5. Press **Create link**, then **Copy**.
+
+Stripe's own guide: [Create a payment link](https://docs.stripe.com/payment-links/create).
+
+## 3. Send it to Daniel
+
+Send the link and tell him where on the site it should go ("a Pay deposit button on the Bookings page"). Payment links aren't secret, so email is fine.
+
+<Tip>
+Make sure the link is from **live mode**, not test mode. Test-mode links have a "Test mode" badge, and nobody can really pay through them.
+</Tip>
+
+## Do you need more than a link?
+
+Payment links are great for a few fixed products or services. If you need a shopping cart, stock counts, or customer accounts, that needs a proper shop on your site. See [What your site costs, and why](/portal/guides/costs).
+
+<Warning>
+If Daniel ever asks for Stripe **API keys**, send the secret key (it starts with `sk_live_`) only with [a one-time link](/portal/guides/send-secrets). Never email it.
+</Warning>

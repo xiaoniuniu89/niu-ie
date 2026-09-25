@@ -121,7 +121,9 @@ Clients struggle to describe what they want. Built in phases, each producing the
 - Guardrails: branch protection, agent limited to content paths, no dependency/config edits, daily run cap per client.
 
 ### 7. Guides
-MDX checklists with screenshots:
+**Built (2026-09-25):** `/portal/guides` with sidebar. Metadata and order in `lib/portal/guide-list.ts`, bodies in `content/portal-guides/<slug>.mdx` (MDX components `<Tip>` and `<Warning>`). No screenshots yet.
+
+Original list:
 - Gmail app password
 - Outlook/Hotmail app password
 - Google Business Profile

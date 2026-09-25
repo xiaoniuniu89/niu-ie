@@ -109,7 +109,7 @@ export function RequestDialog({ projectId, clientId, kind, request, trigger }: P
         <div className="overflow-y-auto p-6">
           <DialogHeader>
             <DialogTitle>{request ? "Edit request" : form.title}</DialogTitle>
-            <DialogDescription>{request ? "You can change this until Daniel starts on it." : form.description}</DialogDescription>
+            <DialogDescription>{request ? "You can change this until we start on it." : form.description}</DialogDescription>
           </DialogHeader>
 
           <form onSubmit={onSubmit} className="mt-5 space-y-4">
@@ -223,7 +223,7 @@ function FilesField({ label, addLabel }: { label: string; addLabel: string }) {
           {names.length ? names.join(", ") : "No files chosen"}
         </span>
       </div>
-      <p className="text-xs text-muted-foreground">Up to {MAX_FILES} images or PDFs, 10MB each. Only you and Daniel can see them.</p>
+      <p className="text-xs text-muted-foreground">Up to {MAX_FILES} images or PDFs, 10MB each. Only you and Niu can see them.</p>
     </div>
   );
 }

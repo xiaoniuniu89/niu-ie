@@ -23,7 +23,7 @@ export function ProjectOverview({ isAdmin }: { isAdmin: boolean }) {
               No clients yet. <Link href="/portal/admin" className="underline">Add one in Admin</Link>.
             </>
           ) : (
-            "Your account isn't linked to a business yet. Daniel will set this up shortly."
+            "Your account isn't linked to a business yet. We'll set this up for you."
           )}
         </p>
       </div>

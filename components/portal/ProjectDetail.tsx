@@ -96,7 +96,7 @@ export function ProjectDetail({ projectId }: { projectId: string }) {
         )}
 
         {tab !== "overview" && !project.repo && (
-          <p className="text-muted-foreground">Requests aren&apos;t set up for this project yet. Email Daniel in the meantime.</p>
+          <p className="text-muted-foreground">Requests aren&apos;t set up for this project yet. Email us in the meantime.</p>
         )}
 
         {tab === "issues" && project.repo && (

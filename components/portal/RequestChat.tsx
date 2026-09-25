@@ -19,13 +19,13 @@ const COPY = {
   issue: {
     trigger: "Describe it in a chat",
     title: "Describe the issue",
-    greeting: "Tell me what isn't working, in your own words. I'll ask anything Daniel would need to know, then send it to him.",
+    greeting: "Tell me what isn't working, in your own words. I'll ask what Niu needs to know, then send it over.",
     placeholder: "e.g. The contact form on the home page doesn't send",
   },
   feature: {
     trigger: "Describe it in a chat",
     title: "Describe your idea",
-    greeting: "Tell me what you'd like added or changed. I'll ask anything Daniel would need to know, then send it to him.",
+    greeting: "Tell me what you'd like added or changed. I'll ask what Niu needs to know, then send it over.",
     placeholder: "e.g. I'd like a gallery page with photos of our work",
   },
 };
@@ -72,7 +72,7 @@ export function RequestChat({ projectId, kind }: { projectId: string; kind: Requ
       setOpen(false);
       // The assistant may file it as the other kind, e.g. a content change from the issue tab.
       const where = result.kind === kind ? "" : result.kind === "feature" ? " (under Feature requests)" : " (under Issues)";
-      setPill({ ok: true, text: `Sent to Daniel: “${result.title}”${where}` });
+      setPill({ ok: true, text: `Sent: “${result.title}”${where}` });
       mutate(requestsKey(projectId));
     } else if (result.status === "failed") {
       // Keep the chat, so reopening it offers Try again.
@@ -128,7 +128,7 @@ export function RequestChat({ projectId, kind }: { projectId: string; kind: Requ
         <DialogContent className="max-w-lg p-0" onInteractOutside={(e) => e.preventDefault()}>
           <DialogHeader className="border-b px-6 pb-4 pt-6">
             <DialogTitle>{copy.title}</DialogTitle>
-            <DialogDescription>An assistant helps you write it up. Daniel reads every request himself.</DialogDescription>
+            <DialogDescription>An assistant helps you write it up. A person at Niu reads every request.</DialogDescription>
           </DialogHeader>
 
           <div className="min-h-48 flex-1 space-y-3 overflow-y-auto px-6 py-4" aria-live="polite">

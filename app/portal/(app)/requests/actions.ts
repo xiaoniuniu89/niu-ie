@@ -78,7 +78,7 @@ async function loadProject(supabase: Ctx["supabase"], projectId: string) {
     .eq("id", projectId)
     .maybeSingle();
   if (!project) return { ok: false, message: "Project not found." } as const;
-  if (!project.repo) return { ok: false, message: "This project isn't linked to GitHub yet. Please email Daniel instead." } as const;
+  if (!project.repo) return { ok: false, message: "This project isn't linked to GitHub yet. Email us instead." } as const;
   return { ok: true, ...(project as Project) } as const;
 }
 
@@ -107,7 +107,7 @@ async function fileRequest(
     return { ok: true, message: "Request sent.", issueNumber };
   } catch (e) {
     console.error(e);
-    return { ok: false, message: "We couldn't send your request. Please try again, or email Daniel." };
+    return { ok: false, message: "We couldn't send your request. Try again, or email us." };
   }
 }
 
@@ -200,7 +200,7 @@ async function loadOpenRequest(projectId: string, issueNumber: number) {
   const issue = await getPortalIssue(project.repo, issueNumber);
   if (!issue) return { ok: false, error: "Request not found." } as const;
   const request = parseIssue(issue);
-  if (request.status !== "open") return { ok: false, error: "Daniel has already started on this, so it can't be changed here." } as const;
+  if (request.status !== "open") return { ok: false, error: "We've already started on this, so you can't change it here." } as const;
   return { ok: true, ...ctx, request, repo: project.repo } as const;
 }
 

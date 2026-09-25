@@ -42,7 +42,7 @@ export const GUIDES: Guide[] = [
   {
     slug: "buy-a-domain",
     title: "Buy a domain",
-    summary: "Buy one yourself, or ask Daniel to buy it for you and bill you.",
+    summary: "Buy one yourself, or ask us to buy it and bill you.",
     section: "Domains and DNS",
   },
   {

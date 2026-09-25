@@ -28,7 +28,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
 export type RequestValues = {
-  id: string;
+  number: number;
   type: string;
   title: string;
   page_url: string | null;
@@ -113,11 +113,8 @@ export function RequestDialog({ projectId, clientId, kind, request, trigger }: P
           </DialogHeader>
 
           <form onSubmit={onSubmit} className="mt-5 space-y-4">
-            {request ? (
-              <input type="hidden" name="requestId" value={request.id} />
-            ) : (
-              <input type="hidden" name="projectId" value={projectId} />
-            )}
+            <input type="hidden" name="projectId" value={projectId} />
+            {request && <input type="hidden" name="issueNumber" value={request.number} />}
             <input type="hidden" name="type" value={request?.type ?? form.type} />
             <Field label="Short title" name="title" required maxLength={120} defaultValue={request?.title} placeholder={form.titlePlaceholder} />
             <Field
@@ -153,7 +150,7 @@ export function RequestDialog({ projectId, clientId, kind, request, trigger }: P
   );
 }
 
-export function CancelRequestButton({ projectId, requestId }: { projectId: string; requestId: string }) {
+export function CancelRequestButton({ projectId, issueNumber }: { projectId: string; issueNumber: number }) {
   const { mutate } = useSWRConfig();
   const [state, formAction, pending] = useActionState<ActionState, FormData>(async (prev, formData) => {
     const result = await cancelRequestAction(prev, formData);
@@ -170,7 +167,8 @@ export function CancelRequestButton({ projectId, requestId }: { projectId: strin
 
   return (
     <form onSubmit={onSubmit} className="flex items-center gap-3">
-      <input type="hidden" name="requestId" value={requestId} />
+      <input type="hidden" name="projectId" value={projectId} />
+      <input type="hidden" name="issueNumber" value={issueNumber} />
       <Button type="submit" size="sm" variant="outline" disabled={pending}>
         {pending ? "Cancelling…" : "Cancel request"}
       </Button>

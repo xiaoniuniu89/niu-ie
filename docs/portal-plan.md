@@ -93,9 +93,9 @@ Clients struggle to describe what they want. Built in phases, each producing the
 **R1 — Simple form (next)**
 - "Report an issue" button on the overview, per project. Modal form: type (`change` | `bug` | `question`), title, page URL, what happens now, what should happen, optional screenshots.
 - Any signed-in member can submit for their own client's projects.
-- Server action writes a `requests` row, then creates the issue on `projects.repo` with a fixed template (Description, Current behaviour, Expected behaviour, Page, Attachments), label `portal`, assigned to Daniel.
+- Server action creates the issue on `projects.repo` (no database row; the issue is the request and the portal lists and edits it through the GitHub API) with a fixed template (Description, Current behaviour, Expected behaviour, Page, Attachments), label `portal`, assigned to Daniel.
 - GitHub auth: fine-grained token (`GITHUB_TOKEN`, server only) with Issues read/write on client repos. GitHub App later (see build order).
-- Screenshots: private Supabase Storage bucket. The issue links to `/portal/files/[id]`, which checks the session and redirects to a fresh signed URL, so links never expire and files are never public. Images show inline in the portal, as links in GitHub.
+- Screenshots: private Supabase Storage bucket. The issue links to `/portal/files/<object path>`, which checks the session and redirects to a fresh signed URL, so links never expire and files are never public. Images show inline in the portal, as links in GitHub.
 - Requests list per project: status read from the GitHub issue on page load (open, `in-progress` label, closed = done). No webhook yet.
 - Client can edit a request (updates the issue body) or cancel it (closes the issue) until it is in progress.
 

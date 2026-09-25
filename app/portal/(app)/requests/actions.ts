@@ -3,7 +3,7 @@
 import { headers } from "next/headers";
 import { z } from "zod";
 import { requireUser } from "@/lib/portal/auth";
-import { cancelIssue, commentOnIssue, createIssue, getIssue, issueStatus, updateIssue } from "@/lib/portal/github";
+import { cancelIssue, commentOnIssue, createIssue, getPortalIssue, parseIssue, updateIssue } from "@/lib/portal/github";
 import {
   CHAT_DAILY_LIMIT,
   CHAT_MAX_MESSAGE,
@@ -26,7 +26,8 @@ const fieldsSchema = z.object({
 });
 
 const fileSchema = z.object({
-  path: z.string(),
+  // "<client_id>/<uuid>-<filename>", linked from the issue as /portal/files/<path>.
+  path: z.string().regex(/^[0-9a-f-]{36}\/[0-9a-f-]{36}-[\w.-]{1,120}$/),
   filename: z.string().regex(/^[\w.-]{1,120}$/),
   mime: z.string().refine((m) => FILE_ACCEPT.split(",").includes(m)),
   size: z.number().int().positive().max(MAX_FILE_BYTES),
@@ -81,52 +82,33 @@ async function loadProject(supabase: Ctx["supabase"], projectId: string) {
   return { ok: true, ...(project as Project) } as const;
 }
 
-// Opens the GitHub issue, then saves the request row and its files. Returns the issue
-// number too, so the chat can comment its transcript on it.
+// Opens the GitHub issue. That issue is the request; nothing is saved in the database.
+// Returns the issue number too, so the chat can comment its transcript on it.
 async function fileRequest(
-  { supabase, user }: Ctx,
+  { user }: Ctx,
   project: Project,
   { type, title, pageUrl, current, expected }: Fields,
   files: UploadedFile[]
 ): Promise<ActionState & { issueNumber?: number }> {
-  // Ids are made up front so the issue body can link each file.
-  const requestId = crypto.randomUUID();
-  const fileRows = files.map((f) => ({ id: crypto.randomUUID(), request_id: requestId, client_id: project.client_id, ...f }));
-
-  let issueNumber: number;
   try {
-    issueNumber = await createIssue(
+    const issueNumber = await createIssue(
       project.repo,
       title,
-      issueBody({ type, pageUrl, current, expected, reporter: user.email ?? "a client", files: fileRows, origin: await origin() })
+      issueBody({
+        type,
+        pageUrl,
+        current,
+        expected,
+        reporter: user.email ?? "a client",
+        files: files.map(({ path, filename }) => ({ path, filename })),
+        origin: await origin(),
+      })
     );
+    return { ok: true, message: "Request sent.", issueNumber };
   } catch (e) {
     console.error(e);
     return { ok: false, message: "We couldn't send your request. Please try again, or email Daniel." };
   }
-
-  const { error } = await supabase.from("requests").insert({
-    id: requestId,
-    client_id: project.client_id,
-    project_id: project.id,
-    created_by: user.id,
-    type,
-    title,
-    page_url: pageUrl || null,
-    current,
-    expected,
-    gh_issue_number: issueNumber,
-  });
-  if (!error && fileRows.length) {
-    const { error: filesError } = await supabase.from("request_files").insert(fileRows);
-    if (filesError) console.error(filesError);
-  }
-  if (error) {
-    console.error(error);
-    return { ok: false, message: "Your request reached Daniel, but we couldn't save it here." };
-  }
-
-  return { ok: true, message: "Request sent.", issueNumber };
 }
 
 const chatSchema = z.object({
@@ -146,8 +128,8 @@ export type ChatState =
   | { status: "ended"; message: string } // too many off-topic messages
   | { status: "error"; message: string };
 
-// The client keeps the conversation and sends it whole each turn; nothing is stored
-// until the assistant has enough to file the ticket.
+// The client keeps the conversation and sends it whole each turn; nothing is filed
+// until the assistant has enough for the ticket.
 export async function requestChatAction(input: z.input<typeof chatSchema>): Promise<ChatState> {
   const ctx = await requireUser();
   const parsed = chatSchema.safeParse(input);
@@ -206,34 +188,33 @@ export async function requestChatAction(input: z.input<typeof chatSchema>): Prom
   return { status: "created", title: ticket.title, kind: ticket.type === "change" ? "feature" : "issue" };
 }
 
-// Loads a request the user can see, and only lets it change while it's still waiting.
-async function loadOpenRequest(requestId: string) {
-  const ctx = await requireUser();
-  const { data: request } = await ctx.supabase
-    .from("requests")
-    .select("id, gh_issue_number, projects (repo), request_files (id, filename)")
-    .eq("id", requestId)
-    .maybeSingle();
-  // No generated DB types, so the many-to-one join is typed as an array; it is one row.
-  const repo = (request?.projects as unknown as { repo: string | null } | null)?.repo;
-  if (!request || !repo || !request.gh_issue_number) return { ok: false, error: "Request not found." } as const;
+const requestRef = { projectId: z.uuid(), issueNumber: z.coerce.number().int().positive() };
 
-  const issue = await getIssue(repo, request.gh_issue_number);
-  if (issueStatus(issue) !== "open") return { ok: false, error: "Daniel has already started on this, so it can't be changed here." } as const;
-  return { ok: true, ...ctx, request, repo, issueNumber: request.gh_issue_number as number } as const;
+// Loads a portal issue on a project the user can see, and only lets it change while it's
+// still waiting.
+async function loadOpenRequest(projectId: string, issueNumber: number) {
+  const ctx = await requireUser();
+  const project = await loadProject(ctx.supabase, projectId);
+  if (!project.ok) return { ok: false, error: "Request not found." } as const;
+
+  const issue = await getPortalIssue(project.repo, issueNumber);
+  if (!issue) return { ok: false, error: "Request not found." } as const;
+  const request = parseIssue(issue);
+  if (request.status !== "open") return { ok: false, error: "Daniel has already started on this, so it can't be changed here." } as const;
+  return { ok: true, ...ctx, request, repo: project.repo } as const;
 }
 
-const updateSchema = fieldsSchema.extend({ requestId: z.uuid() });
+const updateSchema = fieldsSchema.extend(requestRef);
 
 export async function updateRequestAction(_: ActionState, formData: FormData): Promise<ActionState> {
   const parsed = updateSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return { ok: false, message: parsed.error.issues[0].message };
-  const { requestId, type, title, pageUrl, current, expected } = parsed.data;
+  const { projectId, issueNumber, type, title, pageUrl, current, expected } = parsed.data;
 
   try {
-    const loaded = await loadOpenRequest(requestId);
+    const loaded = await loadOpenRequest(projectId, issueNumber);
     if (!loaded.ok) return { ok: false, message: loaded.error };
-    const { supabase, user, request, repo, issueNumber } = loaded;
+    const { user, request, repo } = loaded;
 
     await updateIssue(repo, issueNumber, {
       title,
@@ -243,15 +224,10 @@ export async function updateRequestAction(_: ActionState, formData: FormData): P
         current,
         expected,
         reporter: user.email ?? "a client",
-        files: request.request_files,
+        files: request.files,
         origin: await origin(),
       }),
     });
-    const { error } = await supabase
-      .from("requests")
-      .update({ type, title, page_url: pageUrl || null, current, expected, updated_at: new Date().toISOString() })
-      .eq("id", requestId);
-    if (error) throw error;
 
     return { ok: true, message: "Saved." };
   } catch (e) {
@@ -261,13 +237,13 @@ export async function updateRequestAction(_: ActionState, formData: FormData): P
 }
 
 export async function cancelRequestAction(_: ActionState, formData: FormData): Promise<ActionState> {
-  const parsed = z.object({ requestId: z.uuid() }).safeParse(Object.fromEntries(formData));
+  const parsed = z.object(requestRef).safeParse(Object.fromEntries(formData));
   if (!parsed.success) return { ok: false, message: "Request not found." };
 
   try {
-    const loaded = await loadOpenRequest(parsed.data.requestId);
+    const loaded = await loadOpenRequest(parsed.data.projectId, parsed.data.issueNumber);
     if (!loaded.ok) return { ok: false, message: loaded.error };
-    await cancelIssue(loaded.repo, loaded.issueNumber, loaded.user.email ?? "the client");
+    await cancelIssue(loaded.repo, loaded.request.number, loaded.user.email ?? "the client");
     return { ok: true, message: "Cancelled." };
   } catch (e) {
     console.error(e);

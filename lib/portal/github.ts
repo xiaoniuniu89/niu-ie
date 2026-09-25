@@ -1,4 +1,5 @@
 import "server-only";
+import { ATTACHMENTS, FOOTER, REQUEST_FORMS, REQUEST_TYPES, requestKind, type PortalRequest } from "@/lib/portal/requests";
 
 // Fine-grained token with Issues read/write on client repos only. Never the broad GITHUB_TOKEN.
 const TOKEN = process.env.GITHUB_ISSUES_TOKEN;
@@ -8,8 +9,11 @@ export const IN_PROGRESS_LABEL = "in-progress";
 
 export type RequestStatus = "open" | "in_progress" | "done" | "cancelled";
 
-type Issue = {
+export type Issue = {
   number: number;
+  title: string;
+  body: string | null;
+  created_at: string;
   state: "open" | "closed";
   state_reason: string | null;
   labels: { name: string }[];
@@ -66,14 +70,63 @@ export async function cancelIssue(repo: string, number: number, by: string) {
   });
 }
 
-// Status for each issue number, keyed by number. One list call covers most; issues it
-// misses (just created, since the label filter lags a few seconds, or older than the
-// latest 100) are fetched one by one.
-export async function portalIssueStatuses(repo: string, numbers: number[]) {
-  const issues = await gh<Issue[]>(`/repos/${repo}/issues?labels=${PORTAL_LABEL}&state=all&per_page=100`);
-  const statuses = new Map(issues.filter((i) => !i.pull_request).map((i) => [i.number, issueStatus(i)]));
-  const missing = numbers.filter((n) => !statuses.has(n));
-  const fetched = await Promise.all(missing.map((n) => getIssue(repo, n)));
-  fetched.forEach((i) => statuses.set(i.number, issueStatus(i)));
-  return statuses;
+const isPortalIssue = (i: Issue) => !i.pull_request && i.labels.some((l) => l.name === PORTAL_LABEL);
+
+// Every portal issue on the repo, newest first. The label filter lags a few seconds behind
+// new issues, so the latest issues are also listed unfiltered and merged in.
+export async function listPortalIssues(repo: string) {
+  const [labelled, latest] = await Promise.all([
+    (async () => {
+      const all: Issue[] = [];
+      for (let page = 1; ; page++) {
+        const batch = await gh<Issue[]>(`/repos/${repo}/issues?labels=${PORTAL_LABEL}&state=all&per_page=100&page=${page}`);
+        all.push(...batch);
+        if (batch.length < 100) return all;
+      }
+    })(),
+    gh<Issue[]>(`/repos/${repo}/issues?state=all&per_page=30`),
+  ]);
+  const byNumber = new Map([...labelled, ...latest].filter(isPortalIssue).map((i) => [i.number, i]));
+  return [...byNumber.values()].sort((a, b) => b.number - a.number);
+}
+
+export async function getPortalIssue(repo: string, number: number) {
+  const issue = await getIssue(repo, number);
+  return isPortalIssue(issue) ? issue : null;
+}
+
+// Reads a request back out of its issue. Issues not written by issueBody (made by hand
+// with the portal label) show their whole body as the first field.
+export function parseIssue(issue: Issue): PortalRequest {
+  const body = (issue.body ?? "").replace(/\r\n/g, "\n");
+  const typeLabel = body.match(/^\*\*Type:\*\* (.+)$/m)?.[1];
+  const type = REQUEST_TYPES.find(([, label]) => label === typeLabel)?.[0] ?? "bug";
+  const page = body.match(/^\*\*Page:\*\* (https?:\/\/\S+)$/m)?.[1] ?? null;
+  const form = REQUEST_FORMS[requestKind(type)];
+
+  const currentMark = `## ${form.currentHeading}\n\n`;
+  const expectedMark = `\n\n## ${form.expectedHeading}\n\n`;
+  const currentStart = body.indexOf(currentMark);
+  const expectedStart = currentStart < 0 ? -1 : body.indexOf(expectedMark, currentStart);
+  // Client text could contain anything, so the tail sections are found from the end.
+  const tail = [body.lastIndexOf(`\n\n${ATTACHMENTS}\n\n`), body.lastIndexOf(`\n\n${FOOTER}`)].filter((i) => i > expectedStart);
+  const expectedEnd = tail.length ? Math.min(...tail) : body.length;
+
+  const attachmentsStart = body.lastIndexOf(`\n\n${ATTACHMENTS}\n\n`);
+  const files =
+    attachmentsStart > expectedStart
+      ? Array.from(body.slice(attachmentsStart).matchAll(/^- \[([^\]]+)\]\(\S*?\/portal\/files\/(\S+)\)$/gm), ([, filename, path]) => ({ filename, path }))
+      : [];
+
+  return {
+    number: issue.number,
+    type,
+    title: issue.title,
+    page_url: page,
+    current: expectedStart < 0 ? body.trim() : body.slice(currentStart + currentMark.length, expectedStart).trim(),
+    expected: expectedStart < 0 ? "" : body.slice(expectedStart + expectedMark.length, expectedEnd).trim(),
+    created_at: issue.created_at,
+    status: issueStatus(issue),
+    files,
+  };
 }

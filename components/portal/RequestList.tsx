@@ -1,7 +1,7 @@
 "use client";
 
 import useSWR from "swr";
-import { REQUEST_FORMS, REQUEST_STATUS_LABEL, REQUEST_TYPES, requestKind, requestsKey, type RequestsResponse } from "@/lib/portal/requests";
+import { REQUEST_FORMS, REQUEST_STATUS_LABEL, REQUEST_TYPES, isImage, requestKind, requestsKey, type RequestsResponse } from "@/lib/portal/requests";
 import type { RequestStatus } from "@/lib/portal/github";
 import { CancelRequestButton, RequestDialog } from "@/components/portal/RequestForms";
 import { Badge } from "@/components/ui/badge";
@@ -33,7 +33,6 @@ export function RequestList({ projectId, clientId, types, empty }: Props) {
 
   return (
     <div className="space-y-4">
-      {data.statusError && <p className="text-sm text-destructive">Couldn&apos;t check the latest status. Try again shortly.</p>}
       {requests.length === 0 && <p className="text-muted-foreground">{empty}</p>}
 
       {requests.map((request) => {
@@ -41,11 +40,11 @@ export function RequestList({ projectId, clientId, types, empty }: Props) {
         const kind = requestKind(request.type);
         const form = REQUEST_FORMS[kind];
         return (
-          <Card key={request.id}>
+          <Card key={request.number}>
             <CardHeader>
               <CardTitle className="flex flex-wrap items-center justify-between gap-2 text-lg">
                 {request.title}
-                {request.status && <Badge variant={STATUS_VARIANT[request.status]}>{REQUEST_STATUS_LABEL[request.status]}</Badge>}
+                <Badge variant={STATUS_VARIANT[request.status]}>{REQUEST_STATUS_LABEL[request.status]}</Badge>
               </CardTitle>
               <p className="text-sm text-muted-foreground">
                 {typeLabel} · Sent {new Date(request.created_at).toLocaleDateString("en-IE", { day: "numeric", month: "short", year: "numeric" })}
@@ -71,15 +70,15 @@ export function RequestList({ projectId, clientId, types, empty }: Props) {
                 </div>
               </div>
 
-              {request.request_files.length > 0 && (
+              {request.files.length > 0 && (
                 <ul className="flex flex-wrap gap-3">
-                  {request.request_files.map((file) => (
-                    <li key={file.id}>
-                      <a href={`/portal/files/${file.id}`} target="_blank" rel="noopener noreferrer" className="block">
-                        {file.mime.startsWith("image/") ? (
+                  {request.files.map((file) => (
+                    <li key={file.path}>
+                      <a href={`/portal/files/${file.path}`} target="_blank" rel="noopener noreferrer" className="block">
+                        {isImage(file.filename) ? (
                           // Redirects to a short-lived signed URL, so next/image can't optimise it.
                           // eslint-disable-next-line @next/next/no-img-element
-                          <img src={`/portal/files/${file.id}`} alt={file.filename} className="h-24 w-32 rounded-md border object-cover" />
+                          <img src={`/portal/files/${file.path}`} alt={file.filename} className="h-24 w-32 rounded-md border object-cover" />
                         ) : (
                           <span className="text-primary underline-offset-4 hover:underline">{file.filename}</span>
                         )}
@@ -98,7 +97,7 @@ export function RequestList({ projectId, clientId, types, empty }: Props) {
                     request={request}
                     trigger={<Button size="sm" variant="outline">Edit</Button>}
                   />
-                  <CancelRequestButton projectId={projectId} requestId={request.id} />
+                  <CancelRequestButton projectId={projectId} issueNumber={request.number} />
                 </div>
               )}
             </CardContent>

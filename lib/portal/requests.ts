@@ -6,9 +6,9 @@ export const REQUEST_TYPES = [
   ["question", "Question"],
 ] as const;
 
-// Issues and feature requests use separate forms. Both save to the same columns: for a
-// feature, `current` holds what they'd like and `expected` holds why it would help.
-// "question" is no longer offered but older rows still list under issues.
+// Issues and feature requests use separate forms with the same fields: for a feature,
+// `current` holds what they'd like and `expected` holds why it would help.
+// "question" is no longer offered but older issues still list under issues.
 export type RequestKind = "issue" | "feature";
 
 export const requestKind = (type: string): RequestKind => (type === "change" ? "feature" : "issue");
@@ -59,19 +59,24 @@ export const REQUEST_STATUS_LABEL: Record<RequestStatus, string> = {
   cancelled: "Cancelled",
 };
 
+// A request is a GitHub issue; nothing is stored in the database. Fields are read back
+// out of the issue body that issueBody wrote.
 export type PortalRequest = {
-  id: string;
+  number: number;
   type: string;
   title: string;
   page_url: string | null;
   current: string;
   expected: string;
   created_at: string;
-  status: RequestStatus | null;
-  request_files: { id: string; filename: string; mime: string }[];
+  status: RequestStatus;
+  files: RequestFile[];
 };
 
-export type RequestsResponse = { requests: PortalRequest[]; statusError: boolean };
+// `path` is the object path in the request-files bucket: "<client_id>/<uuid>-<filename>".
+export type RequestFile = { path: string; filename: string };
+
+export type RequestsResponse = { requests: PortalRequest[] };
 
 // SWR key for a project's request list. Mutate it after creating, editing or cancelling.
 export const requestsKey = (projectId: string) => `/portal/api/projects/${projectId}/requests`;
@@ -86,7 +91,7 @@ type IssueFields = {
   current: string;
   expected: string;
   reporter: string;
-  files: { id: string; filename: string }[];
+  files: RequestFile[];
   origin: string;
 };
 
@@ -101,9 +106,14 @@ export function issueBody(r: IssueFields) {
   ];
   if (r.files.length) {
     // Portal links check the viewer's session, then redirect to a short-lived signed URL.
-    const links = r.files.map((f) => `- [${f.filename}](${r.origin}/portal/files/${f.id})`).join("\n");
-    sections.push(`## Attachments\n\n${links}`);
+    const links = r.files.map((f) => `- [${f.filename}](${r.origin}/portal/files/${f.path})`).join("\n");
+    sections.push(`${ATTACHMENTS}\n\n${links}`);
   }
-  sections.push(`---\nReported by ${r.reporter} via the Niu portal.`);
+  sections.push(`${FOOTER}${r.reporter} via the Niu portal.`);
   return sections.join("\n\n");
 }
+
+export const ATTACHMENTS = "## Attachments";
+export const FOOTER = "---\nReported by ";
+
+export const isImage = (filename: string) => /\.(png|jpe?g|webp|gif)$/i.test(filename);

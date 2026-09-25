@@ -55,8 +55,6 @@ export const FEATURE_TYPES = ["change"] as const;
 export const REQUEST_STATUS_LABEL: Record<RequestStatus, string> = {
   open: "Received",
   in_progress: "In progress",
-  done: "Done",
-  cancelled: "Cancelled",
 };
 
 // A request is a GitHub issue; nothing is stored in the database. Fields are read back

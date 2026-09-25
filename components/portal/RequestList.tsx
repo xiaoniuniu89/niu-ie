@@ -8,11 +8,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-const STATUS_VARIANT: Record<RequestStatus, "default" | "secondary" | "outline"> = {
+const STATUS_VARIANT: Record<RequestStatus, "default" | "secondary"> = {
   open: "secondary",
   in_progress: "default",
-  done: "outline",
-  cancelled: "outline",
 };
 
 type Props = {

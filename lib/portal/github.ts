@@ -7,15 +7,13 @@ const ASSIGNEE = "xiaoniuniu89";
 export const PORTAL_LABEL = "portal";
 export const IN_PROGRESS_LABEL = "in-progress";
 
-export type RequestStatus = "open" | "in_progress" | "done" | "cancelled";
+export type RequestStatus = "open" | "in_progress";
 
 export type Issue = {
   number: number;
   title: string;
   body: string | null;
   created_at: string;
-  state: "open" | "closed";
-  state_reason: string | null;
   labels: { name: string }[];
   html_url: string;
   pull_request?: unknown;
@@ -37,8 +35,8 @@ async function gh<T>(path: string, init?: RequestInit): Promise<T> {
   return res.json() as Promise<T>;
 }
 
-export function issueStatus(issue: Pick<Issue, "state" | "state_reason" | "labels">): RequestStatus {
-  if (issue.state === "closed") return issue.state_reason === "not_planned" ? "cancelled" : "done";
+// Only open issues are listed, so a request is either waiting or being worked on.
+export function issueStatus(issue: Pick<Issue, "labels">): RequestStatus {
   return issue.labels.some((l) => l.name === IN_PROGRESS_LABEL) ? "in_progress" : "open";
 }
 

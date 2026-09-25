@@ -4,7 +4,15 @@ import { headers } from "next/headers";
 import { z } from "zod";
 import { requireUser } from "@/lib/portal/auth";
 import { cancelIssue, commentOnIssue, createIssue, getIssue, issueStatus, updateIssue } from "@/lib/portal/github";
-import { CHAT_MAX_MESSAGE, CHAT_MAX_TURNS, CHAT_DAILY_LIMIT, chatTranscript, runRequestChat } from "@/lib/portal/request-chat";
+import {
+  CHAT_DAILY_LIMIT,
+  CHAT_MAX_MESSAGE,
+  CHAT_MAX_STRIKES,
+  CHAT_MAX_TURNS,
+  OFF_TOPIC_REPLY,
+  chatTranscript,
+  runRequestChat,
+} from "@/lib/portal/request-chat";
 import { FILE_ACCEPT, MAX_FILE_BYTES, MAX_FILES, issueBody } from "@/lib/portal/requests";
 
 export type ActionState = { ok: boolean; message: string } | null;
@@ -135,6 +143,7 @@ export type ChatState =
   | { status: "reply"; reply: string }
   | { status: "created"; title: string }
   | { status: "failed"; message: string } // the ticket was ready but filing it failed
+  | { status: "ended"; message: string } // too many off-topic messages
   | { status: "error"; message: string };
 
 // The client keeps the conversation and sends it whole each turn; nothing is stored
@@ -172,6 +181,13 @@ export async function requestChatAction(input: z.input<typeof chatSchema>): Prom
   } catch (e) {
     console.error(e);
     return { status: "error", message: "The chat isn't available right now. Please try again, or use the form." };
+  }
+  if (!result.onTopic) {
+    const strikes = messages.filter((m) => m.role === "assistant" && m.content === OFF_TOPIC_REPLY).length + 1;
+    if (strikes >= CHAT_MAX_STRIKES) {
+      return { status: "ended", message: "This chat is only for writing up your request, so it has ended. You can start a new one or use the form." };
+    }
+    return { status: "reply", reply: result.reply };
   }
   if (!result.ticket) return { status: "reply", reply: result.reply };
 

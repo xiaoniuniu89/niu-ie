@@ -40,6 +40,7 @@ export function RequestChat({ projectId, kind }: { projectId: string; kind: Requ
   const [draft, setDraft] = useState("");
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [ended, setEnded] = useState<string | null>(null);
   const [pill, setPill] = useState<Pill>(null);
   const bottom = useRef<HTMLDivElement>(null);
 
@@ -72,9 +73,17 @@ export function RequestChat({ projectId, kind }: { projectId: string; kind: Requ
       setError(result.message);
       setOpen(false);
       setPill({ ok: false, text: `Not sent. ${result.message}` });
+    } else if (result.status === "ended") {
+      setEnded(result.message);
     } else {
       setError(result.message);
     }
+  }
+
+  function restart() {
+    setMessages([]);
+    setError(null);
+    setEnded(null);
   }
 
   function onSubmit(e: React.FormEvent) {
@@ -128,6 +137,14 @@ export function RequestChat({ projectId, kind }: { projectId: string; kind: Requ
                 Thinking…
               </p>
             )}
+            {ended && (
+              <div className="space-y-2" role="alert">
+                <p className="text-sm text-muted-foreground">{ended}</p>
+                <Button type="button" size="sm" variant="outline" onClick={restart}>
+                  Start again
+                </Button>
+              </div>
+            )}
             {error && (
               <div className="space-y-2" role="alert">
                 <p className="text-sm text-destructive">{error}</p>
@@ -150,10 +167,10 @@ export function RequestChat({ projectId, kind }: { projectId: string; kind: Requ
               maxLength={MAX_MESSAGE}
               rows={2}
               placeholder={messages.length ? "Type your answer" : copy.placeholder}
-              disabled={pending}
+              disabled={pending || Boolean(ended)}
               className="resize-none"
             />
-            <Button type="submit" size="icon" disabled={pending || !draft.trim()} aria-label="Send">
+            <Button type="submit" size="icon" disabled={pending || Boolean(ended) || !draft.trim()} aria-label="Send">
               <SendHorizontal className="h-4 w-4" />
             </Button>
           </form>

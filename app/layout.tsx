@@ -5,8 +5,6 @@ import { Analytics } from "@vercel/analytics/next";
 import { cookies } from "next/headers";
 import { LocaleWrapper } from "@/components/LocaleWrapper";
 import { CookieConsent } from "@/components/CookieConsent";
-import { ClerkProvider } from "@clerk/nextjs";
-import { shadcn } from "@clerk/ui/themes";
 import "./globals.css";
 
 const lora = Lora({
@@ -95,35 +93,33 @@ export default async function RootLayout({
       <body
         className={`${lora.variable} ${robotoCondensed.variable} ${nunito.variable} antialiased min-h-screen flex flex-col`}
       >
-        <ClerkProvider appearance={{ theme: shadcn }}>
-          <Script id="consent-defaults" strategy="beforeInteractive">
-            {`
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('consent', 'default', {
-                analytics_storage: 'denied',
-                ad_storage: 'denied',
-              });
-            `}
-          </Script>
-          <Script
-            src="https://www.googletagmanager.com/gtag/js?id=G-D9C89TP5C2"
-            strategy="afterInteractive"
-          />
-          <Script id="google-analytics" strategy="afterInteractive">
-            {`
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-D9C89TP5C2');
-            `}
-          </Script>
-          <LocaleWrapper>
-            {children}
-          </LocaleWrapper>
-          <CookieConsent />
-          <Analytics />
-        </ClerkProvider>
+        <Script id="consent-defaults" strategy="beforeInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('consent', 'default', {
+              analytics_storage: 'denied',
+              ad_storage: 'denied',
+            });
+          `}
+        </Script>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-D9C89TP5C2"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-D9C89TP5C2');
+          `}
+        </Script>
+        <LocaleWrapper>
+          {children}
+        </LocaleWrapper>
+        <CookieConsent />
+        <Analytics />
       </body>
     </html>
   );

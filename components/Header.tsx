@@ -15,7 +15,7 @@ import {
   SheetTrigger,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { ChevronDown, Menu, Sparkles, MessageSquare } from "lucide-react";
+import { ChevronDown, Menu, Sparkles, MessageSquare, LogIn } from "lucide-react";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import { useIntl } from "react-intl";
 
@@ -83,6 +83,13 @@ export function Header() {
           <div className="h-4 w-px bg-border mx-1" aria-hidden="true" />
 
           <LanguageSelector />
+
+          <Button asChild variant="outline" size="sm" className="font-condensed font-semibold tracking-wide rounded-md">
+            <Link href="/portal">
+              <LogIn className="w-3.5 h-3.5" />
+              {intl.formatMessage({ id: "nav.clientLogin" })}
+            </Link>
+          </Button>
 
           <Button asChild size="sm" className="font-condensed font-semibold tracking-wide bg-primary text-primary-foreground hover:bg-primary/90 rounded-md">
             <Link href="/contact?mode=sample">
@@ -154,6 +161,12 @@ export function Header() {
                 <Button asChild variant="outline" className="w-full font-condensed font-semibold rounded-md">
                   <Link href="/contact?mode=inquiry">
                     {intl.formatMessage({ id: "footer.inquiryBtn" })}
+                  </Link>
+                </Button>
+                <Button asChild variant="ghost" className="w-full font-condensed font-semibold rounded-md">
+                  <Link href="/portal">
+                    <LogIn className="w-4 h-4 mr-2" />
+                    {intl.formatMessage({ id: "nav.clientLogin" })}
                   </Link>
                 </Button>
               </div>

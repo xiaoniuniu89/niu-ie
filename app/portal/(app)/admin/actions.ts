@@ -1,19 +1,16 @@
 "use server";
 
 import { headers } from "next/headers";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import nodemailer from "nodemailer";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/portal/auth";
 import { createAdminClient } from "@/lib/portal/supabase/admin";
 
-export type ActionState = { ok: boolean; message: string } | null;
+// `id` is the new row, for forms that open it after creating.
+export type ActionState = { ok: boolean; message: string; id?: string } | null;
 
 const CLIENT_STATUSES = ["active", "paused", "archived"] as const;
 const PROJECT_STATUSES = ["planning", "in_progress", "live", "maintenance"] as const;
-
-const clientPath = (id: string) => `/portal/admin/${id}`;
 
 const clientSchema = z.object({ businessName: z.string().trim().min(1) });
 
@@ -29,8 +26,7 @@ export async function createClientAction(_: ActionState, formData: FormData): Pr
     .single();
   if (error) return { ok: false, message: error.message };
 
-  revalidatePath("/portal/admin");
-  redirect(clientPath(data.id));
+  return { ok: true, message: "Created.", id: data.id };
 }
 
 const updateClientSchema = z.object({
@@ -51,7 +47,6 @@ export async function updateClientAction(_: ActionState, formData: FormData): Pr
     .eq("id", clientId);
   if (error) return { ok: false, message: error.message };
 
-  revalidatePath("/portal/admin", "layout");
   return { ok: true, message: "Saved." };
 }
 
@@ -85,7 +80,6 @@ export async function createProjectAction(_: ActionState, formData: FormData): P
     .insert({ client_id: parsed.data.clientId, ...projectRow(parsed.data) });
   if (error) return { ok: false, message: error.message };
 
-  revalidatePath(clientPath(parsed.data.clientId));
   return { ok: true, message: `Added ${parsed.data.name}.` };
 }
 
@@ -102,7 +96,6 @@ export async function updateProjectAction(_: ActionState, formData: FormData): P
     .eq("id", parsed.data.projectId);
   if (error) return { ok: false, message: error.message };
 
-  revalidatePath(clientPath(parsed.data.clientId));
   return { ok: true, message: "Saved." };
 }
 
@@ -116,7 +109,6 @@ export async function deleteProjectAction(_: ActionState, formData: FormData): P
   const { error } = await supabase.from("projects").delete().eq("id", parsed.data.projectId);
   if (error) return { ok: false, message: error.message };
 
-  revalidatePath(clientPath(parsed.data.clientId));
   return { ok: true, message: "Removed." };
 }
 
@@ -152,7 +144,6 @@ export async function inviteMemberAction(_: ActionState, formData: FormData): Pr
     .eq("id", parsed.data.clientId)
     .single();
 
-  revalidatePath(clientPath(parsed.data.clientId));
   const origin = (await headers()).get("origin") ?? "https://www.niu.ie";
   try {
     await sendInviteEmail(email, client?.business_name ?? "your business", `${origin}/portal/login`);
@@ -178,7 +169,6 @@ export async function removeMemberAction(_: ActionState, formData: FormData): Pr
     .eq("user_id", parsed.data.userId);
   if (error) return { ok: false, message: error.message };
 
-  revalidatePath(clientPath(parsed.data.clientId));
   return { ok: true, message: "Removed." };
 }
 

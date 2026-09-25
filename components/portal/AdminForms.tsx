@@ -1,6 +1,7 @@
 "use client";
 
 import { startTransition, useActionState, useEffect, useId, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { useSWRConfig } from "swr";
 import {
   createClientAction,
@@ -12,6 +13,7 @@ import {
   updateProjectAction,
   type ActionState,
 } from "@/app/portal/(app)/admin/actions";
+import { adminClientKey, adminClientPath, adminClientsKey } from "@/lib/portal/admin";
 import { projectsKey } from "@/lib/portal/projects";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -42,8 +44,16 @@ const PROJECT_STATUS_OPTIONS = [
 ] as const;
 
 export function NewClientForm() {
+  const router = useRouter();
   return (
-    <ActionForm action={createClientAction} submit="Create and continue" pendingLabel="Creating…" invalidatesProjects>
+    <ActionForm
+      action={createClientAction}
+      submit="Create and continue"
+      pendingLabel="Creating…"
+      invalidates={[adminClientsKey]}
+      invalidatesProjects
+      onSuccess={(state) => state.id && router.push(adminClientPath(state.id))}
+    >
       <Field name="businessName" label="Business name" required />
     </ActionForm>
   );
@@ -51,7 +61,7 @@ export function NewClientForm() {
 
 export function ClientDetailsForm({ id, name, status }: { id: string; name: string; status: string }) {
   return (
-    <ActionForm action={updateClientAction} submit="Save" invalidatesProjects>
+    <ActionForm action={updateClientAction} submit="Save" invalidates={[adminClientKey(id), adminClientsKey]} invalidatesProjects>
       <input type="hidden" name="clientId" value={id} />
       <Field name="businessName" label="Business name" required defaultValue={name} />
       <Select name="status" label="Status" options={CLIENT_STATUS_OPTIONS} defaultValue={status} />
@@ -61,7 +71,13 @@ export function ClientDetailsForm({ id, name, status }: { id: string; name: stri
 
 export function InviteForm({ clientId }: { clientId: string }) {
   return (
-    <ActionForm action={inviteMemberAction} submit="Invite" pendingLabel="Inviting…" resetOnSuccess>
+    <ActionForm
+      action={inviteMemberAction}
+      submit="Invite"
+      pendingLabel="Inviting…"
+      resetOnSuccess
+      invalidates={[adminClientKey(clientId), adminClientsKey]}
+    >
       <input type="hidden" name="clientId" value={clientId} />
       <Field name="email" label="Email" type="email" required />
     </ActionForm>
@@ -77,6 +93,7 @@ export function RemoveMemberButton({ clientId, userId, email }: { clientId: stri
       variant="outline"
       confirmText={`Remove ${email}'s access to this client?`}
       inline
+      invalidates={[adminClientKey(clientId), adminClientsKey]}
     >
       <input type="hidden" name="clientId" value={clientId} />
       <input type="hidden" name="userId" value={userId} />
@@ -90,6 +107,7 @@ export function ProjectForm({ clientId, project }: { clientId: string; project?:
       action={project ? updateProjectAction : createProjectAction}
       submit={project ? "Save" : "Add project"}
       resetOnSuccess={!project}
+      invalidates={[adminClientKey(clientId), adminClientsKey]}
       invalidatesProjects
     >
       <input type="hidden" name="clientId" value={clientId} />
@@ -125,6 +143,7 @@ export function DeleteProjectButton({ clientId, projectId, name }: { clientId: s
       variant="outline"
       confirmText={`Delete ${name}? The client will no longer see it.`}
       inline
+      invalidates={[adminClientKey(clientId), adminClientsKey]}
       invalidatesProjects
     >
       <input type="hidden" name="clientId" value={clientId} />
@@ -141,7 +160,9 @@ function ActionForm({
   confirmText,
   resetOnSuccess,
   inline,
+  invalidates = [],
   invalidatesProjects,
+  onSuccess,
   children,
 }: {
   action: Action;
@@ -151,16 +172,23 @@ function ActionForm({
   confirmText?: string;
   resetOnSuccess?: boolean;
   inline?: boolean;
+  // Admin SWR keys to refetch after a successful save.
+  invalidates?: string[];
   // Clears the cached client and project list the overview and project pages read.
   invalidatesProjects?: boolean;
+  onSuccess?: (state: NonNullable<ActionState>) => void;
   children: React.ReactNode;
 }) {
   const { mutate } = useSWRConfig();
-  const [state, formAction, pending] = useActionState<ActionState, FormData>((prev, formData) => {
-    // Cleared before the action runs because createClientAction redirects instead of returning.
-    // Nothing on the admin pages reads the key, so the next portal page load fetches it fresh.
-    if (invalidatesProjects) mutate(projectsKey, undefined, { revalidate: false });
-    return action(prev, formData);
+  const [state, formAction, pending] = useActionState<ActionState, FormData>(async (prev, formData) => {
+    const result = await action(prev, formData);
+    if (result?.ok) {
+      await Promise.all(invalidates.map((key) => mutate(key)));
+      // Nothing on the admin pages reads this key, so the next portal page load fetches it fresh.
+      if (invalidatesProjects) mutate(projectsKey, undefined, { revalidate: false });
+      onSuccess?.(result);
+    }
+    return result;
   }, null);
   const formRef = useRef<HTMLFormElement>(null);
 

@@ -1,15 +1,9 @@
-import Link from "next/link";
-import { ChevronRight } from "lucide-react";
 import { requireAdmin } from "@/lib/portal/auth";
 import { NewClientForm } from "@/components/portal/AdminForms";
+import { AdminClientList } from "@/components/portal/AdminClients";
 
 export default async function AdminPage() {
-  const { supabase } = await requireAdmin();
-
-  const { data: clients } = await supabase
-    .from("clients")
-    .select("id, business_name, status, projects (id), members (user_id)")
-    .order("business_name");
+  await requireAdmin();
 
   return (
     <div className="space-y-10">
@@ -20,28 +14,7 @@ export default async function AdminPage() {
 
       <section>
         <h2 className="text-lg font-semibold">Clients</h2>
-        {!clients?.length && <p className="mt-2 text-muted-foreground">None yet. Create one below.</p>}
-        <ul className="mt-4 divide-y divide-border rounded-lg border border-border bg-card">
-          {clients?.map((c) => (
-            <li key={c.id}>
-              <Link
-                href={`/portal/admin/${c.id}`}
-                className="flex items-center justify-between gap-4 px-4 py-3 hover:bg-muted/50"
-              >
-                <span>
-                  <span className="font-medium">{c.business_name}</span>
-                  <span className="ml-3 text-sm text-muted-foreground">
-                    {plural(c.projects.length, "project")} · {plural(c.members.length, "person", "people")}
-                  </span>
-                </span>
-                <span className="flex items-center gap-2 text-sm text-muted-foreground">
-                  {c.status !== "active" && c.status}
-                  <ChevronRight className="size-4" aria-hidden />
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <AdminClientList />
       </section>
 
       <section className="max-w-sm rounded-lg border border-border bg-card p-4">
@@ -50,8 +23,4 @@ export default async function AdminPage() {
       </section>
     </div>
   );
-}
-
-function plural(n: number, one: string, many = `${one}s`) {
-  return `${n} ${n === 1 ? one : many}`;
 }

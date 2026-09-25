@@ -11,13 +11,20 @@ export const getSessionUser = cache(async () => {
   return { supabase, user: claims ? { id: claims.sub, email: claims.email } : null };
 });
 
-// Cached per request, so the layout and page share one auth check instead of repeating it.
-export const requireUser = cache(async () => {
+// For API routes: the session user and whether they're an admin, without redirecting.
+export const getSessionAdmin = cache(async () => {
   const { supabase, user } = await getSessionUser();
-  if (!user) redirect("/portal/login");
+  if (!user) return { supabase, user, isAdmin: false };
 
   const { data: admin } = await supabase.from("admins").select("user_id").eq("user_id", user.id).maybeSingle();
   return { supabase, user, isAdmin: Boolean(admin) };
+});
+
+// Cached per request, so the layout and page share one auth check instead of repeating it.
+export const requireUser = cache(async () => {
+  const { supabase, user, isAdmin } = await getSessionAdmin();
+  if (!user) redirect("/portal/login");
+  return { supabase, user, isAdmin };
 });
 
 export async function requireAdmin() {

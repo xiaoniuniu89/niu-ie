@@ -141,7 +141,7 @@ const chatSchema = z.object({
 
 export type ChatState =
   | { status: "reply"; reply: string }
-  | { status: "created"; title: string }
+  | { status: "created"; title: string; kind: "issue" | "feature" }
   | { status: "failed"; message: string } // the ticket was ready but filing it failed
   | { status: "ended"; message: string } // too many off-topic messages
   | { status: "error"; message: string };
@@ -196,14 +196,14 @@ export async function requestChatAction(input: z.input<typeof chatSchema>): Prom
   const filed = await fileRequest(
     ctx,
     project,
-    { type: kind === "feature" ? "change" : "bug", title: ticket.title, pageUrl, current: ticket.current, expected: ticket.expected },
+    { type: ticket.type, title: ticket.title, pageUrl, current: ticket.current, expected: ticket.expected },
     []
   );
   if (!filed?.ok) return { status: "failed", message: filed?.message ?? "We couldn't send your request." };
   if (filed.issueNumber) {
     await commentOnIssue(project.repo, filed.issueNumber, chatTranscript(messages)).catch(console.error);
   }
-  return { status: "created", title: ticket.title };
+  return { status: "created", title: ticket.title, kind: ticket.type === "change" ? "feature" : "issue" };
 }
 
 // Loads a request the user can see, and only lets it change while it's still waiting.

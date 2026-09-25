@@ -70,7 +70,9 @@ export function RequestChat({ projectId, kind }: { projectId: string; kind: Requ
     } else if (result.status === "created") {
       setMessages([]);
       setOpen(false);
-      setPill({ ok: true, text: `Sent to Daniel: “${result.title}”` });
+      // The assistant may file it as the other kind, e.g. a content change from the issue tab.
+      const where = result.kind === kind ? "" : result.kind === "feature" ? " (under Feature requests)" : " (under Issues)";
+      setPill({ ok: true, text: `Sent to Daniel: “${result.title}”${where}` });
       mutate(requestsKey(projectId));
     } else if (result.status === "failed") {
       // Keep the chat, so reopening it offers Try again.

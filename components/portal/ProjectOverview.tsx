@@ -50,11 +50,7 @@ export function ProjectOverview({ isAdmin }: { isAdmin: boolean }) {
                 </thead>
                 <tbody>
                   {client.projects.map((project) => (
-                    // The View button's link stretches over the whole row; the live site link sits above it.
-                    <tr
-                      key={project.id}
-                      className="relative cursor-pointer border-b border-border last:border-0 transition-colors hover:bg-muted/50 focus-within:bg-muted/50"
-                    >
+                    <tr key={project.id} className="border-b border-border last:border-0">
                       <td className="px-4 py-3 font-medium">{project.name}</td>
                       <td className="px-4 py-3">
                         <Badge variant="secondary">{PROJECT_STATUS_LABEL[project.status] ?? project.status}</Badge>
@@ -65,7 +61,7 @@ export function ProjectOverview({ isAdmin }: { isAdmin: boolean }) {
                             href={project.live_url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="relative z-10 block truncate text-primary underline-offset-4 hover:underline"
+                            className="block truncate text-primary underline-offset-4 hover:underline"
                           >
                             {project.live_url.replace(/^https?:\/\//, "")}
                           </a>
@@ -75,8 +71,8 @@ export function ProjectOverview({ isAdmin }: { isAdmin: boolean }) {
                       </td>
                       <td className="px-4 py-3 text-right">
                         <Button asChild size="sm" variant="outline">
-                          <Link href={projectPath(project.id)} className="after:absolute after:inset-0">
-                            View project
+                          <Link href={projectPath(project.id)}>
+                            View more
                             <ChevronRight className="h-4 w-4" aria-hidden />
                           </Link>
                         </Button>

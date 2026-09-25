@@ -2,11 +2,10 @@ import "server-only";
 import { z } from "zod";
 import type { RequestKind } from "@/lib/portal/requests";
 
-// Any OpenAI-compatible chat API. Defaults to OpenAI; for DeepSeek set
-// AI_BASE_URL=https://api.deepseek.com and AI_MODEL=deepseek-chat.
-const API_KEY = process.env.AI_API_KEY;
-const BASE_URL = process.env.AI_BASE_URL ?? "https://api.openai.com/v1";
-const MODEL = process.env.AI_MODEL ?? "gpt-4o-mini";
+// DeepSeek's OpenAI-compatible chat API.
+const API_KEY = process.env.DEEPSEEK_API_KEY;
+const BASE_URL = "https://api.deepseek.com";
+const MODEL = "deepseek-chat";
 
 // Caps that keep a chat cheap and stop it being used as a free chatbot.
 export const CHAT_MAX_MESSAGE = 1000;
@@ -72,7 +71,7 @@ export async function runRequestChat(
   messages: ChatMessage[],
   lastTurn: boolean
 ): Promise<ChatResult> {
-  if (!API_KEY) throw new Error("AI_API_KEY is not set");
+  if (!API_KEY) throw new Error("DEEPSEEK_API_KEY is not set");
   const res = await fetch(`${BASE_URL}/chat/completions`, {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },

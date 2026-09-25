@@ -12,7 +12,7 @@ Done:
 - `proxy.ts` (Next 16 middleware) runs on `/portal/*` only; signed-out users go to `/portal/login`.
 - Login: email, then link or code (`components/portal/LoginForm.tsx`). `app/portal/auth/confirm/route.ts` accepts both `?code=` (default template) and `?token_hash=` (custom template).
 - Overview (`app/portal/(app)/page.tsx`): live site, preview and GitHub links per project.
-- Admin (`app/portal/(app)/admin/`): create client, link project, invite person. Invite creates the Supabase user with the secret key and sends a Gmail email pointing to `/portal/login`.
+- Admin (`app/portal/(app)/admin/`): pick or create a client, then edit its details, people and projects on `/portal/admin/[clientId]`. Admin password login. invite creates the Supabase user with the secret key and sends a Gmail email pointing to `/portal/login`.
 - "Client login" button in the site header (all 11 locales).
 - Vercel has the Supabase env vars. Supabase redirect URLs cover localhost, niu.ie and www.niu.ie.
 - `niuwebdev@gmail.com` is the admin.
@@ -38,7 +38,7 @@ Working notes:
 
 - Public signups disabled in Supabase. Admin creates the user (secret key) and sends an invite email from Gmail pointing to `/portal/login`.
 - Login email carries a **6-digit code plus link**. Outlook/Hotmail link scanners can consume one-time links; the code is the fallback.
-- No passwords.
+- Clients: no passwords. Admins can set one on `/portal/admin` and use "Sign in with a password" on the login page, so admin logins don't use up the email limit.
 - Custom SMTP (e.g. Resend) — Supabase default email is rate-limited and only reaches team members. Not set up yet.
 
 ## Data model

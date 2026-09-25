@@ -72,19 +72,20 @@ export async function cancelIssue(repo: string, number: number, by: string) {
 
 const isPortalIssue = (i: Issue) => !i.pull_request && i.labels.some((l) => l.name === PORTAL_LABEL);
 
-// Every portal issue on the repo, newest first. The label filter lags a few seconds behind
-// new issues, so the latest issues are also listed unfiltered and merged in.
+// Open portal issues on the repo, newest first; done and cancelled requests drop off.
+// The label filter lags a few seconds behind new issues, so the latest open issues are
+// also listed unfiltered and merged in.
 export async function listPortalIssues(repo: string) {
   const [labelled, latest] = await Promise.all([
     (async () => {
       const all: Issue[] = [];
       for (let page = 1; ; page++) {
-        const batch = await gh<Issue[]>(`/repos/${repo}/issues?labels=${PORTAL_LABEL}&state=all&per_page=100&page=${page}`);
+        const batch = await gh<Issue[]>(`/repos/${repo}/issues?labels=${PORTAL_LABEL}&state=open&per_page=100&page=${page}`);
         all.push(...batch);
         if (batch.length < 100) return all;
       }
     })(),
-    gh<Issue[]>(`/repos/${repo}/issues?state=all&per_page=30`),
+    gh<Issue[]>(`/repos/${repo}/issues?state=open&per_page=30`),
   ]);
   const byNumber = new Map([...labelled, ...latest].filter(isPortalIssue).map((i) => [i.number, i]));
   return [...byNumber.values()].sort((a, b) => b.number - a.number);

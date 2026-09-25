@@ -7,6 +7,7 @@ import { ChevronLeft } from "lucide-react";
 import { PROJECT_STATUS_LABEL, projectsKey, type ProjectsResponse } from "@/lib/portal/projects";
 import { FEATURE_TYPES, ISSUE_TYPES } from "@/lib/portal/requests";
 import { ProjectLinks } from "@/components/portal/ProjectOverview";
+import { RequestChat } from "@/components/portal/RequestChat";
 import { RequestDialog } from "@/components/portal/RequestForms";
 import { RequestList } from "@/components/portal/RequestList";
 import { Badge } from "@/components/ui/badge";
@@ -100,7 +101,10 @@ export function ProjectDetail({ projectId }: { projectId: string }) {
 
         {tab === "issues" && project.repo && (
           <div className="space-y-4">
-            <RequestDialog projectId={project.id} clientId={client.id} kind="issue" trigger={<Button>Report an issue</Button>} />
+            <div className="flex flex-wrap items-center gap-3">
+              <RequestDialog projectId={project.id} clientId={client.id} kind="issue" trigger={<Button>Report an issue</Button>} />
+              <RequestChat projectId={project.id} kind="issue" />
+            </div>
             <RequestList
               projectId={project.id}
               clientId={client.id}
@@ -112,7 +116,10 @@ export function ProjectDetail({ projectId }: { projectId: string }) {
 
         {tab === "features" && project.repo && (
           <div className="space-y-4">
-            <RequestDialog projectId={project.id} clientId={client.id} kind="feature" trigger={<Button>Request a feature</Button>} />
+            <div className="flex flex-wrap items-center gap-3">
+              <RequestDialog projectId={project.id} clientId={client.id} kind="feature" trigger={<Button>Request a feature</Button>} />
+              <RequestChat projectId={project.id} kind="feature" />
+            </div>
             <RequestList
               projectId={project.id}
               clientId={client.id}

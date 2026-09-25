@@ -3,7 +3,8 @@
 import { headers } from "next/headers";
 import { z } from "zod";
 import { requireUser } from "@/lib/portal/auth";
-import { cancelIssue, createIssue, getIssue, issueStatus, updateIssue } from "@/lib/portal/github";
+import { cancelIssue, commentOnIssue, createIssue, getIssue, issueStatus, updateIssue } from "@/lib/portal/github";
+import { CHAT_MAX_MESSAGE, CHAT_MAX_TURNS, CHAT_DAILY_LIMIT, chatTranscript, runRequestChat } from "@/lib/portal/request-chat";
 import { FILE_ACCEPT, MAX_FILE_BYTES, MAX_FILES, issueBody } from "@/lib/portal/requests";
 
 export type ActionState = { ok: boolean; message: string } | null;
@@ -42,23 +43,44 @@ async function origin() {
 }
 
 export async function createRequestAction(_: ActionState, formData: FormData): Promise<ActionState> {
-  const { supabase, user } = await requireUser();
+  const ctx = await requireUser();
   const parsed = createSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return { ok: false, message: parsed.error.issues[0].message };
-  const { projectId, type, title, pageUrl, current, expected, files } = parsed.data;
+  const { projectId, files, ...fields } = parsed.data;
 
-  // RLS returns the project only if the user belongs to its client.
-  const { data: project } = await supabase
-    .from("projects")
-    .select("id, client_id, repo")
-    .eq("id", projectId)
-    .maybeSingle();
-  if (!project) return { ok: false, message: "Project not found." };
-  if (!project.repo) return { ok: false, message: "This project isn't linked to GitHub yet. Please email Daniel instead." };
+  const project = await loadProject(ctx.supabase, projectId);
+  if (!project.ok) return { ok: false, message: project.message };
   if (files.some((f) => !f.path.startsWith(`${project.client_id}/`))) {
     return { ok: false, message: "One of the attachments isn't allowed." };
   }
+  return fileRequest(ctx, project, fields, files);
+}
 
+type Ctx = Awaited<ReturnType<typeof requireUser>>;
+type Project = { id: string; client_id: string; name: string; repo: string };
+type Fields = { type: "change" | "bug"; title: string; pageUrl: string; current: string; expected: string };
+type UploadedFile = z.infer<typeof fileSchema>;
+
+// RLS returns the project only if the user belongs to its client.
+async function loadProject(supabase: Ctx["supabase"], projectId: string) {
+  const { data: project } = await supabase
+    .from("projects")
+    .select("id, client_id, name, repo")
+    .eq("id", projectId)
+    .maybeSingle();
+  if (!project) return { ok: false, message: "Project not found." } as const;
+  if (!project.repo) return { ok: false, message: "This project isn't linked to GitHub yet. Please email Daniel instead." } as const;
+  return { ok: true, ...(project as Project) } as const;
+}
+
+// Opens the GitHub issue, then saves the request row and its files. Returns the issue
+// number too, so the chat can comment its transcript on it.
+async function fileRequest(
+  { supabase, user }: Ctx,
+  project: Project,
+  { type, title, pageUrl, current, expected }: Fields,
+  files: UploadedFile[]
+): Promise<ActionState & { issueNumber?: number }> {
   // Ids are made up front so the issue body can link each file.
   const requestId = crypto.randomUUID();
   const fileRows = files.map((f) => ({ id: crypto.randomUUID(), request_id: requestId, client_id: project.client_id, ...f }));
@@ -96,7 +118,76 @@ export async function createRequestAction(_: ActionState, formData: FormData): P
     return { ok: false, message: "Your request reached Daniel, but we couldn't save it here." };
   }
 
-  return { ok: true, message: "Request sent." };
+  return { ok: true, message: "Request sent.", issueNumber };
+}
+
+const chatSchema = z.object({
+  projectId: z.uuid(),
+  kind: z.enum(["issue", "feature"]),
+  messages: z
+    .array(z.object({ role: z.enum(["user", "assistant"]), content: z.string().trim().min(1).max(2000) }))
+    .min(1)
+    .max(CHAT_MAX_TURNS * 2)
+    .refine((m) => m.at(-1)?.role === "user"),
+});
+
+export type ChatState =
+  | { status: "reply"; reply: string }
+  | { status: "created"; title: string }
+  | { status: "failed"; message: string } // the ticket was ready but filing it failed
+  | { status: "error"; message: string };
+
+// The client keeps the conversation and sends it whole each turn; nothing is stored
+// until the assistant has enough to file the ticket.
+export async function requestChatAction(input: z.input<typeof chatSchema>): Promise<ChatState> {
+  const ctx = await requireUser();
+  const parsed = chatSchema.safeParse(input);
+  if (!parsed.success) return { status: "error", message: "That chat is too long. Please use the form instead." };
+  const { projectId, kind, messages } = parsed.data;
+  const userTurns = messages.filter((m) => m.role === "user");
+  if (userTurns.length > CHAT_MAX_TURNS || userTurns.at(-1)!.content.length > CHAT_MAX_MESSAGE) {
+    return { status: "error", message: "That chat is too long. Please use the form instead." };
+  }
+
+  const project = await loadProject(ctx.supabase, projectId);
+  if (!project.ok) return { status: "error", message: project.message };
+
+  const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+  const { count } = await ctx.supabase
+    .from("request_chat_usage")
+    .select("id", { count: "exact", head: true })
+    .gte("created_at", since);
+  if ((count ?? CHAT_DAILY_LIMIT) >= CHAT_DAILY_LIMIT) {
+    return { status: "error", message: "You've used the chat a lot today. Please use the form instead." };
+  }
+  const { error: usageError } = await ctx.supabase.from("request_chat_usage").insert({});
+  if (usageError) {
+    console.error(usageError);
+    return { status: "error", message: "The chat isn't available right now. Please use the form instead." };
+  }
+
+  let result;
+  try {
+    result = await runRequestChat(kind, project.name, messages, userTurns.length >= CHAT_MAX_TURNS);
+  } catch (e) {
+    console.error(e);
+    return { status: "error", message: "The chat isn't available right now. Please try again, or use the form." };
+  }
+  if (!result.ticket) return { status: "reply", reply: result.reply };
+
+  const { ticket } = result;
+  const pageUrl = z.url().safeParse(ticket.page_url).success ? ticket.page_url! : "";
+  const filed = await fileRequest(
+    ctx,
+    project,
+    { type: kind === "feature" ? "change" : "bug", title: ticket.title, pageUrl, current: ticket.current, expected: ticket.expected },
+    []
+  );
+  if (!filed?.ok) return { status: "failed", message: filed?.message ?? "We couldn't send your request." };
+  if (filed.issueNumber) {
+    await commentOnIssue(project.repo, filed.issueNumber, chatTranscript(messages)).catch(console.error);
+  }
+  return { status: "created", title: ticket.title };
 }
 
 // Loads a request the user can see, and only lets it change while it's still waiting.

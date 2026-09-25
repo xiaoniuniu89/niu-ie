@@ -54,11 +54,12 @@ export async function updateIssue(repo: string, number: number, fields: { title?
   await gh(`/repos/${repo}/issues/${number}`, { method: "PATCH", body: JSON.stringify(fields) });
 }
 
+export async function commentOnIssue(repo: string, number: number, body: string) {
+  await gh(`/repos/${repo}/issues/${number}/comments`, { method: "POST", body: JSON.stringify({ body }) });
+}
+
 export async function cancelIssue(repo: string, number: number, by: string) {
-  await gh(`/repos/${repo}/issues/${number}/comments`, {
-    method: "POST",
-    body: JSON.stringify({ body: `Cancelled by ${by} in the Niu portal.` }),
-  });
+  await commentOnIssue(repo, number, `Cancelled by ${by} in the Niu portal.`);
   await gh(`/repos/${repo}/issues/${number}`, {
     method: "PATCH",
     body: JSON.stringify({ state: "closed", state_reason: "not_planned" }),

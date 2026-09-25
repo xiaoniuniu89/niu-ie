@@ -24,6 +24,7 @@ Blocked until Resend is set up (deferred):
 
 Working notes:
 - Supabase CLI detects agents and forces JSON output. Always pass `--agent no`. Run SQL with `npx supabase db query --linked --agent no "<sql>"`.
+- Request chat (optional, beside each form): `components/portal/RequestChat.tsx` calls `requestChatAction`, which asks follow-ups via any OpenAI-compatible API (`lib/portal/request-chat.ts`), then files the issue and comments the transcript on it. Env: `AI_API_KEY`, optional `AI_BASE_URL` / `AI_MODEL` (default OpenAI `gpt-4o-mini`; DeepSeek = `https://api.deepseek.com` + `deepseek-chat`). Caps: 1000 chars per message, 6 client messages per chat, 30 replies per user per 24h (`request_chat_usage` table).
 - Next: requests (issue reporting), phase R1. Notifications are on hold until we decide what we want.
 
 ## Stack

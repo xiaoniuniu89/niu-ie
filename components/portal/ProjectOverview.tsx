@@ -5,6 +5,7 @@ import useSWR from "swr";
 import { PROJECT_STATUS_LABEL, projectPath, projectsKey, type PortalProject, type ProjectsResponse } from "@/lib/portal/projects";
 import { ChevronRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 export function ProjectOverview({ isAdmin }: { isAdmin: boolean }) {
   const { data, error } = useSWR<ProjectsResponse>(projectsKey);
@@ -44,21 +45,17 @@ export function ProjectOverview({ isAdmin }: { isAdmin: boolean }) {
                     <th scope="col" className="px-4 py-2 font-medium">Project</th>
                     <th scope="col" className="px-4 py-2 font-medium">Status</th>
                     <th scope="col" className="hidden px-4 py-2 font-medium sm:table-cell">Live site</th>
-                    <th scope="col" className="w-8 px-4 py-2"><span className="sr-only">Open</span></th>
+                    <th scope="col" className="px-4 py-2"><span className="sr-only">Actions</span></th>
                   </tr>
                 </thead>
                 <tbody>
                   {client.projects.map((project) => (
-                    // The name link stretches over the whole row; the live site link sits above it.
+                    // The View button's link stretches over the whole row; the live site link sits above it.
                     <tr
                       key={project.id}
-                      className="relative border-b border-border last:border-0 transition-colors hover:bg-muted/50 focus-within:bg-muted/50"
+                      className="relative cursor-pointer border-b border-border last:border-0 transition-colors hover:bg-muted/50 focus-within:bg-muted/50"
                     >
-                      <td className="px-4 py-3 font-medium">
-                        <Link href={projectPath(project.id)} className="after:absolute after:inset-0 focus:outline-none">
-                          {project.name}
-                        </Link>
-                      </td>
+                      <td className="px-4 py-3 font-medium">{project.name}</td>
                       <td className="px-4 py-3">
                         <Badge variant="secondary">{PROJECT_STATUS_LABEL[project.status] ?? project.status}</Badge>
                       </td>
@@ -76,8 +73,13 @@ export function ProjectOverview({ isAdmin }: { isAdmin: boolean }) {
                           <span className="text-muted-foreground/60">Not set</span>
                         )}
                       </td>
-                      <td className="px-4 py-3 text-muted-foreground">
-                        <ChevronRight className="h-4 w-4" aria-hidden />
+                      <td className="px-4 py-3 text-right">
+                        <Button asChild size="sm" variant="outline">
+                          <Link href={projectPath(project.id)} className="after:absolute after:inset-0">
+                            View project
+                            <ChevronRight className="h-4 w-4" aria-hidden />
+                          </Link>
+                        </Button>
                       </td>
                     </tr>
                   ))}

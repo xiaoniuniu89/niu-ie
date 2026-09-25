@@ -19,6 +19,7 @@ import {
   DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -152,28 +153,55 @@ export function RequestDialog({ projectId, clientId, kind, request, trigger }: P
 
 export function CancelRequestButton({ projectId, issueNumber }: { projectId: string; issueNumber: number }) {
   const { mutate } = useSWRConfig();
+  const [open, setOpen] = useState(false);
   const [state, formAction, pending] = useActionState<ActionState, FormData>(async (prev, formData) => {
     const result = await cancelRequestAction(prev, formData);
-    if (result?.ok) mutate(requestsKey(projectId));
+    if (result?.ok) {
+      setOpen(false);
+      mutate(requestsKey(projectId));
+    }
     return result;
   }, null);
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!window.confirm("Cancel this request?")) return;
     const formData = new FormData(e.currentTarget);
     startTransition(() => formAction(formData));
   }
 
   return (
-    <form onSubmit={onSubmit} className="flex items-center gap-3">
-      <input type="hidden" name="projectId" value={projectId} />
-      <input type="hidden" name="issueNumber" value={issueNumber} />
-      <Button type="submit" size="sm" variant="outline" disabled={pending}>
-        {pending ? "Cancelling…" : "Cancel request"}
-      </Button>
-      {state && !state.ok && <p className="text-sm text-destructive">{state.message}</p>}
-    </form>
+    <Dialog open={open} onOpenChange={(next) => !pending && setOpen(next)}>
+      <DialogTrigger asChild>
+        <Button type="button" size="sm" variant="outline" disabled={pending}>
+          {pending ? "Cancelling…" : "Cancel request"}
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="max-w-sm">
+        <DialogHeader>
+          <DialogTitle>Cancel this request?</DialogTitle>
+          <DialogDescription>It will be removed from your list and we won&apos;t work on it.</DialogDescription>
+        </DialogHeader>
+        <form onSubmit={onSubmit} className="space-y-4">
+          <input type="hidden" name="projectId" value={projectId} />
+          <input type="hidden" name="issueNumber" value={issueNumber} />
+          {state && !state.ok && (
+            <p className="text-sm text-destructive" role="alert">
+              {state.message}
+            </p>
+          )}
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button type="button" variant="outline" disabled={pending}>
+                Keep it
+              </Button>
+            </DialogClose>
+            <Button type="submit" variant="destructive" disabled={pending}>
+              {pending ? "Cancelling…" : "Cancel request"}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 }
 

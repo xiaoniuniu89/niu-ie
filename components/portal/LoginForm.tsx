@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/portal/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,7 @@ export function LoginForm() {
   const [step, setStep] = useState<"email" | "code">("email");
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const errorId = useId();
 
   async function sendEmail(e: React.FormEvent) {
     e.preventDefault();
@@ -67,9 +68,16 @@ export function LoginForm() {
             value={code}
             onChange={(e) => setCode(e.target.value)}
             placeholder="123456"
+            autoFocus
+            aria-invalid={error ? true : undefined}
+            aria-describedby={error ? errorId : undefined}
           />
         </div>
-        {error && <p className="text-sm text-destructive">{error}</p>}
+        {error && (
+          <p id={errorId} role="alert" className="text-sm text-destructive">
+            {error}
+          </p>
+        )}
         <Button type="submit" className="w-full" disabled={pending || code.trim().length < 6}>
           {pending ? "Checking…" : "Sign in"}
         </Button>
@@ -91,9 +99,15 @@ export function LoginForm() {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error ? errorId : undefined}
         />
       </div>
-      {error && <p className="text-sm text-destructive">{error}</p>}
+      {error && (
+        <p id={errorId} role="alert" className="text-sm text-destructive">
+          {error}
+        </p>
+      )}
       <Button type="submit" className="w-full" disabled={pending}>
         {pending ? "Sending…" : "Email me a sign-in link"}
       </Button>

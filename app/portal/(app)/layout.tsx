@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { requireUser } from "@/lib/portal/auth";
-import { signOut } from "@/app/portal/actions";
-import { Button } from "@/components/ui/button";
 import { PortalMobileNav, PortalSidebar } from "@/components/portal/PortalNav";
 import { PortalSWRProvider } from "@/components/portal/PortalSWRProvider";
+import { SignOutButton } from "@/components/portal/SignOutButton";
 
 export const metadata: Metadata = {
   title: "Client portal",
@@ -28,11 +27,7 @@ export default async function PortalLayout({ children }: { children: React.React
             </div>
             <div className="flex items-center gap-3 text-sm text-muted-foreground">
               <span className="hidden sm:inline">{user.email}</span>
-              <form action={signOut}>
-                <Button type="submit" variant="outline" size="sm">
-                  Sign out
-                </Button>
-              </form>
+              <SignOutButton />
             </div>
           </div>
         </header>

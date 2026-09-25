@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, type KeyboardEvent } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import useSWR from "swr";
@@ -28,9 +29,26 @@ export function ProjectDetail({ projectId }: { projectId: string }) {
   const param = useSearchParams().get("tab");
   const tab: Tab = TABS.find(([value]) => value === param)?.[0] ?? "overview";
 
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
   // Shallow URL update keeps the tab on refresh without a server round trip.
   function selectTab(next: Tab) {
     window.history.replaceState(null, "", next === "overview" ? window.location.pathname : `?tab=${next}`);
+  }
+
+  // WAI-ARIA tabs: arrows wrap, Home/End jump; focus follows selection.
+  function onTabKeyDown(event: KeyboardEvent<HTMLButtonElement>, index: number) {
+    const last = TABS.length - 1;
+    const target =
+      event.key === "ArrowRight" ? (index === last ? 0 : index + 1)
+      : event.key === "ArrowLeft" ? (index === 0 ? last : index - 1)
+      : event.key === "Home" ? 0
+      : event.key === "End" ? last
+      : null;
+    if (target === null) return;
+    event.preventDefault();
+    selectTab(TABS[target][0]);
+    tabRefs.current[target]?.focus();
   }
 
   const back = (
@@ -66,16 +84,21 @@ export function ProjectDetail({ projectId }: { projectId: string }) {
       </div>
 
       <div role="tablist" aria-label="Project sections" className="flex gap-1 overflow-x-auto border-b border-border">
-        {TABS.map(([value, label]) => (
+        {TABS.map(([value, label], index) => (
           <button
             key={value}
+            ref={(el) => {
+              tabRefs.current[index] = el;
+            }}
             type="button"
             role="tab"
             id={`tab-${value}`}
             aria-selected={tab === value}
             aria-controls={`panel-${value}`}
+            tabIndex={tab === value ? 0 : -1}
             onClick={() => selectTab(value)}
-            className="-mb-px whitespace-nowrap border-b-2 border-transparent px-3 py-2 text-sm text-muted-foreground hover:text-foreground aria-selected:border-primary aria-selected:font-medium aria-selected:text-foreground"
+            onKeyDown={(event) => onTabKeyDown(event, index)}
+            className="-mb-px min-h-11 whitespace-nowrap border-b-2 border-transparent px-3 py-2 text-sm text-muted-foreground hover:text-foreground aria-selected:border-primary aria-selected:font-medium aria-selected:text-foreground md:min-h-0"
           >
             {label}
           </button>
@@ -96,7 +119,13 @@ export function ProjectDetail({ projectId }: { projectId: string }) {
         )}
 
         {tab !== "overview" && !project.repo && (
-          <p className="text-muted-foreground">Requests aren&apos;t set up for this project yet. Email us in the meantime.</p>
+          <p className="text-muted-foreground">
+            Requests aren&apos;t set up for this project yet.{" "}
+            <Link href="/contact" className="text-primary underline underline-offset-4">
+              Contact us
+            </Link>{" "}
+            in the meantime.
+          </p>
         )}
 
         {tab === "issues" && project.repo && (

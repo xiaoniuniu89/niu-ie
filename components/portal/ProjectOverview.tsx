@@ -30,11 +30,16 @@ export function ProjectOverview({ isAdmin }: { isAdmin: boolean }) {
     );
   }
 
+  const single = data.clients.length === 1;
+
   return (
-    <div className="space-y-10">
+    <div className={single ? "space-y-2" : "space-y-10"}>
+      <h1 className="font-serif text-2xl font-semibold">Your projects</h1>
       {data.clients.map((client) => (
         <section key={client.id}>
-          <h1 className="font-serif text-2xl font-semibold">{client.business_name}</h1>
+          <h2 className={single ? "text-sm text-muted-foreground" : "font-serif text-xl font-semibold"}>
+            {client.business_name}
+          </h2>
           {client.projects.length === 0 ? (
             <p className="mt-4 text-muted-foreground">No projects linked yet.</p>
           ) : (
@@ -118,6 +123,7 @@ function OverviewSkeleton() {
   return (
     <div aria-busy="true">
       <div className="h-8 w-56 animate-pulse rounded-md bg-muted" />
+      <div className="mt-2 h-5 w-40 animate-pulse rounded-md bg-muted" />
       <div className="mt-4 h-40 animate-pulse rounded-lg border bg-muted/40" />
     </div>
   );

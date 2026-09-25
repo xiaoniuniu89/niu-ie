@@ -127,7 +127,7 @@ function DocsGroup({ pathname }: { pathname: string }) {
           onClick={() => setOpen((o) => !o)}
           aria-expanded={open}
           aria-controls="docs-nav"
-          className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring md:h-9 md:w-9"
         >
           <ChevronDown className={cn("h-4 w-4 transition-transform", open && "rotate-180")} aria-hidden />
           <span className="sr-only">{open ? "Hide guides" : "Show guides"}</span>
@@ -184,7 +184,7 @@ function NavLink({
       href={href}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "flex min-h-9 items-center gap-2.5 rounded-md px-3 py-1.5 font-medium hover:bg-muted outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        "flex min-h-11 md:min-h-9 items-center gap-2.5 rounded-md px-3 py-1.5 font-medium hover:bg-muted outline-none focus-visible:ring-2 focus-visible:ring-ring",
         active ? "bg-muted text-foreground" : "text-foreground/80 hover:text-foreground",
         className,
       )}
@@ -201,7 +201,7 @@ function SubLink({ href, active, children }: { href: string; active: boolean; ch
       href={href}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "block rounded-md px-3 py-1.5 leading-snug hover:bg-muted hover:text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        "flex min-h-11 items-center md:min-h-0 rounded-md px-3 py-1.5 leading-snug hover:bg-muted hover:text-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring",
         active ? "bg-muted font-semibold text-foreground" : "text-muted-foreground",
       )}
     >

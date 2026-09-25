@@ -15,7 +15,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
         <h1 className="font-serif text-2xl font-semibold text-foreground">Niu client portal</h1>
         <p className="mt-2 text-sm text-muted-foreground">Access is by invitation. Enter the email we invited.</p>
         {error === "link" && (
-          <p className="mt-4 rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">
+          <p role="alert" className="mt-4 rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">
             That sign-in link has expired or was already used. Request a new one below.
           </p>
         )}

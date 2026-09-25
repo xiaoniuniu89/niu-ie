@@ -78,7 +78,7 @@ async function loadProject(supabase: Ctx["supabase"], projectId: string) {
     .eq("id", projectId)
     .maybeSingle();
   if (!project) return { ok: false, message: "Project not found." } as const;
-  if (!project.repo) return { ok: false, message: "This project isn't linked to GitHub yet. Email us instead." } as const;
+  if (!project.repo) return { ok: false, message: "This project isn't linked to GitHub yet. Contact us at niu.ie/contact instead." } as const;
   return { ok: true, ...(project as Project) } as const;
 }
 
@@ -107,7 +107,7 @@ async function fileRequest(
     return { ok: true, message: "Request sent.", issueNumber };
   } catch (e) {
     console.error(e);
-    return { ok: false, message: "We couldn't send your request. Try again, or email us." };
+    return { ok: false, message: "We couldn't send your request. Try again, or contact us at niu.ie/contact." };
   }
 }
 

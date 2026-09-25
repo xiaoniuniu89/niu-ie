@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { MDXComponents } from "mdx/types";
-import { AlertTriangle, Lightbulb } from "lucide-react";
+import { AlertTriangle, ExternalLink, Lightbulb } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // Styles for rendered guide MDX. No typography plugin, so each element is mapped here.
@@ -24,10 +24,21 @@ export const guideComponents: MDXComponents = {
   tr: (props) => <tr className="border-b border-border last:border-0" {...props} />,
   th: (props) => <th className="px-3 py-2 font-medium text-foreground" {...props} />,
   td: (props) => <td className="px-3 py-2 align-top" {...props} />,
-  a: ({ href = "", ...props }) => {
+  a: ({ href = "", children, ...props }) => {
     const className = "text-primary underline underline-offset-4";
-    if (href.startsWith("/")) return <Link href={href} className={className} {...props} />;
-    return <a href={href} target="_blank" rel="noopener noreferrer" className={className} {...props} />;
+    if (href.startsWith("/"))
+      return (
+        <Link href={href} className={className} {...props}>
+          {children}
+        </Link>
+      );
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer" className={className} {...props}>
+        {children}
+        <ExternalLink className="ml-0.5 inline h-3 w-3 align-middle" aria-hidden />
+        <span className="sr-only"> (opens in new tab)</span>
+      </a>
+    );
   },
   Tip: ({ children }: { children: React.ReactNode }) => <Callout kind="tip">{children}</Callout>,
   Warning: ({ children }: { children: React.ReactNode }) => <Callout kind="warning">{children}</Callout>,

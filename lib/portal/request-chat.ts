@@ -2,10 +2,10 @@ import "server-only";
 import { z } from "zod";
 import type { RequestKind } from "@/lib/portal/requests";
 
-// DeepSeek's OpenAI-compatible chat API.
-const API_KEY = process.env.DEEPSEEK_API_KEY;
-const BASE_URL = "https://api.deepseek.com";
-const MODEL = "deepseek-chat";
+// gpt-4.1-mini: cheap, follows instructions well, and isn't a reasoning model, so
+// replies come back fast without paying for hidden reasoning tokens.
+const API_KEY = process.env.OPENAI_API_KEY;
+const MODEL = process.env.OPENAI_MODEL ?? "gpt-4.1-mini";
 
 // Caps that keep a chat cheap and stop it being used as a free chatbot.
 export const CHAT_MAX_MESSAGE = 1000;
@@ -88,15 +88,15 @@ export async function runRequestChat(
   messages: ChatMessage[],
   lastTurn: boolean
 ): Promise<ChatResult> {
-  if (!API_KEY) throw new Error("DEEPSEEK_API_KEY is not set");
-  const res = await fetch(`${BASE_URL}/chat/completions`, {
+  if (!API_KEY) throw new Error("OPENAI_API_KEY is not set");
+  const res = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
     body: JSON.stringify({
       model: MODEL,
       messages: [{ role: "system", content: systemPrompt(kind, projectName, lastTurn) }, ...messages],
       response_format: { type: "json_object" },
-      max_tokens: MAX_REPLY_TOKENS,
+      max_completion_tokens: MAX_REPLY_TOKENS,
       temperature: 0.3,
     }),
     signal: AbortSignal.timeout(30_000),

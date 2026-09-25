@@ -12,8 +12,8 @@ const fieldsSchema = z.object({
   type: z.enum(["change", "bug", "question"]),
   title: z.string().trim().min(3, "Give it a short title.").max(120, "Keep the title under 120 characters."),
   pageUrl: z.url("Page link must start with https://").or(z.literal("")),
-  current: z.string().trim().min(1, "Tell us what happens now.").max(5000),
-  expected: z.string().trim().min(1, "Tell us what should happen.").max(5000),
+  current: z.string().trim().min(1, "Fill in both boxes.").max(5000),
+  expected: z.string().trim().min(1, "Fill in both boxes.").max(5000),
 });
 
 const fileSchema = z.object({
@@ -24,6 +24,8 @@ const fileSchema = z.object({
 });
 
 const createSchema = fieldsSchema.extend({
+  // New requests come from the issue or feature form; "question" only survives on older rows.
+  type: z.enum(["change", "bug"]),
   projectId: z.uuid(),
   files: z.string().transform((s, ctx) => {
     const parsed = z.array(fileSchema).max(MAX_FILES).safeParse(JSON.parse(s || "[]"));

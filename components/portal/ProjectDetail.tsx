@@ -100,7 +100,7 @@ export function ProjectDetail({ projectId }: { projectId: string }) {
 
         {tab === "issues" && project.repo && (
           <div className="space-y-4">
-            <RequestDialog projectId={project.id} clientId={client.id} defaultType="bug" trigger={<Button>Report an issue</Button>} />
+            <RequestDialog projectId={project.id} clientId={client.id} kind="issue" trigger={<Button>Report an issue</Button>} />
             <RequestList
               projectId={project.id}
               clientId={client.id}
@@ -112,7 +112,7 @@ export function ProjectDetail({ projectId }: { projectId: string }) {
 
         {tab === "features" && project.repo && (
           <div className="space-y-4">
-            <RequestDialog projectId={project.id} clientId={client.id} defaultType="change" trigger={<Button>Request a feature</Button>} />
+            <RequestDialog projectId={project.id} clientId={client.id} kind="feature" trigger={<Button>Request a feature</Button>} />
             <RequestList
               projectId={project.id}
               clientId={client.id}

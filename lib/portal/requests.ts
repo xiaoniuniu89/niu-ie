@@ -1,10 +1,52 @@
 import type { RequestStatus } from "@/lib/portal/github";
 
 export const REQUEST_TYPES = [
-  ["change", "Change something"],
+  ["change", "Feature request"],
   ["bug", "Something is broken"],
-  ["question", "Ask a question"],
+  ["question", "Question"],
 ] as const;
+
+// Issues and feature requests use separate forms. Both save to the same columns: for a
+// feature, `current` holds what they'd like and `expected` holds why it would help.
+// "question" is no longer offered but older rows still list under issues.
+export type RequestKind = "issue" | "feature";
+
+export const requestKind = (type: string): RequestKind => (type === "change" ? "feature" : "issue");
+
+export const REQUEST_FORMS = {
+  issue: {
+    type: "bug",
+    title: "Report an issue",
+    description: "Tell us what isn't working. Plain words are fine.",
+    titlePlaceholder: "e.g. Contact form doesn't send",
+    pageLabel: "Which page? (optional)",
+    currentLabel: "What happens now?",
+    currentPlaceholder: "e.g. I press Send and nothing happens.",
+    expectedLabel: "What should happen?",
+    expectedPlaceholder: "e.g. It should say the message was sent.",
+    filesLabel: "Screenshots (optional)",
+    addFiles: "Add screenshots",
+    submit: "Send report",
+    currentHeading: "Current behaviour",
+    expectedHeading: "Expected behaviour",
+  },
+  feature: {
+    type: "change",
+    title: "Request a feature",
+    description: "Tell us what you'd like added or changed on your site.",
+    titlePlaceholder: "e.g. Add a gallery page",
+    pageLabel: "Where on the site? (optional)",
+    currentLabel: "What would you like?",
+    currentPlaceholder: "e.g. A page with photos of our recent work.",
+    expectedLabel: "Why would it help?",
+    expectedPlaceholder: "e.g. Customers keep asking to see examples.",
+    filesLabel: "Examples or mockups (optional)",
+    addFiles: "Add files",
+    submit: "Send request",
+    currentHeading: "Request",
+    expectedHeading: "Why it would help",
+  },
+} as const;
 
 // Which request types each project tab lists.
 export const ISSUE_TYPES = ["bug", "question"] as const;
@@ -50,11 +92,12 @@ type IssueFields = {
 
 export function issueBody(r: IssueFields) {
   const typeLabel = REQUEST_TYPES.find(([value]) => value === r.type)?.[1] ?? r.type;
+  const form = REQUEST_FORMS[requestKind(r.type)];
   const sections = [
     `**Type:** ${typeLabel}`,
     `**Page:** ${r.pageUrl || "Not given"}`,
-    `## Current behaviour\n\n${r.current}`,
-    `## Expected behaviour\n\n${r.expected}`,
+    `## ${form.currentHeading}\n\n${r.current}`,
+    `## ${form.expectedHeading}\n\n${r.expected}`,
   ];
   if (r.files.length) {
     // Portal links check the viewer's session, then redirect to a short-lived signed URL.

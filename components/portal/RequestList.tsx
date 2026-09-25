@@ -1,7 +1,7 @@
 "use client";
 
 import useSWR from "swr";
-import { REQUEST_STATUS_LABEL, REQUEST_TYPES, requestsKey, type RequestsResponse } from "@/lib/portal/requests";
+import { REQUEST_FORMS, REQUEST_STATUS_LABEL, REQUEST_TYPES, requestKind, requestsKey, type RequestsResponse } from "@/lib/portal/requests";
 import type { RequestStatus } from "@/lib/portal/github";
 import { CancelRequestButton, RequestDialog } from "@/components/portal/RequestForms";
 import { Badge } from "@/components/ui/badge";
@@ -38,6 +38,8 @@ export function RequestList({ projectId, clientId, types, empty }: Props) {
 
       {requests.map((request) => {
         const typeLabel = REQUEST_TYPES.find(([value]) => value === request.type)?.[1];
+        const kind = requestKind(request.type);
+        const form = REQUEST_FORMS[kind];
         return (
           <Card key={request.id}>
             <CardHeader>
@@ -60,11 +62,11 @@ export function RequestList({ projectId, clientId, types, empty }: Props) {
             <CardContent className="space-y-4 text-sm">
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <p className="font-medium">What happens now</p>
+                  <p className="font-medium">{form.currentLabel}</p>
                   <p className="mt-1 whitespace-pre-wrap text-muted-foreground">{request.current}</p>
                 </div>
                 <div>
-                  <p className="font-medium">What should happen</p>
+                  <p className="font-medium">{form.expectedLabel}</p>
                   <p className="mt-1 whitespace-pre-wrap text-muted-foreground">{request.expected}</p>
                 </div>
               </div>
@@ -92,6 +94,7 @@ export function RequestList({ projectId, clientId, types, empty }: Props) {
                   <RequestDialog
                     projectId={projectId}
                     clientId={clientId}
+                    kind={kind}
                     request={request}
                     trigger={<Button size="sm" variant="outline">Edit</Button>}
                   />

@@ -11,7 +11,7 @@ import {
   type ActionState,
 } from "@/app/portal/(app)/requests/actions";
 import { createClient } from "@/lib/portal/supabase/client";
-import { FEATURE_TYPES, FILE_ACCEPT, MAX_FILE_BYTES, MAX_FILES, REQUEST_TYPES, requestsKey } from "@/lib/portal/requests";
+import { FILE_ACCEPT, MAX_FILE_BYTES, MAX_FILES, REQUEST_FORMS, requestsKey, type RequestKind } from "@/lib/portal/requests";
 import { projectPath } from "@/lib/portal/projects";
 import { Button } from "@/components/ui/button";
 import {
@@ -39,13 +39,14 @@ export type RequestValues = {
 type Props = {
   projectId: string;
   clientId: string;
+  kind: RequestKind;
   request?: RequestValues;
-  // Preselected type for a new request: "change" for feature requests, "bug" for issues.
-  defaultType?: string;
   trigger: React.ReactNode;
 };
 
-export function RequestDialog({ projectId, clientId, request, defaultType = "change", trigger }: Props) {
+// One dialog, two forms: issues ask what's broken, feature requests ask what they'd like.
+export function RequestDialog({ projectId, clientId, kind, request, trigger }: Props) {
+  const form = REQUEST_FORMS[kind];
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
@@ -59,8 +60,7 @@ export function RequestDialog({ projectId, clientId, request, defaultType = "cha
       mutate(requestsKey(projectId));
       // From the overview, open the project on the tab that lists the new request.
       if (!request && pathname !== projectPath(projectId)) {
-        const isFeature = (FEATURE_TYPES as readonly unknown[]).includes(formData.get("type"));
-        router.push(`${projectPath(projectId)}?tab=${isFeature ? "features" : "issues"}`);
+        router.push(`${projectPath(projectId)}?tab=${kind === "feature" ? "features" : "issues"}`);
       }
     }
     return result;
@@ -108,12 +108,8 @@ export function RequestDialog({ projectId, clientId, request, defaultType = "cha
       <DialogContent className="max-w-lg p-0" onInteractOutside={(e) => e.preventDefault()}>
         <div className="overflow-y-auto p-6">
           <DialogHeader>
-            <DialogTitle>{request ? "Edit request" : defaultType === "change" ? "Request a feature" : "Report an issue"}</DialogTitle>
-            <DialogDescription>
-              {request
-                ? "You can change this until Daniel starts on it."
-                : "Tell us what you'd like changed or what isn't working. Plain words are fine."}
-            </DialogDescription>
+            <DialogTitle>{request ? "Edit request" : form.title}</DialogTitle>
+            <DialogDescription>{request ? "You can change this until Daniel starts on it." : form.description}</DialogDescription>
           </DialogHeader>
 
           <form onSubmit={onSubmit} className="mt-5 space-y-4">
@@ -122,18 +118,18 @@ export function RequestDialog({ projectId, clientId, request, defaultType = "cha
             ) : (
               <input type="hidden" name="projectId" value={projectId} />
             )}
-            <TypeField defaultValue={request?.type ?? defaultType} />
-            <Field label="Short title" name="title" required maxLength={120} defaultValue={request?.title} placeholder="e.g. Update opening hours" />
+            <input type="hidden" name="type" value={request?.type ?? form.type} />
+            <Field label="Short title" name="title" required maxLength={120} defaultValue={request?.title} placeholder={form.titlePlaceholder} />
             <Field
-              label="Which page? (optional)"
+              label={form.pageLabel}
               name="pageUrl"
               type="url"
               defaultValue={request?.page_url ?? ""}
               placeholder="https://"
             />
-            <Area label="What happens now?" name="current" defaultValue={request?.current} placeholder="e.g. The contact page says we close at 5pm." />
-            <Area label="What should happen?" name="expected" defaultValue={request?.expected} placeholder="e.g. It should say 6pm on weekdays." />
-            {!request && <FilesField />}
+            <Area label={form.currentLabel} name="current" defaultValue={request?.current} placeholder={form.currentPlaceholder} />
+            <Area label={form.expectedLabel} name="expected" defaultValue={request?.expected} placeholder={form.expectedPlaceholder} />
+            {!request && <FilesField label={form.filesLabel} addLabel={form.addFiles} />}
 
             {message && (
               <p className="text-sm text-destructive" role="status">
@@ -147,7 +143,7 @@ export function RequestDialog({ projectId, clientId, request, defaultType = "cha
                 </Button>
               </DialogClose>
               <Button type="submit" disabled={busy}>
-                {uploading ? "Uploading…" : pending ? "Sending…" : request ? "Save" : "Send request"}
+                {uploading ? "Uploading…" : pending ? "Sending…" : request ? "Save" : form.submit}
               </Button>
             </div>
           </form>
@@ -183,25 +179,6 @@ export function CancelRequestButton({ projectId, requestId }: { projectId: strin
   );
 }
 
-function TypeField({ defaultValue }: { defaultValue: string }) {
-  return (
-    <fieldset className="space-y-2">
-      <legend className="text-sm font-medium">What kind of request?</legend>
-      <div className="flex flex-wrap gap-2">
-        {REQUEST_TYPES.map(([value, label]) => (
-          <label
-            key={value}
-            className="flex cursor-pointer items-center gap-2 rounded-md border border-input bg-card px-3 py-2 text-sm has-[:checked]:border-primary has-[:checked]:bg-primary/10"
-          >
-            <input type="radio" name="type" value={value} defaultChecked={value === defaultValue} className="accent-primary" />
-            {label}
-          </label>
-        ))}
-      </div>
-    </fieldset>
-  );
-}
-
 function Field({ label, name, ...props }: { label: string; name: string } & React.ComponentProps<"input">) {
   const id = useId();
   return (
@@ -222,13 +199,13 @@ function Area({ label, name, ...props }: { label: string; name: string } & React
   );
 }
 
-function FilesField() {
+function FilesField({ label, addLabel }: { label: string; addLabel: string }) {
   const id = useId();
   const input = useRef<HTMLInputElement>(null);
   const [names, setNames] = useState<string[]>([]);
   return (
     <div className="space-y-2">
-      <Label htmlFor={id}>Screenshots (optional)</Label>
+      <Label htmlFor={id}>{label}</Label>
       <input
         ref={input}
         id={id}
@@ -242,7 +219,7 @@ function FilesField() {
       <div className="flex flex-wrap items-center gap-3">
         <Button type="button" variant="outline" onClick={() => input.current?.click()}>
           <Paperclip className="h-4 w-4" />
-          {names.length ? "Change files" : "Add screenshots"}
+          {names.length ? "Change files" : addLabel}
         </Button>
         <span className="text-sm text-muted-foreground">
           {names.length ? names.join(", ") : "No files chosen"}

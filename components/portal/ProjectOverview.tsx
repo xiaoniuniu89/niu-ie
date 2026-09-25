@@ -3,10 +3,8 @@
 import Link from "next/link";
 import useSWR from "swr";
 import { PROJECT_STATUS_LABEL, projectPath, projectsKey, type PortalProject, type ProjectsResponse } from "@/lib/portal/projects";
-import { RequestDialog } from "@/components/portal/RequestForms";
+import { ChevronRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function ProjectOverview({ isAdmin }: { isAdmin: boolean }) {
   const { data, error } = useSWR<ProjectsResponse>(projectsKey);
@@ -36,41 +34,57 @@ export function ProjectOverview({ isAdmin }: { isAdmin: boolean }) {
       {data.clients.map((client) => (
         <section key={client.id}>
           <h1 className="font-serif text-2xl font-semibold">{client.business_name}</h1>
-          <div className="mt-4 grid gap-4 sm:grid-cols-2">
-            {client.projects.length === 0 && (
-              <p className="text-muted-foreground">No projects linked yet.</p>
-            )}
-            {client.projects.map((project) => (
-              // The title link stretches over the whole card; links and buttons inside sit above it.
-              <Card
-                key={project.id}
-                className="relative cursor-pointer transition-colors hover:border-primary/60 focus-within:border-primary/60"
-              >
-                <CardHeader>
-                  <CardTitle className="flex items-center justify-between gap-2">
-                    <Link href={projectPath(project.id)} className="after:absolute after:inset-0 after:rounded-lg focus:outline-none">
-                      {project.name}
-                    </Link>
-                    <Badge variant="secondary">{PROJECT_STATUS_LABEL[project.status] ?? project.status}</Badge>
-                  </CardTitle>
-                  <CardDescription>Your website and where it lives.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <ProjectLinks project={project} />
-                </CardContent>
-                {project.repo && (
-                  <CardFooter>
-                    <RequestDialog
-                      projectId={project.id}
-                      clientId={client.id}
-                      defaultType="bug"
-                      trigger={<Button size="sm" className="relative z-10">Report an issue</Button>}
-                    />
-                  </CardFooter>
-                )}
-              </Card>
-            ))}
-          </div>
+          {client.projects.length === 0 ? (
+            <p className="mt-4 text-muted-foreground">No projects linked yet.</p>
+          ) : (
+            <div className="mt-4 overflow-hidden rounded-lg border border-border bg-card">
+              <table className="w-full text-sm">
+                <thead className="border-b border-border text-left text-muted-foreground">
+                  <tr>
+                    <th scope="col" className="px-4 py-2 font-medium">Project</th>
+                    <th scope="col" className="px-4 py-2 font-medium">Status</th>
+                    <th scope="col" className="hidden px-4 py-2 font-medium sm:table-cell">Live site</th>
+                    <th scope="col" className="w-8 px-4 py-2"><span className="sr-only">Open</span></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {client.projects.map((project) => (
+                    // The name link stretches over the whole row; the live site link sits above it.
+                    <tr
+                      key={project.id}
+                      className="relative border-b border-border last:border-0 transition-colors hover:bg-muted/50 focus-within:bg-muted/50"
+                    >
+                      <td className="px-4 py-3 font-medium">
+                        <Link href={projectPath(project.id)} className="after:absolute after:inset-0 focus:outline-none">
+                          {project.name}
+                        </Link>
+                      </td>
+                      <td className="px-4 py-3">
+                        <Badge variant="secondary">{PROJECT_STATUS_LABEL[project.status] ?? project.status}</Badge>
+                      </td>
+                      <td className="hidden max-w-64 px-4 py-3 sm:table-cell">
+                        {project.live_url ? (
+                          <a
+                            href={project.live_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="relative z-10 block truncate text-primary underline-offset-4 hover:underline"
+                          >
+                            {project.live_url.replace(/^https?:\/\//, "")}
+                          </a>
+                        ) : (
+                          <span className="text-muted-foreground/60">Not set</span>
+                        )}
+                      </td>
+                      <td className="px-4 py-3 text-muted-foreground">
+                        <ChevronRight className="h-4 w-4" aria-hidden />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </section>
       ))}
     </div>
@@ -106,10 +120,7 @@ function OverviewSkeleton() {
   return (
     <div aria-busy="true">
       <div className="h-8 w-56 animate-pulse rounded-md bg-muted" />
-      <div className="mt-4 grid gap-4 sm:grid-cols-2">
-        <div className="h-56 animate-pulse rounded-lg border bg-muted/40" />
-        <div className="h-56 animate-pulse rounded-lg border bg-muted/40" />
-      </div>
+      <div className="mt-4 h-40 animate-pulse rounded-lg border bg-muted/40" />
     </div>
   );
 }

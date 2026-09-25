@@ -4,8 +4,9 @@ import type { RequestKind } from "@/lib/portal/requests";
 
 // gpt-6-luna: OpenAI's cheapest current model for focused tasks. Reasoning is off, so
 // replies come back fast without paying for hidden reasoning tokens.
-const API_KEY = process.env.OPENAI_API_KEY;
-const MODEL = process.env.OPENAI_MODEL ?? "gpt-6-luna";
+// Shares AI_API_KEY with scripts/translate.ts. AI_MODEL is the translator's, so not read here.
+const API_KEY = process.env.AI_API_KEY;
+const MODEL = "gpt-6-luna";
 
 // Caps that keep a chat cheap and stop it being used as a free chatbot.
 export const CHAT_MAX_MESSAGE = 1000;
@@ -88,7 +89,7 @@ export async function runRequestChat(
   messages: ChatMessage[],
   lastTurn: boolean
 ): Promise<ChatResult> {
-  if (!API_KEY) throw new Error("OPENAI_API_KEY is not set");
+  if (!API_KEY) throw new Error("AI_API_KEY is not set");
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },

@@ -104,7 +104,7 @@ function ProjectLink({ label, href }: { label: string; href: string | null }) {
     <li className="flex justify-between gap-4">
       <span className="text-muted-foreground">{label}</span>
       {href ? (
-        <a href={href} target="_blank" rel="noopener noreferrer" className="relative z-10 truncate text-primary underline-offset-4 hover:underline">
+        <a href={href} target="_blank" rel="noopener noreferrer" className="truncate text-primary underline-offset-4 hover:underline">
           {href.replace(/^https?:\/\//, "")}
         </a>
       ) : (
